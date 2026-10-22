@@ -1,0 +1,14 @@
+generated: '2026-10-22'
+method: derived
+source: openapi/fleetsu-openapi.yml
+versioning:
+  scheme: url-path
+  current: v1 (with 8 /v2/ paths)
+  description: Version is carried in the path prefix (/v1/, /v2/). api-docs.fleetsu.com publishes no versioning policy.
+deprecation:
+  policy: null
+  deprecated_operations: []
+  note: No operation in the contract is marked deprecated, and no deprecation policy or Sunset/Deprecation header is documented.
+status_page: null
+sla: null
+note: No status page or SLA is linked from api-docs.fleetsu.com or fleetsu.com (now branded Rand McNally).

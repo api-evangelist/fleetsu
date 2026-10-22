@@ -1,0 +1,48 @@
+name: Fleetsu agent skills
+generated: '2026-10-22'
+method: generated
+source: openapi/fleetsu-openapi.yml
+skills:
+- file: fleetsu-locate-fleet-assets.md
+  name: fleetsu-locate-fleet-assets
+  api: openapi/fleetsu-openapi.yml
+  operations:
+  - getV1Assets
+  - getV1AssetsLocations
+  - getV1AssetsMoving
+  - getV1AssetsOffline
+  - getV1AssetsByAssetid
+- file: fleetsu-review-asset-trips-and-events.md
+  name: fleetsu-review-asset-trips-and-events
+  api: openapi/fleetsu-openapi.yml
+  operations:
+  - getV1AssetsByAssetidTrips
+  - getV1AssetsByAssetidEvents
+  - getV1EventsCodes
+  - getV1EventsByEventid
+- file: fleetsu-manage-geofences.md
+  name: fleetsu-manage-geofences
+  api: openapi/fleetsu-openapi.yml
+  operations:
+  - getV1Fences
+  - postV1Fences
+  - postV1FencesByFenceidAssets
+  - getV1FencesByFenceidAssets
+  - getV1ReportsFencesInteractions
+- file: fleetsu-score-driver-safety.md
+  name: fleetsu-score-driver-safety
+  api: openapi/fleetsu-openapi.yml
+  operations:
+  - getV1Drivers
+  - getV1DriversByDriverid
+  - getV1DriversByDriveridScore
+  - getV1ReportsDriversScores
+- file: fleetsu-export-ato-logbook.md
+  name: fleetsu-export-ato-logbook
+  api: openapi/fleetsu-openapi.yml
+  operations:
+  - getV1Logbooks
+  - getV1LogbooksByLogbookid
+  - getV1LogbooksTrips
+  - getV1LogbooksTripsCsv
+  - getV1LogbooksByLogbookidPdf

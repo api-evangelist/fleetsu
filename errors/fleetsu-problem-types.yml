@@ -1,0 +1,28 @@
+generated: '2026-10-22'
+method: searched
+source: https://api-docs.fleetsu.com/
+format: custom-json
+envelope:
+  fields:
+  - code
+  - message
+  description: 'Error bodies in the published examples carry a numeric code (either the HTTP status or an extended code such as 4040003) and a message string.'
+note: The docs state "Standard HTTP Response codes are returned on all requests." Only 401 is described in prose; 400 and 404 come from saved example responses in the provider's Postman collection (accounts/invite/{code}). No full error reference is published.
+problems:
+- status: 401
+  title: Unauthorized
+  type: null
+  description: 'Unauthenticated requests will fail with a 401 Unauthorized HTTP Response'
+  remediation: Send an Authorization Basic header with a valid Fleetsu username and password.
+- status: 400
+  title: Bad Request
+  type: null
+  code: 400
+  description: 'Example: {"code": 400, "message": "Invalid Invite Code ID"}'
+  remediation: Correct the request parameter named in the message.
+- status: 404
+  title: Not Found
+  type: null
+  code: 4040003
+  description: 'Example: {"code": 4040003, "message": "Invite Not Found"}'
+  remediation: Check the identifier exists.

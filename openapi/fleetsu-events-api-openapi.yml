@@ -1,0 +1,935 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Events API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Events
+paths:
+  /v1/events:
+    get:
+      operationId: getV1Events
+      summary: v1/events
+      tags:
+      - Events
+      description: 'List of Events
+
+
+        Fields
+
+
+        eventId - (int) - Event ID
+
+
+        imei - (string) - Unique Asset ID
+
+
+        label - (string) - Asset label
+
+
+        latitude - (Float) - Asset location''s latitude
+
+
+        longitude - (Float) - Asset location''s longitude
+
+
+        formattedAddress - (String) - Asset location''s Full Address
+
+
+        gpsIndicator - (String) - Device''s GPS Indicator
+
+
+        numSatellites - (int) - Device''s total number of satellites
+
+
+        heading - (int) - Device''s Heading
+
+
+        speed - (int) - Asset Speed
+
+
+        datetime - (datetime) - Event occurred Datetime
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search assetId,imei,label,vehicleRegistration
+
+
+        imei - (string) - Device''s IMEI
+
+
+        tagId - (string) - Related Tag
+
+
+        customerId - (int) - Customer ID
+
+
+        groupId - (int) - Group ID
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        eventId
+
+
+        imei
+
+
+        label
+
+
+        latitude
+
+
+        longitude
+
+
+        formattedAddress
+
+
+        gpsIndicator
+
+
+        numSatellite
+
+
+        heading
+
+
+        speed
+
+
+        datetime
+
+
+        _extend : Available Extentions
+
+
+        event/address - Event''s full address
+
+
+        device - Device Details
+
+
+        event/extendedinfo - Event''s extended info details
+
+
+        account - Account Details
+
+
+        event/fence - Fence Details
+
+
+        trip - Trip Details
+
+
+        _sort : Available sort fields
+
+
+        datetime
+
+
+        imei'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                results:
+                - eventId: 1666111905
+                  datetime: '2022-01-04T05:50:54+00:00'
+                  code: '33'
+                  latitude: -28.97719
+                  longitude: 117.80396
+                  numSatellites: 9
+                  gsmSignal: 1
+                  heading: 210
+                  hdop: 0
+                  altitude: 32767
+                  speed: 98
+                  processedDate: '2022-01-04T05:50:57+00:00'
+                  imei: vt4662241316
+                  batteryRemaining: 4.158
+                  postProcessed: '2022-01-04T05:51:02+00:00'
+                  engineHour: 256200823
+                  deviceId: vt4662241316
+                - eventId: 1666111286
+                  datetime: '2022-01-04T05:50:14+00:00'
+                  code: '33'
+                  latitude: -29.55442
+                  longitude: 117.15334
+                  numSatellites: 9
+                  gsmSignal: 1
+                  heading: 214
+                  hdop: 0
+                  altitude: 31817
+                  speed: 85
+                  processedDate: '2022-01-04T05:50:15+00:00'
+                  imei: vt4662351313
+                  batteryRemaining: 4.144
+                  postProcessed: '2022-01-04T05:50:22+00:00'
+                  engineHour: 20077093
+                  deviceId: vt4662351313
+                - eventId: 1666111269
+                  datetime: '2022-01-04T05:50:14+00:00'
+                  code: '33'
+                  latitude: -29.55442
+                  longitude: 117.15334
+                  numSatellites: 9
+                  gsmSignal: 1
+                  heading: 214
+                  hdop: 0
+                  altitude: 31817
+                  speed: 85
+                  processedDate: '2022-01-04T05:50:15+00:00'
+                  imei: vt4662241316
+                  batteryRemaining: 4.144
+                  postProcessed: '2022-01-04T05:50:22+00:00'
+                  engineHour: 246196693
+                  deviceId: vt4662241316
+                total: 2
+    post:
+      operationId: postV1Events
+      summary: v1/events
+      tags:
+      - Events
+      description: 'Create Event
+
+
+        Error Codes:
+
+
+        4001001: Missing Event Code
+
+
+        4001002: Missing Datetime
+
+
+        4001003: Missing Device ID
+
+
+        4090001: Duplicate Message - Device ID + DateTime + Code
+
+
+        4001004: Device Not Found'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                assetId:
+                  type: string
+                code:
+                  type: string
+                datetime:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/events/codes:
+    get:
+      operationId: getV1EventsCodes
+      summary: v1/events/codes
+      tags:
+      - Events
+      description: List of Event Codes & Descriptions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                params: {}
+                results:
+                - code: ''
+                  parameter: ''
+                  extendedDescription: ''
+                  type: INFO
+                  purpose: ''
+  /v1/events/history:
+    get:
+      operationId: getV1EventsHistory
+      summary: v1/events/history
+      tags:
+      - Events
+      description: List of Event Codes & Descriptions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - datetime: '2022-01-04 05:50:54'
+                  total: 1
+  /v1/events/important:
+    get:
+      operationId: getV1EventsImportant
+      summary: v1/events/important
+      tags:
+      - Events
+      description: 'List of Important Events
+
+
+        See /events for searching and filtering options'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 999999
+                start: 1
+                end: 200
+                results:
+                - label: ''
+                  eventId: 1660082453
+                  datetime: '0000-00-00T00:00:00+00:00'
+                  code: ''
+                  heading: ''
+                  imei: ''
+                  tripId: 0
+                  speed: 0
+                  latitude: 0
+                  longitude: 0
+                  extendedDescription: Device Overheat
+                  deviceId: ''
+  /v1/events/parameters/types:
+    get:
+      operationId: getV1EventsParametersTypes
+      summary: v1/events/parameters/types
+      tags:
+      - Events
+      description: Load Event Details
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                streetNumber:
+                  type: string
+                streetName:
+                  type: string
+                suburb:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 834
+                start: 1
+                end: 834
+                results:
+                - parameter: assetOdometer
+                  description: Asset - Odometer
+                  unit: km
+                  parameterGroup: Asset
+                - parameter: assetRuntime
+                  description: Asset - Runtime
+                  unit: hr
+                  parameterGroup: Asset
+                - parameter: assetSpeed
+                  description: Asset - Speed
+                  unit: km/h
+                  parameterGroup: Asset
+  /v1/events/total-fuel:
+    get:
+      operationId: getV1EventsTotalFuel
+      summary: v1/events/total-fuel
+      tags:
+      - Events
+      description: Total Fuel Consumption
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                private: 0
+                business: 0
+                unknown: 0
+  /v1/events/{eventId}:
+    get:
+      operationId: getV1EventsByEventid
+      summary: v1/events/{id}
+      tags:
+      - Events
+      description: Load Event Details
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: v1/events/{id}
+          content:
+            application/json:
+              example:
+                eventId: 1666111905
+                datetime: '2022-01-04T05:50:54+00:00'
+                code: '33'
+                latitude: 0
+                longitude: 0
+                numSatellites: 9
+                gsmSignal: 1
+                heading: 210
+                hdop: 0
+                altitude: 0
+                speed: 0
+                processedDate: '2022-01-04T05:50:57+00:00'
+                imei: ''
+                batteryRemaining: 0
+                postProcessed: '2022-01-04T05:51:02+00:00'
+                engineHour: 0
+                deviceId: ''
+  /v1/events/{eventId}/address:
+    post:
+      operationId: postV1EventsByEventidAddress
+      summary: v1/events/{id}/address
+      tags:
+      - Events
+      description: Load Event Details
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                streetNumber:
+                  type: string
+                streetName:
+                  type: string
+                suburb:
+                  type: string
+      responses:
+        default:
+          description: v1/events/{id}/address
+          content:
+            application/json:
+              example:
+                eventId: 1666111905
+                addressId: 25708131
+  /v1/events/{eventId}/parameters:
+    get:
+      operationId: getV1EventsByEventidParameters
+      summary: v1/events/{id}/parameters
+      tags:
+      - Events
+      description: Load Event Details
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: string
+                streetNumber:
+                  type: string
+                streetName:
+                  type: string
+                suburb:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 999999
+                start: 1
+                end: 1000
+                results:
+                - eventId: 1666111905
+                  parameter: Accum1
+                  value: 0000103e
+                - eventId: 1666111905
+                  parameter: Accum4
+                  value: 000032d3
+                - eventId: 1666111905
+                  parameter: altitude
+                  value: '36722'
+                - eventId: 1666111905
+                  parameter: assetRuntime
+                  value: '71166.9'
+                - eventId: 1666111905
+                  parameter: assetSpeed
+                  value: '98.17'
+                - eventId: 1666111905
+                  parameter: batteryRemaining
+                  value: '4.158'
+                - eventId: 1666111905
+                  parameter: driverId
+                  value: '2199'
+                - eventId: 1666111905
+                  parameter: externalPower
+                  value: '13.011'
+                - eventId: 1666111905
+                  parameter: gpsHeading
+                  value: '210'
+                - eventId: 1666111905
+                  parameter: GPSOdometer
+                  value: '899092225'
+                - eventId: 1666111905
+                  parameter: gsmSignal
+                  value: '-103'
+                - eventId: 1666111905
+                  parameter: jobId
+                  value: kavitha test
+                - eventId: 1666111905
+                  parameter: numSatellites
+                  value: '9'
+                - eventId: 1666111905
+                  parameter: runtime
+                  value: '30081223'
+                - eventId: 1666111905
+                  parameter: speed
+                  value: '98.17'
+                - eventId: 1666111905
+                  parameter: speedLimit
+                  value: '110'
+                - eventId: 1666111905
+                  parameter: tripPurposeId
+                  value: '19'
+  /v1/events/{eventId}/public:
+    get:
+      operationId: getV1EventsByEventidPublic
+      summary: v1/events/{id}/public
+      tags:
+      - Events
+      description: Load Event Details
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                eventId: 0
+                datetime: '0000-00-00T00:00:00+00:00'
+                code: ''
+                latitude: 0
+                longitude: 0
+                numSatellites: 0
+                gsmSignal: 0
+                heading: 0
+                hdop: 0
+                altitude: 0
+                speed: 0
+                tripId: 0
+                batteryRemaining: 0
+                engineHour: 0
+                deviceId: ''
+  /v2/events:
+    get:
+      operationId: getV2Events
+      summary: v2/events
+      tags:
+      - Events
+      description: 'List of Events
+
+
+        Fields
+
+
+        eventId - (int) - Event ID
+
+
+        imei - (string) - Unique Asset ID
+
+
+        label - (string) - Asset label
+
+
+        latitude - (Float) - Asset location''s latitude
+
+
+        longitude - (Float) - Asset location''s longitude
+
+
+        formattedAddress - (String) - Asset location''s Full Address
+
+
+        gpsIndicator - (String) - Device''s GPS Indicator
+
+
+        numSatellites - (int) - Device''s total number of satellites
+
+
+        heading - (int) - Device''s Heading
+
+
+        speed - (int) - Asset Speed
+
+
+        datetime - (datetime) - Event occurred Datetime
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search assetId,imei,label,vehicleRegistration
+
+
+        imei - (string) - Device''s IMEI
+
+
+        tagId - (string) - Related Tag
+
+
+        customerId - (int) - Customer ID
+
+
+        groupId - (int) - Group ID
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        eventId
+
+
+        imei
+
+
+        label
+
+
+        latitude
+
+
+        longitude
+
+
+        formattedAddress
+
+
+        gpsIndicator
+
+
+        numSatellite
+
+
+        heading
+
+
+        speed
+
+
+        datetime
+
+
+        _extend : Available Extentions
+
+
+        event/address - Event''s full address
+
+
+        device - Device Details
+
+
+        event/extendedInfo - Event''s extended info details
+
+
+        account - Account Details
+
+
+        event/fence - Fence Details
+
+
+        trip - Trip Details
+
+
+        _sort : Available sort fields
+
+
+        datetime
+
+
+        imei'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 999999
+                start: 1
+                end: 200
+                results:
+                - eventId: 1666129052
+                  datetime: 0000-009-00T00:00:00+00:00
+                  code: '35'
+                  latitude: 0
+                  longitude: 0
+                  numSatellites: 0
+                  gsmSignal: 0
+                  heading: 0
+                  hdop: 0
+                  altitude: 0
+                  speed: 0
+                  processedDate: 0000-009-00T00:00:00+00:00
+                  imei: ''
+                  batteryRemaining: 0
+                  engineHour: 0
+                  deviceId: ''
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

@@ -1,0 +1,19 @@
+generated: '2026-10-22'
+method: searched
+source: https://api-docs.fleetsu.com/
+docs: https://api-docs.fleetsu.com/
+summary:
+  types:
+  - http
+schemes:
+- name: basicAuth
+  type: http
+  scheme: basic
+  description: 'Docs (Postman collection description): "The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate." Example header: "Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=="'
+  credential: Fleetsu platform username and password (user login credentials); no API keys or OAuth are documented.
+  unauthenticated_response: 'Unauthenticated requests will fail with a 401 Unauthorized HTTP Response'
+  transport: 'All API Requests must be made over HTTPS'
+  sources:
+  - openapi/fleetsu-openapi.yml
+  - openapi/_original/fleetsu-postman-collection.json
+  - https://api-docs.fleetsu.com/

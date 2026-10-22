@@ -1,0 +1,53 @@
+name: Fleetsu Regulatory Posture
+generated: '2026-10-22'
+method: searched
+source: https://api.fleetsu.com/tnc
+description: >-
+  Regulatory signals read from the Terms & Conditions linked from the Fleetsu API login page
+  (https://api.fleetsu.com/tnc, HTTP 200). That page is titled "Terms & Conditions - Fleetsu" but the
+  agreement is written as "Rand McNally Terms and Conditions" for the "Rand McNally Fleet Service"
+  ("Rand McNally" means RM Acquisition, LLC (d/b/a Rand McNally) in all locations other than Australia).
+  The fleetsu.com privacy policy and terms pages (https://fleetsu.com/privacy-policy/,
+  https://fleetsu.com/terms-conditions/) answered HTTP 202 with a SiteGround "Robot Challenge" captcha
+  on 2026-10-22 even to a headless browser, so the privacy policy could not be read and no privacy
+  signals (data subject requests, subprocessors, residency, incident notification) are recorded.
+signals:
+- signal: exit_assistance
+  url: https://api.fleetsu.com/tnc
+  section: 11. Customer Data
+  note: >-
+    On termination the customer may request one copy of its Customer Data, but only within 7 days;
+    afterwards the data is no longer accessible. A narrow, time-boxed export right.
+  evidence:
+    source: https://api.fleetsu.com/tnc
+    http_status: 200
+    fetched: '2026-10-22'
+    quote: "11.2 Within 7 days after the termination of the Agreement you may request a copy of the Customer Data, and Rand McNally will provide you a single copy of the Customer Data."
+- signal: data_retention
+  url: https://api.fleetsu.com/tnc
+  section: 11. Customer Data
+  note: >-
+    Customer Data is stored by or on behalf of the provider and may be used to improve the service and
+    placed in aggregated anonymous databases; after the 7-day post-termination window the customer loses
+    access. No retention period or deletion commitment is stated.
+  evidence:
+    source: https://api.fleetsu.com/tnc
+    http_status: 200
+    fetched: '2026-10-22'
+    quote: "You agree that Rand McNally may use and analyse your Customer Data for the purpose of improving the Rand McNally Fleet Service and including the Customer Data in aggregated anonymous databases."
+- signal: age_assurance
+  url: https://api.fleetsu.com/tnc
+  section: 1. Agreement (clause 1.3)
+  note: An age requirement stated in the terms (self-attestation by acceptance); no age-verification mechanism is described.
+  evidence:
+    source: https://api.fleetsu.com/tnc
+    http_status: 200
+    fetched: '2026-10-22'
+    quote: "You must be over 18 years of age to use or to purchase any Rand McNally Fleet Service or Products."
+not_readable:
+- url: https://fleetsu.com/privacy-policy/
+  http_status: 202
+  reason: SiteGround sgcaptcha robot challenge (redirect to /.well-known/sgcaptcha/)
+- url: https://fleetsu.com/terms-conditions/
+  http_status: 202
+  reason: SiteGround sgcaptcha robot challenge (redirect to /.well-known/sgcaptcha/)

@@ -1,0 +1,2274 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Assets API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Assets
+paths:
+  /v1/assets:
+    get:
+      operationId: getV1Assets
+      summary: v1/assets
+      tags:
+      - Assets
+      description: 'Return a list of assets
+
+
+        Fields
+
+
+        Field
+
+        Type
+
+        Description
+
+
+        deviceId/assetId
+
+        string
+
+        System defined unique identifier in the system for the asset, often expressed as a UUID
+
+
+        enabled
+
+        integer
+
+        An Integer indicating the current asset state 0 = Enabled, 4 = Paused
+
+
+        label
+
+        string
+
+        Label used to identify an asset in the system
+
+
+        accountId
+
+        integer
+
+        Integer Identifying the account where the asset is assigned
+
+
+        groupId
+
+        integer
+
+        Integer Identifying the group where the asset is assigned
+
+
+        dateActivated
+
+        datetime
+
+        UTC Datetime when the asset TODO
+
+
+        vehicleMake
+
+        string
+
+        The Maker/Manufacturer of the asset
+
+
+        vehicleModel
+
+        string
+
+        The Model of the asset
+
+
+        vehicleRegistration
+
+        string
+
+        The Rego/Registration of the asset
+
+
+        vehicleVin
+
+        string
+
+        The Vehicle Identification Number (VIN) a unique serial number used by the automative industry to identify individual vehicles
+
+
+        maker
+
+        string
+
+        The Maker/Manufacturer of the Device used to capture Events and transmit to the platform
+
+
+        model
+
+        string
+
+        The Model of the Device used to capture Events and transmit to the platform
+
+
+        dateProvisioned
+
+        datetime
+
+        UTC Datetime when the asset TODO
+
+
+        subscription
+
+        string
+
+        Description
+
+
+        tripMethod
+
+        string
+
+        Description
+
+
+        dateInstalled
+
+        datetime
+
+        UTC Datetime when the asset TODO
+
+
+        allowApiEvents
+
+        boolean
+
+        Description
+
+
+        fuelTankSize
+
+        integer
+
+        Description
+
+
+        fuelTankFullPercentage
+
+        integer
+
+        Description
+
+
+        driverId
+
+        integer
+
+        Description
+
+
+        driverIdMethod
+
+        string
+
+        Description
+
+
+        entityTypeKey
+
+        string
+
+        Description
+
+
+        isDriverLocked
+
+        boolean
+
+        Description
+
+
+        string
+
+        Description
+
+
+        odometerLocked
+
+        boolean
+
+        Description
+
+
+        runtimeLocked
+
+        boolean
+
+        Description
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search assetId,imei,label,vehicleRegistration
+
+
+        tagId - (string) - Related Tag
+
+
+        deviceHealthId - (string) - Device Health ID
+
+
+        assetStateId - (string) - Asset State ID
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        assetId,imei
+
+
+        label
+
+
+        jobId
+
+
+        type
+
+
+        vehicleRegitration
+
+
+        vehicleMake
+
+
+        vehicleModel
+
+
+        vehicleVin
+
+
+        avatar
+
+
+        mapIconId
+
+
+        groupId
+
+
+        accountId,customerId
+
+
+        dateInstalled
+
+
+        _extend : Available Extentions
+
+
+        event - Last Event last valid location received
+
+
+        ping - Last Ping last time device communicated with platform
+
+
+        movement - Last Movement last time asset moved
+
+
+        account - Account assocated account
+
+
+        group - Group associated asset group
+
+
+        asset/odo - ODO Reading current odometer reading
+
+
+        asset/tags - Tags associated tags
+
+
+        asset/state - Asset State moving, parked, towing, review,investigate
+
+
+        asset/setting - Custom Setting custom asset settings e.g. fuel type
+
+
+        asset/reminders - Service Reminders pending service reminders
+
+
+        asset/fields - Custom Fields
+
+
+        _sort : Available sort fields
+
+
+        imei
+
+
+        label
+
+
+        vehicleRegistration
+
+
+        vehicleMake
+
+
+        vehicleModel'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 20
+                start: 1
+                end: 1
+                results:
+                - deviceId: '12345678901234567'
+                  type: phone
+                  enabled: 0
+                  label: Asset 1
+                  accountId: 4
+                  userId: 1344
+                  groupId: 227
+                  avatar: //cdn.fleetsu.com/avatar.png
+                  authcode: 0
+                  maker: fleetsu
+                  model: app
+                  dateProvisioned: '2019-01-01T00:00:00+00:00'
+                  fbtEnabled: false
+                  mapIconId: 24
+                  dateInstalled: 2019-01-021T00:00:00+00:00
+                  allowApiEvents: true
+                  fuelTankSize: 55
+                  fuelTankFullPercentage: 99
+                  driverId: 0
+                  installerId: 0
+                  simDataLimit: 0
+                  assetId: '12345678901234567'
+                  odometerLocked: false
+                  runtimeLocked: false
+                params: {}
+    post:
+      operationId: postV1Assets
+      summary: v1/assets
+      tags:
+      - Assets
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                groupId:
+                  type: string
+                entityTypeKey:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/active:
+    get:
+      operationId: getV1AssetsActive
+      summary: v1/assets/active
+      tags:
+      - Assets
+      description: List of Active Assets - Assets which have reported at least once in the last 24hrs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - imei: ''
+                  label: 0
+  /v1/assets/attachments:
+    get:
+      operationId: getV1AssetsAttachments
+      summary: v1/assets/attachments
+      tags:
+      - Assets
+      description: List of Active Assets - Assets which have reported at least once in the last 24hrs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - assetAttachmentId: ''
+                  assetId: ''
+                  fileName: ''
+                  fileType: ''
+                  fileSize: 0
+                  status: true
+                  title: ''
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+  /v1/assets/distances:
+    get:
+      operationId: getV1AssetsDistances
+      summary: v1/assets/distances
+      tags:
+      - Assets
+      description: Total Distance Travelled
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/fields:
+    get:
+      operationId: getV1AssetsFields
+      summary: v1/assets/fields
+      tags:
+      - Assets
+      description: Total Distance Travelled
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/health/totals:
+    get:
+      operationId: getV1AssetsHealthTotals
+      summary: v1/assets/health/totals
+      tags:
+      - Assets
+      description: Total Distance Travelled
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                investigate: 0
+                not-deployed: 0
+                not-monitored: 0
+                offline: 0
+                online: 0
+                review: 0
+  /v1/assets/locations:
+    get:
+      operationId: getV1AssetsLocations
+      summary: v1/assets/locations
+      tags:
+      - Assets
+      description: Total Distance Travelled
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                start: 1
+                end: 1
+                results:
+                - deviceId: ''
+                  label: ''
+                  accountId: 0
+                  groupId: 0
+                  avatar: ''
+                  type: ''
+                  mapIconId: 0
+                  model: ''
+                  maker: ''
+                  assetId: ''
+                  odometerLocked: false
+                  runtimeLocked: false
+                  firmwareDeploymentStatus: ''
+                  group:
+                    groupId: 0
+                    name: ''
+                  event:
+                    eventId: ''
+                    imei: ''
+                    datetime: 0000-009-00T00:090:00+00:00
+                    latitude: 0
+                    longitude: 0
+                    heading: 0
+                    speed: 0
+                    deviceId: ''
+                  health:
+                    deviceHealthId: ''
+                    assetStateId: ''
+                  deviceType:
+                    sortOrder: 0
+                    deviceType: ''
+                    deviceTypeKey: ''
+                    iconUrl: ''
+  /v1/assets/locations/summary:
+    get:
+      operationId: getV1AssetsLocationsSummary
+      summary: v1/assets/locations/summary
+      tags:
+      - Assets
+      description: Total Distance Travelled
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - deviceId: ''
+                  label: ''
+                  accountId: 0
+                  groupId: 0
+                  avatar: ''
+                  deviceHealthId: ''
+                  assetStateId: ''
+                  assetId: ''
+                  account:
+                    customerId: 0
+                    customerName: ''
+                    accountId: 0
+                    companyName: '0'
+                  odometerLocked: false
+                  runtimeLocked: false
+                  firmwareDeploymentStatus: ''
+                  group:
+                    groupId: 0
+                    name: ''
+                  parameters:
+                    assetOdometer:
+                      deviceId: ''
+                      parameter: ''
+                      value: ''
+                    driverId:
+                      deviceId: ''
+                      parameter: ''
+                      value: ''
+                    speed:
+                      deviceId: ''
+                      parameter: ''
+                      value: '0'
+  /v1/assets/models:
+    get:
+      operationId: getV1AssetsModels
+      summary: v1/assets/models
+      tags:
+      - Assets
+      description: Total Distance Travelled
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/moving:
+    get:
+      operationId: getV1AssetsMoving
+      summary: v1/assets/moving
+      tags:
+      - Assets
+      description: Total Distance Travelled
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - deviceId: ''
+                  entityTypeKey: ''
+                  type: ''
+                  enabled: 0
+                  label: ''
+                  accountId: 0
+                  groupId: 0
+                  dateActivated: '0000-00-00T00:00:00+00:00'
+                  vehicleMake: ''
+                  vehicleModel: ''
+                  vehicleRegistration: ''
+                  vehicleVin: ''
+                  maker: ''
+                  model: ''
+                  dateProvisioned: '0000-00-00T00:00:00+00:00'
+                  subscription: ''
+                  dateInstalled: '0000-00-00T00:00:00+00:00'
+                  allowApiEvents: false
+                  fuelTankSize: 0
+                  fuelTankFullPercentage: 0
+                  driverIdMethod: ''
+                  isDriverLocked: false
+                  assetId: ''
+                  odometerLocked: false
+                  runtimeLocked: false
+                  firmwareDeploymentStatus: ''
+  /v1/assets/notes:
+    get:
+      operationId: getV1AssetsNotes
+      summary: v1/assets/notes
+      tags:
+      - Assets
+      description: Total Distance Travelled
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - noteId: 0
+                  typeId: 0
+                  deviceId: '0'
+                  datetime: '0000-00-01T00:00:00+00:00'
+                  userId: 709
+                  note: ''
+                  statusId: 1
+                  dateClosed: '0000-00-01T00:00:00+00:00'
+                  dateCreated: '0000-00-01T00:00:00+00:00'
+                  dateUpdated: '0000-00-01T00:00:00+00:00'
+  /v1/assets/notifications:
+    get:
+      operationId: getV1AssetsNotifications
+      summary: v1/assets/notifications
+      tags:
+      - Assets
+      description: Total Distance Travelled
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/offline:
+    get:
+      operationId: getV1AssetsOffline
+      summary: v1/assets/offline
+      tags:
+      - Assets
+      description: List of assets who have not reported in the last 24 hrs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - imei: ''
+                  label: ''
+                  datetime: ''
+                  state: ''
+                  batteryRemaining: ''
+  /v1/assets/reminders/summary:
+    get:
+      operationId: getV1AssetsRemindersSummary
+      summary: v1/assets/reminders/summary
+      tags:
+      - Assets
+      description: List of assets who have not reported in the last 24 hrs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                reminder: 0
+                due: 0
+                overdue: 0
+  /v1/assets/states:
+    get:
+      operationId: getV1AssetsStates
+      summary: v1/assets/states
+      tags:
+      - Assets
+      description: List of assets who have not reported in the last 24 hrs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 11
+                start: 1
+                end: 11
+                results:
+                - assetStateId: ''
+                  assetState: ''
+                  assetStateSort: 1
+  /v1/assets/top-speeds:
+    get:
+      operationId: getV1AssetsTopSpeeds
+      summary: v1/assets/top-speeds
+      tags:
+      - Assets
+      description: List of assets sorted by their max speed
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - imei: ''
+                  label: ''
+                  speed: 0
+                  tripid: 0
+                  state: ''
+                  avatar: ''
+                  datetime: '0000-00-00T00:00:00Z'
+                  latitude: 0
+                  longitude: 0
+  /v1/assets/total:
+    get:
+      operationId: getV1AssetsTotal
+      summary: v1/assets/total
+      tags:
+      - Assets
+      description: List of assets sorted by their max speed
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                stationary: 0
+                moving: 0
+  /v1/assets/total-distance:
+    get:
+      operationId: getV1AssetsTotalDistance
+      summary: v1/assets/total-distance
+      tags:
+      - Assets
+      description: Total Distance Travelled
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                private: 0
+                business: 0
+                unknown: 0
+  /v1/assets/total-fuel:
+    get:
+      operationId: getV1AssetsTotalFuel
+      summary: v1/assets/total-fuel
+      tags:
+      - Assets
+      description: 'Total Fuel Consumed - OK
+
+
+        Requires Optimisation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                private: 0
+                business: 0
+                unknown: 0
+  /v1/assets/total-last-movement:
+    get:
+      operationId: getV1AssetsTotalLastMovement
+      summary: v1/assets/total-last-movement
+      tags:
+      - Assets
+      description: 'Total Fuel Consumed - OK
+
+
+        Requires Optimisation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 2
+                start: 1
+                end: 2
+                results:
+                - lastMovementStatusId: +48hrs
+                  lastMovementStatus: + 48hrs
+                  sortOrder: 2
+                  dateCreated: '0000-00-00 00:00:00'
+                  dateUpdated: '0000-00-00 00:00:00'
+                  total: 0
+                - lastMovementStatusId: today
+                  lastMovementStatus: Today
+                  sortOrder: 1
+                  dateCreated: '0000-00-00 00:00:00'
+                  dateUpdated: '0000-00-00 00:00:00'
+                  total: 0
+  /v1/assets/total-moving:
+    get:
+      operationId: getV1AssetsTotalMoving
+      summary: v1/assets/total-moving
+      tags:
+      - Assets
+      description: 'Total Fuel Consumed - OK
+
+
+        Requires Optimisation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                moving: 0
+                stationary: 0
+  /v1/assets/totalwithfuel:
+    get:
+      operationId: getV1AssetsTotalwithfuel
+      summary: v1/assets/totalwithfuel
+      tags:
+      - Assets
+      description: 'Total Fuel Consumed - OK
+
+
+        Requires Optimisation'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                withFuel: 0
+  /v1/assets/{assetId}:
+    get:
+      operationId: getV1AssetsByAssetid
+      summary: v1/assets/{id}
+      tags:
+      - Assets
+      description: 'Load a Asset''s Details
+
+
+        Fields
+
+
+        assetID,imei - (string) - Unique Asset ID
+
+
+        enabled - (bool) - Asset Enabled/Disabled
+
+
+        label - (string) - Asset label
+
+
+        jobId - (string) - External Job Reference No. (scheduled for v9.22)
+
+
+        type - (string) - Asset Type
+
+
+        vehicleRegitration - (string) - Vehicle Registration No
+
+
+        vehicleMake - (string) - Vehicle Manufacturer
+
+
+        vehicleModel - (string) - Vehicle Model
+
+
+        vehicleVin - (string) - Vechicle VIN Number
+
+
+        avatar - (string) - URL to Asset Avatar
+
+
+        mapIconId - (int) - Map Icon Id
+
+
+        groupId - (int) - Assigned Asset Group
+
+
+        accountID,customerId - (int) - Asset Account
+
+
+        jobId - (int) - Job ID
+
+
+        dateInstalled - (datetime) - Date Tracker Device Installed
+
+
+        purchaseDate - (datetime) - Date Ass4t was Purchased
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        q - Generic Search of label,imei,assetId,simSerial,vehicleRegitration
+
+
+        assetId,imei
+
+
+        label
+
+
+        jobId
+
+
+        type
+
+
+        vehicleRegitration
+
+
+        vehicleMake
+
+
+        vehicleModel
+
+
+        vehicleVin
+
+
+        avatar
+
+
+        mapIconId
+
+
+        groupId
+
+
+        accountId,customerId
+
+
+        dateInstalled
+
+
+        enabled
+
+
+        tagId - Filter by Tag
+
+
+        fenceId - Filter By Assets Associtated to Fence
+
+
+        inFenceId - Filter to Assets in fence/s by fenceId
+
+
+        deviceHealthId - Filter By Device Health (online,review,investigate,offline,not-deployed,not-monitored)
+
+
+        assetStateId - Filter By Asset State (moving,parked,review,investigate,offline)
+
+
+        sensor - Filter to assets by sensor/s parameter
+
+
+        dateFrom - Filter Assets with trips after
+
+
+        dateTo - Filter Asset trips berfore
+
+
+        _extend : Available Extentions
+
+
+        event - Last Event last valid location received, see v1/event for additional extend options
+
+
+        ping,device/ping - Last Ping last time device communicated with platform see v1/event for additional extend options
+
+
+        movement,device/movement - Last Movement last time asset moved see v1/event for additional extend options
+
+
+        account - Account assocated account
+
+
+        group. device/group - Group associated asset group
+
+
+        asset/odo - ODO Reading current odometer reading
+
+
+        asset/tags - Tags associated tags
+
+
+        asset/state - Asset State moving, parked, towing, review,investigate
+
+
+        asset/setting - Custom Setting custom asset settings e.g. fuel type
+
+
+        asset/reminders - Service Reminders pending service reminders
+
+
+        device/enginhour - Asset Current Engine Hour
+
+
+        device/extendedinfo - Current Extended Info/Sensor Values
+
+
+        device/health - Current Device Health'
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                imei: '12345678901234567'
+                phoneNo: ''
+                type: ''
+                enabled: false
+                label: Asset 1
+                customerId: 4
+                userId: 0
+                groupId: 228
+                avatar: //cdn.fleetsu.com/53b8bc8722231.png
+                simSerial: Virtual
+                authcode: 0
+                engineNo: ''
+                engineCapacity: ''
+                vehicleMake: Fiat
+                vehicleModel: X1
+                vehicleRegistration: ''
+                vehicleVin: ''
+                fuelCard: ''
+                etag: ''
+                subType: ''
+                maker: ''
+                model: ''
+                version: ''
+                dateProvisioned: '2019-01-01T00:00:00+00:00'
+                subscription: ''
+                fbtEnabled: true
+                reminderUserId: 0
+                master: ''
+                tripMethod: ''
+                battery: ''
+                mapIconId: 12
+                cloneTo: ''
+                allowApiEvents: false
+                deviceId: '12345678901234567'
+    post:
+      operationId: postV1AssetsByAssetid
+      summary: v1/assets/{id}
+      tags:
+      - Assets
+      description: 'Update Asset''s Details
+
+
+        Fields
+
+
+        assetID,imei - (string) - Unique Asset ID
+
+
+        enabled - (bool) - Asset Enabled/Disabled
+
+
+        label - (string) - Asset label
+
+
+        jobId - (string) - External Job Reference No. (scheduled for v9.22)
+
+
+        type - (string) - Asset Type
+
+
+        vehicleRegitration - (string) - Vehicle Registration No
+
+
+        vehicleMake - (string) - Vehicle Manufacturer
+
+
+        vehicleModel - (string) - Vehicle Model
+
+
+        vehicleVin - (string) - Vechicle VIN Number
+
+
+        avatar - (string) - URL to Asset Avatar
+
+
+        mapIconId - (int) - Map Icon Id
+
+
+        groupId - (int) - Assigned Asset Group
+
+
+        accountID,customerId - (int) - Asset Account
+
+
+        jobId - (int) - Job ID
+
+
+        dateInstalled - (datetime) - Date Tracker Device Installed
+
+
+        purchaseDate - (datetime) - Date Ass4t was Purchased'
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/{assetId}/devices:
+    get:
+      operationId: getV1AssetsByAssetidDevices
+      summary: v1/assets/{id}/devices
+      tags:
+      - Assets
+      description: List of Tracker Devices associated with Asset
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - deviceId: ''
+                  label: ''
+                  maker: ''
+                  model: ''
+                  groupId: 0
+                  accountId: 0
+                  enabled: 0
+                  dateProvisioned: ''
+                  assetId: ''
+                  odometerLocked: false
+                  runtimeLocked: false
+                  firmwareDeploymentStatus: ''
+  /v1/assets/{assetId}/devices/{deviceId}:
+    get:
+      operationId: getV1AssetsByAssetidDevicesByDeviceid
+      summary: v1/assets/{id}/devices/{id}
+      tags:
+      - Assets
+      description: Tracker Device Details
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceId: 0046e927-a75b-4d82-9255-6
+                type: car
+                enabled: 0
+                label: test-imei-fault
+                accountId: 4931
+                groupId: 1012
+                dateActivated: '2020-10-09T04:46:14+00:00'
+                vehicleMake: FaultMake
+                vehicleModel: FaultModel
+                vehicleRegistration: TH2324R
+                vehicleVin: '23423532323534634'
+                maker: platform
+                model: asset
+                dateProvisioned: '2020-10-09T04:42:51+00:00'
+                dateInstalled: '2020-10-09T04:46:14+00:00'
+                allowApiEvents: false
+                jobId: Job123
+                fuelTankSize: 55
+                fuelTankFullPercentage: 99
+                entityTypeKey: asset
+                isDriverLocked: false
+                assetId: 0046e927-a75b-4d82-9255-6
+                odometerLocked: false
+                runtimeLocked: false
+                firmwareDeploymentStatus: UNKNOWN
+  /v1/assets/{assetId}/events:
+    get:
+      operationId: getV1AssetsByAssetidEvents
+      summary: v1/assets/{id}/events
+      tags:
+      - Assets
+      description: List Asset Tags
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                entityTypeKey:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/{assetId}/history/service:
+    get:
+      operationId: getV1AssetsByAssetidHistoryService
+      summary: v1/assets/{id}/history/service
+      tags:
+      - Assets
+      description: List Asset Tags
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                entityTypeKey:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/{assetId}/links:
+    get:
+      operationId: getV1AssetsByAssetidLinks
+      summary: v1/assets/{id}/links
+      tags:
+      - Assets
+      description: List of Device Links
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - deviceLinkKey: 014869001701970-52fafa9b-056f-483c-a6a3-e
+                  type: move
+                  deviceId: 014869001701970
+                  assetId: 52fafa9b-056f-483c-a6a3-e
+                  parameters: null
+                  dateCreated: '2022-02-04T15:45:44+00:00'
+                  dateUpdated: '2022-02-04T15:45:44+00:00'
+    post:
+      operationId: postV1AssetsByAssetidLinks
+      summary: v1/assets/{id}/links
+      tags:
+      - Assets
+      description: List of Device Links
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                assetId:
+                  type: string
+                type:
+                  type: string
+                deviceId:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                type: move
+                deviceId: 014869001701970
+                assetId: 52fafa9b-056f-483c-a6a3-e
+                deviceLinkKey: 014869001701970-52fafa9b-056f-483c-a6a3-e
+    delete:
+      operationId: deleteV1AssetsByAssetidLinks
+      summary: v1/assets/{id}/links
+      tags:
+      - Assets
+      description: List of Device Links
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                assetId:
+                  type: string
+                type:
+                  type: string
+                deviceId:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceLinkKey: 014869001701970-52fafa9b-056f-483c-a6a3-e
+                type: disabled
+                deviceId: 014869001701970
+                assetId: 52fafa9b-056f-483c-a6a3-e
+                parameters: null
+                dateCreated: '2022-02-04T15:45:44+00:00'
+                dateUpdated: '2022-02-04T15:45:44+00:00'
+                device:
+                  deviceId: 014869001701970
+                  accountId: 126
+                  assetId: 014869001701970
+                  odometerLocked: false
+                  runtimeLocked: false
+                  firmwareDeploymentStatus: UNKNOWN
+  /v1/assets/{assetId}/notes:
+    get:
+      operationId: getV1AssetsByAssetidNotes
+      summary: v1/assets/{id}/notes
+      tags:
+      - Assets
+      description: List of Notes
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - noteId: 0
+                  typeId: 1
+                  deviceId: ''
+                  datetime: '0000-00-00T00:00:00+00:00'
+                  userId: 0
+                  note: ''
+                  statusId: 1
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+    post:
+      operationId: postV1AssetsByAssetidNotes
+      summary: v1/assets/{id}/notes
+      tags:
+      - Assets
+      description: Add Note to Asset
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+                typeId:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/{assetId}/notes/{noteId}:
+    get:
+      operationId: getV1AssetsByAssetidNotesByNoteid
+      summary: v1/assets/{id}/notes/{id}
+      tags:
+      - Assets
+      description: Load Asset Note
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: noteId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                noteId: 0
+                typeId: 1
+                deviceId: ''
+                datetime: ''
+                userId: 0
+                note: ''
+                statusId: 1
+                dateCreated: '0000-00-00T00:00:00+00:00'
+                dateUpdated: '0000-00-00T00:00:00+00:00'
+    post:
+      operationId: postV1AssetsByAssetidNotesByNoteid
+      summary: v1/assets/{id}/notes/{id}
+      tags:
+      - Assets
+      description: Load Asset Note
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: noteId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                statusId:
+                  type: string
+                dateClosed:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1AssetsByAssetidNotesByNoteid
+      summary: v1/assets/{id}/notes/{id}
+      tags:
+      - Assets
+      description: Load Asset Note
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: noteId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/{assetId}/reminders:
+    get:
+      operationId: getV1AssetsByAssetidReminders
+      summary: v1/assets/{id}/reminders
+      tags:
+      - Assets
+      description: List of Asset Reminders
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1AssetsByAssetidReminders
+      summary: v1/assets/{id}/reminders
+      tags:
+      - Assets
+      description: Add Asset Reminder
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                parameter:
+                  type: string
+                description:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/{assetId}/reminders/{reminderKey}:
+    get:
+      operationId: getV1AssetsByAssetidRemindersByReminderkey
+      summary: v1/assets/{id}/reminders/{reminderKey}
+      tags:
+      - Assets
+      description: List of Asset Reminders
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: reminderKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1AssetsByAssetidRemindersByReminderkey
+      summary: v1/assets/{id}/reminders/{reminderKey}
+      tags:
+      - Assets
+      description: Add Asset Reminder
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: reminderKey
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                dateCompleted:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1AssetsByAssetidRemindersByReminderkey
+      summary: v1/assets/{id}/reminders/{reminderKey}
+      tags:
+      - Assets
+      description: Add Asset Reminder
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: reminderKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/{assetId}/subscriptions:
+    get:
+      operationId: getV1AssetsByAssetidSubscriptions
+      summary: v1/assets/{id}/subscriptions
+      tags:
+      - Assets
+      description: List of Asset Reminders
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - assetSubscriptionKey: ''
+                  status: 1
+                  assetId: ''
+                  subscriptionPlanKey: ''
+                  dateSubscriptionStart: '0000-00-00T00:00:00+00:00'
+                  dateSubscriptionEnd: '0000-00-00T00:00:00+00:00'
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+  /v1/assets/{assetId}/subscriptions/{assetSubscriptionKey}:
+    get:
+      operationId: getV1AssetsByAssetidSubscriptionsByAssetsubscriptionkey
+      summary: v1/assets/{id}/subscriptions/{assetSubscriptionKey}
+      tags:
+      - Assets
+      description: List of Asset Reminders
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: assetSubscriptionKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                assetSubscriptionKey: 0262a8c8-df50-46e1-81bf-4cdabbe2c84d
+                status: 1
+                assetId: TEST-ASSET-ID
+                subscriptionPlanKey: PLAN-01
+                subscriptionPrice: 1
+                dateSubscriptionStart: 0000-00-00T00:00:00+0000
+                dateSubscriptionEnd: 0000-00-00T00:00:00+0000
+                dateCreated: 0000-00-00T00:00:00+0000
+                dateUpdated: 0000-00-00T00:00:00+0000
+  /v1/assets/{assetId}/tags:
+    get:
+      operationId: getV1AssetsByAssetidTags
+      summary: v1/assets/{id}/tags
+      tags:
+      - Assets
+      description: List Asset Tags
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - imei: ''
+                  tagId: ''
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  statusId: 1
+    post:
+      operationId: postV1AssetsByAssetidTags
+      summary: v1/assets/{id}/tags
+      tags:
+      - Assets
+      description: List Asset Tags
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                tagId:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: success
+                tagId: ''
+                tagName: ''
+  /v1/assets/{assetId}/tags/{tagId}:
+    get:
+      operationId: getV1AssetsByAssetidTagsByTagid
+      summary: v1/assets/{id}/tags/{tagId}
+      tags:
+      - Assets
+      description: List Asset Tags
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1AssetsByAssetidTagsByTagid
+      summary: v1/assets/{id}/tags/{tagId}
+      tags:
+      - Assets
+      description: List Asset Tags
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/{assetId}/trips:
+    get:
+      operationId: getV1AssetsByAssetidTrips
+      summary: v1/assets/{id}/trips
+      tags:
+      - Assets
+      description: List Asset Tags
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/assets/{assetId}/vin/decode:
+    get:
+      operationId: getV1AssetsByAssetidVinDecode
+      summary: v1/assets/{id}/vin/decode
+      tags:
+      - Assets
+      description: List of Asset Reminders
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceId: ''
+                type: ''
+                enabled: 0
+                label: ''
+                accountId: 0
+                groupId: 0
+                dateActivated: '0000-00-00T00:00:00+00:00'
+                vehicleMake: ''
+                vehicleModel: ''
+                vehicleRegistration: ''
+                vehicleVin: ''
+                maker: ''
+                model: ''
+                dateProvisioned: '0000-00-00T00:00:00+00:00'
+                dateInstalled: '0000-00-00T00:00:00+00:00'
+                allowApiEvents: false
+                jobId: ''
+                fuelTankSize: 55
+                fuelTankFullPercentage: 99
+                entityTypeKey: ''
+                isDriverLocked: false
+                assetId: ''
+                odometerLocked: false
+                runtimeLocked: false
+                firmwareDeploymentStatus: UNKNOWN
+                settings:
+                  countryCode:
+                    deviceSettingId: ''
+                    deviceId: ''
+                    parameter: ''
+                    value: AU
+                    dateCreated: '0000-00-00T00:00:00+00:00'
+                    dateUpdated: '0000-00-00T00:00:00+00:00'
+                    status: true
+                    description: ''
+                    template: ''
+  /v1/assets/{assetId}/warnings:
+    get:
+      operationId: getV1AssetsByAssetidWarnings
+      summary: v1/assets/{id}/vin/warnings
+      tags:
+      - Assets
+      description: List of Asset Reminders
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceId: ''
+                type: ''
+                enabled: 0
+                label: ''
+                accountId: 0
+                groupId: 0
+                dateActivated: '0000-00-00T00:00:00+00:00'
+                vehicleMake: ''
+                vehicleModel: ''
+                vehicleRegistration: ''
+                vehicleVin: ''
+                maker: ''
+                model: ''
+                dateProvisioned: '0000-00-00T00:00:00+00:00'
+                dateInstalled: '0000-00-00T00:00:00+00:00'
+                allowApiEvents: false
+                jobId: ''
+                fuelTankSize: 55
+                fuelTankFullPercentage: 99
+                entityTypeKey: ''
+                isDriverLocked: false
+                assetId: ''
+                odometerLocked: false
+                runtimeLocked: false
+                firmwareDeploymentStatus: UNKNOWN
+                settings:
+                  countryCode:
+                    deviceSettingId: ''
+                    deviceId: ''
+                    parameter: ''
+                    value: AU
+                    dateCreated: '0000-00-00T00:00:00+00:00'
+                    dateUpdated: '0000-00-00T00:00:00+00:00'
+                    status: true
+                    description: ''
+                    template: ''
+  /v2/assets/{assetId}/faults:
+    get:
+      operationId: getV2AssetsByAssetidFaults
+      summary: v2/assets/{id}/faults
+      tags:
+      - Assets
+      description: 'Total Fuel Consumed - OK
+
+
+        Requires Optimisation'
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - eventId: 1
+                  datetime: ''
+                  code: ''
+                  parameter: ''
+                  assetId: ''
+                  params:
+                    faultCode: ''
+                    faultDescription: ''
+                    obdFaultCode: ''
+                  fault:
+                    faultCode: ''
+                    title: ''
+                    type: ''
+                    accountId: 0
+                    status: true
+    delete:
+      operationId: deleteV2AssetsByAssetidFaults
+      summary: v2/assets/{id}/faults
+      tags:
+      - Assets
+      description: 'Total Fuel Consumed - OK
+
+
+        Requires Optimisation'
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                success: true
+                active: 0
+  /v2/assets/{assetId}/faults/{parameterKey}:
+    delete:
+      operationId: deleteV2AssetsByAssetidFaultsByParameterkey
+      summary: v2/assets/{id}/faults/{parameter}
+      tags:
+      - Assets
+      description: 'Total Fuel Consumed - OK
+
+
+        Requires Optimisation'
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: parameterKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v2/assets/{assetId}/parameters:
+    get:
+      operationId: getV2AssetsByAssetidParameters
+      summary: v2/assets/{id}/parameters
+      tags:
+      - Assets
+      description: 'Total Fuel Consumed - OK
+
+
+        Requires Optimisation'
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - parameterKey: '0'
+                  deviceId: '0'
+                  parameter: ''
+                  value: '3'
+                  datetime: '0000-00-00T00:00:00+00:00'
+                  eventId: 0
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+  /v2/assets/{assetId}/settings:
+    get:
+      operationId: getV2AssetsByAssetidSettings
+      summary: v2/assets/{id}/settings
+      tags:
+      - Assets
+      description: 'Total Fuel Consumed - OK
+
+
+        Requires Optimisation'
+      parameters:
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

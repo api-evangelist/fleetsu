@@ -1,0 +1,328 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Subscriptions API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Subscriptions
+paths:
+  /v1/subscriptions:
+    get:
+      operationId: getV1Subscriptions
+      summary: v1/subscriptions
+      tags:
+      - Subscriptions
+      description: 'List of Subscriptions
+
+
+        Fields
+
+
+        subscriptionKey - (string)- Unique Subscription Key
+
+
+        deviceId - (string) - Unique Device ID
+
+
+        subscriptionPlanKey - (string) - Subscription Plan Key
+
+
+        price - (float) - Subscription Place
+
+
+        status - (int) - Subscription Status
+
+
+        accountSubscriptionKey - (string) - Subscription Provider Key
+
+
+        dateCreated - (datetime) - Date Subscription was Created
+
+
+        dateUpdated - (datetime) - Date Subscription was Last Updated
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        subscriptionKe
+
+
+        deviceId
+
+
+        subscriptionPlanKey
+
+
+        price
+
+
+        status
+
+
+        accountSubscriptionKey
+
+
+        dateCreated
+
+
+        dateUpdated
+
+
+        _extend : Available Extentions
+
+
+        device - Device Details
+
+
+        subscription/plan - Subscription Plan
+
+
+        account/subscription - Linked Provider Subscription
+
+
+        account - Account Details
+
+
+        subscription/provider/subscription - Subscription Provider Subscription Details
+
+
+        subscription/provider/plan - Subscription Provider Plan Details'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - subscriptionKey: ''
+                  deviceId: ''
+                  subscriptionPlanKey: ''
+                  price: 0
+                  status: 1
+                  subscriptionStart: '0000-00-00T00:00:00+00:00'
+                  comment: ''
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

@@ -1,0 +1,60 @@
+generated: '2026-10-22'
+method: searched
+source: https://api-docs.fleetsu.com/
+note: Read from the info.description of the provider-published Postman collection rendered at api-docs.fleetsu.com (saved as openapi/_original/fleetsu-postman-collection.json).
+format:
+  style: REST
+  media_type: application/json
+  request_header: 'Ensure a Header Value Key = "Accept"  Value = "application/json"'
+  transport: 'All API Requests must be made over HTTPS'
+authentication:
+  style: http-basic
+  ref: authentication/fleetsu-authentication.yml
+pagination:
+  style: offset
+  params:
+  - name: _limit
+    description: 'Limit returned results Min: 1, Max: 1000, default: 200'
+  - name: _start
+    description: 'Start point for returning results e.g. _start=201'
+  response_fields: []
+  note: No total-count or next-link response field is documented.
+filtering:
+  description: Query-string filters on resource fields; string wildcards (?label=Asset*), comma-separated multivalue OR (?groupId=12,76,100 or groupId[0]=12&groupId[1]=76), datetime comparisons (?datetime=>2017-01-01T00:00:00Z) including relative expressions (?datetime=-7 day).
+  datetime: 'it is recommended to use ISO 8601 standard dates. If a timezone is not specified in the date string UTC will be assumed.'
+sorting:
+  param: _sort
+  description: '_sort=label ascending, _sort=!label descending, _sort=make,model multi-field'
+expansion:
+  param: _extend
+  description: 'Append related data to the search results e.g. _extend=event or _extend=event,account; fields restricted with _extend=event:eventId|latitude|longitude or _extend[event][_fields]=...'
+sparse_fields:
+  param: _fields
+  description: Documented inside the advanced _extend form (_extend[event][_fields]=eventId|latitude|...).
+grouping:
+  param: _group
+  description: '_group=datetime:hour Group By Hour; modifiers HOUR, DATE, MONTH, DAYOFMONTH, DAYOFWEEK, DAYOFYEAR, MINUTE, WEEK, WEEKDAY, WEEKOFYEAR, YEAR, YEARWEEK, DATEHOUR'
+versioning:
+  style: url-path
+  description: Paths are prefixed /v1/ (273 paths) and /v2/ (8 paths) in the contract; no versioning policy is published.
+  ref: lifecycle/fleetsu-lifecycle.yml
+errors:
+  envelope: '{"code": <int>, "message": <string>}'
+  description: 'Standard HTTP Response codes are returned on all requests. Example bodies show {"code": 400, "message": "Invalid Invite Code ID"} and {"code": 4040003, "message": "Invite Not Found"}.'
+  ref: errors/fleetsu-problem-types.yml
+idempotency:
+  coverage: none
+  description: No idempotency key or replay-protection mechanism is documented; writes are POST/DELETE.
+request_id:
+  documented: false
+rate_limits:
+  documented: false
+  ref: rate-limits/fleetsu-rate-limits.yml
+metadata:
+  documented: false
+reversibility:
+  status: none
+  description: The contract has 37 DELETE operations (e.g. deleteV1FencesByFenceid, deleteV1GroupsByGroupid, deleteV1TagsByTagid) and many POST create/update operations. The docs publish no cancel, undo, restore or soft-delete operation and no window in which a delete can be reversed; reversal would mean re-creating the resource.
+  operations: []
+dry_run_mode:
+  documented: false

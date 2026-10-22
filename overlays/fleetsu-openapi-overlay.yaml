@@ -1,0 +1,151 @@
+overlay: 1.0.0
+info:
+  title: Fleetsu API - API Evangelist enhancements
+  version: 1.0.0
+extends: ../openapi/_original/fleetsu-openapi.yml
+x-generated: '2026-10-22'
+x-method: generated
+x-source: Conventions transcribed from the info.description of openapi/fleetsu-openapi.yml (Authentication, Filtering/Searching, Sorting, Pagination,
+  Extending Datasets, Grouping).
+actions:
+- target: $.info
+  update:
+    x-api-evangelist-summary: 'Fleetsu (now Rand McNally Rand Platform) connected-fleet / GPS telematics REST API: assets, devices, drivers, events,
+      faults, geofences, logbooks, trips and reports.'
+    x-documentation: https://api-docs.fleetsu.com/
+- target: $
+  update:
+    security:
+    - basicAuth: []
+- target: $.components.securitySchemes.basicAuth
+  update:
+    description: HTTP Basic authentication using a Fleetsu username and password. Unauthenticated requests return 401 Unauthorized.
+- target: $.paths.*.get
+  update:
+    x-pagination:
+      style: offset
+      limit_param: _limit
+      offset_param: _start
+      default: 200
+      max: 1000
+    x-query-conventions:
+      sort: _sort (prefix ! for descending)
+      extend: _extend
+      group: _group
+      filter: field=value, wildcards *, comma-separated OR, datetime >/< ranges (UTC if no timezone)
+- target: $.paths['/v1/assets'].get
+  update:
+    x-mcp-candidate-tool: list_assets
+    x-agent-category: assets
+- target: $.paths['/v1/assets/{assetId}'].get
+  update:
+    x-mcp-candidate-tool: get_asset
+    x-agent-category: assets
+- target: $.paths['/v1/assets/locations'].get
+  update:
+    x-mcp-candidate-tool: list_asset_locations
+    x-agent-category: assets
+- target: $.paths['/v1/assets/moving'].get
+  update:
+    x-mcp-candidate-tool: list_moving_assets
+    x-agent-category: assets
+- target: $.paths['/v1/assets/offline'].get
+  update:
+    x-mcp-candidate-tool: list_offline_assets
+    x-agent-category: assets
+- target: $.paths['/v1/assets/{assetId}/trips'].get
+  update:
+    x-mcp-candidate-tool: list_asset_trips
+    x-agent-category: trips
+- target: $.paths['/v1/assets/{assetId}/events'].get
+  update:
+    x-mcp-candidate-tool: list_asset_events
+    x-agent-category: events
+- target: $.paths['/v1/assets/{assetId}/reminders'].get
+  update:
+    x-mcp-candidate-tool: list_asset_reminders
+    x-agent-category: maintenance
+- target: $.paths['/v1/events'].get
+  update:
+    x-mcp-candidate-tool: list_events
+    x-agent-category: events
+- target: $.paths['/v1/events/{eventId}'].get
+  update:
+    x-mcp-candidate-tool: get_event
+    x-agent-category: events
+- target: $.paths['/v1/events/codes'].get
+  update:
+    x-mcp-candidate-tool: list_event_codes
+    x-agent-category: events
+- target: $.paths['/v1/events/important'].get
+  update:
+    x-mcp-candidate-tool: list_important_events
+    x-agent-category: events
+- target: $.paths['/v1/faults'].get
+  update:
+    x-mcp-candidate-tool: list_faults
+    x-agent-category: faults
+- target: $.paths['/v1/drivers'].get
+  update:
+    x-mcp-candidate-tool: list_drivers
+    x-agent-category: drivers
+- target: $.paths['/v1/drivers/{driverId}'].get
+  update:
+    x-mcp-candidate-tool: get_driver
+    x-agent-category: drivers
+- target: $.paths['/v1/drivers/{driverId}/score'].get
+  update:
+    x-mcp-candidate-tool: get_driver_score
+    x-agent-category: drivers
+- target: $.paths['/v1/fences'].get
+  update:
+    x-mcp-candidate-tool: list_fences
+    x-agent-category: geofences
+- target: $.paths['/v1/fences/{fenceId}'].get
+  update:
+    x-mcp-candidate-tool: get_fence
+    x-agent-category: geofences
+- target: $.paths['/v1/fences/{fenceId}/assets'].get
+  update:
+    x-mcp-candidate-tool: list_fence_assets
+    x-agent-category: geofences
+- target: $.paths['/v1/groups'].get
+  update:
+    x-mcp-candidate-tool: list_groups
+    x-agent-category: groups
+- target: $.paths['/v1/tags'].get
+  update:
+    x-mcp-candidate-tool: list_tags
+    x-agent-category: tags
+- target: $.paths['/v1/logbooks'].get
+  update:
+    x-mcp-candidate-tool: list_logbooks
+    x-agent-category: logbooks
+- target: $.paths['/v1/logbooks/trips'].get
+  update:
+    x-mcp-candidate-tool: list_logbook_trips
+    x-agent-category: logbooks
+- target: $.paths['/v1/reports/fleet/completed-trips'].get
+  update:
+    x-mcp-candidate-tool: report_completed_trips
+    x-agent-category: reports
+- target: $.paths['/v1/reports/fleet/idling'].get
+  update:
+    x-mcp-candidate-tool: report_idling
+    x-agent-category: reports
+- target: $.paths['/v1/reports/drivers/scores'].get
+  update:
+    x-mcp-candidate-tool: report_driver_scores
+    x-agent-category: reports
+- target: $.paths['/v1/reports/fences/interactions'].get
+  update:
+    x-mcp-candidate-tool: report_fence_interactions
+    x-agent-category: reports
+- target: $.paths['/v1/reports/device-health'].get
+  update:
+    x-mcp-candidate-tool: report_device_health
+    x-agent-category: reports
+- target: $.paths['/v1/maps/geocode'].get
+  update:
+    x-mcp-candidate-tool: geocode
+    x-agent-category: maps

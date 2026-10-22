@@ -1,23 +1,414 @@
 aid: fleetsu
+
 name: Fleetsu
-description: 'Fleetsu is a company surfaced via the API Evangelist harvest backlog (source: australia-apidays-2026)
-  and added to the network as a stub for full-pipeline profiling.'
+
+description: 'Fleetsu is an Australian connected-fleet and GPS telematics platform offering real-time
+  vehicle tracking, fuel management and fuel tax credit reporting, ATO-compliant automated logbooks,
+  driver safety scoring, AI video dashcams, location alerts, asset tracking and service reminders for
+  car, truck, trailer and plant fleets. Its fleetsu.com site is now branded Rand McNally ("Rand Platform",
+  (c) 2025 Rand McNally) and its help center redirects to help.randmcnally.io. The Fleetsu Platform API,
+  documented at api-docs.fleetsu.com, is a REST/JSON API over HTTPS using HTTP Basic authentication, covering
+  assets, accounts, drivers, events, faults, fences, groups, logbooks, trips, reports and more.'
+
 url: https://raw.githubusercontent.com/api-evangelist/fleetsu/refs/heads/main/apis.yml
+
+image: https://res.cloudinary.com/postman/image/upload/t_team_logo_pubdoc/v1/team/768118b36f06c94b0306958b980558e6915839447e859fe16906e29d683976f0
+
 x-type: company
+
 x-source: harvest:australia-apidays-2026
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-22 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-22'
+
 modified: '2026-10-22'
+
 tags:
 - Company
-apis: []
+- Fleet Management
+- Telematics
+- GPS Tracking
+- Connected Vehicles
+- Logistics
+- Driver Safety
+- Australia
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: AgenticAccess
+  url: agentic-access/fleetsu-agentic-access.yml
+- type: Spectral
+  url: rules/fleetsu-rules.yml
+- type: Vocabulary
+  url: vocabulary/fleetsu-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Conventions
+  url: conventions/fleetsu-conventions.yml
+- type: Lifecycle
+  url: lifecycle/fleetsu-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/fleetsu-problem-types.yml
+- type: Conformance
+  url: conformance/fleetsu-conformance.yml
+- type: Overlay
+  url: overlays/fleetsu-openapi-overlay.yaml
+- type: WellKnown
+  url: well-known/fleetsu-well-known.yml
+- type: Hosts
+  url: hosts/fleetsu-hosts.yml
+- type: IntegrationEdges
+  url: integrations/fleetsu-integration-edges.yml
+- type: Vendors
+  url: vendors/fleetsu-vendors.yml
+- type: Login
+  url: https://api.fleetsu.com/login
+- type: Authentication
+  url: authentication/fleetsu-authentication.yml
+- type: DomainSecurity
+  url: security/fleetsu-domain-security.yml
 - type: Website
   url: https://fleetsu.com/
+- type: Documentation
+  url: https://api-docs.fleetsu.com/
+- type: APIReference
+  url: https://api-docs.fleetsu.com/
+- type: Blog
+  url: https://fleetsu.com/blog/
+- type: Support
+  url: https://help.fleetsu.com/
+- type: Contact
+  url: https://fleetsu.com/contact-us/
+- type: TermsOfService
+  url: https://fleetsu.com/terms-conditions/
+- type: PrivacyPolicy
+  url: https://fleetsu.com/privacy-policy/
+- type: Twitter
+  url: https://twitter.com/fleetsu_com
+
+apis:
+- aid: fleetsu:fleetsu-accounts-api
+  name: Fleetsu Accounts API
+  description: The Accounts API from Fleetsu — 17 operation(s) for accounts.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-accounts-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-assets-api
+  name: Fleetsu Assets API
+  description: The Assets API from Fleetsu — 43 operation(s) for assets.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Assets
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-assets-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-devices-api
+  name: Fleetsu Devices API
+  description: The Devices API from Fleetsu — 20 operation(s) for devices.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Devices
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-devices-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-driver-api
+  name: Fleetsu Driver API
+  description: The Driver API from Fleetsu — 12 operation(s) for driver.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Driver
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-driver-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-events-api
+  name: Fleetsu Events API
+  description: The Events API from Fleetsu — 11 operation(s) for events.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-events-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-faults-api
+  name: Fleetsu Faults API
+  description: The Faults API from Fleetsu — 2 operation(s) for faults.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Faults
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-faults-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-fences-api
+  name: Fleetsu Fences API
+  description: The Fences API from Fleetsu — 9 operation(s) for fences.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Fences
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-fences-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-general-api
+  name: Fleetsu General API
+  description: The General API from Fleetsu — 1 operation(s) for general.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - General
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-general-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-groups-api
+  name: Fleetsu Groups API
+  description: The Groups API from Fleetsu — 3 operation(s) for groups.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-groups-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-installs-api
+  name: Fleetsu Installs API
+  description: The Installs API from Fleetsu — 1 operation(s) for installs.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Installs
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-installs-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-kpi-api
+  name: Fleetsu KPI API
+  description: The KPI API from Fleetsu — 2 operation(s) for kpi.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - KPI
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-kpi-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-logbooks-api
+  name: Fleetsu Logbooks API
+  description: The Logbooks API from Fleetsu — 14 operation(s) for logbooks.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Logbooks
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-logbooks-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-maps-api
+  name: Fleetsu Maps API
+  description: The Maps API from Fleetsu — 3 operation(s) for maps.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Maps
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-maps-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-reports-api
+  name: Fleetsu Reports API
+  description: The Reports API from Fleetsu — 88 operation(s) for reports.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-reports-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-subscriptions-api
+  name: Fleetsu Subscriptions API
+  description: The Subscriptions API from Fleetsu — 1 operation(s) for subscriptions.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-subscriptions-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-tags-api
+  name: Fleetsu Tags API
+  description: The Tags API from Fleetsu — 10 operation(s) for tags.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-tags-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-trips-api
+  name: Fleetsu Trips API
+  description: The Trips API from Fleetsu — 14 operation(s) for trips.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Trips
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-trips-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-user-api
+  name: Fleetsu User API
+  description: The User API from Fleetsu — 12 operation(s) for user.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-user-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+- aid: fleetsu:fleetsu-users-api
+  name: Fleetsu Users API
+  description: The Users API from Fleetsu — 21 operation(s) for users.
+  humanURL: https://api-docs.fleetsu.com/
+  baseURL: https://api.fleetsu.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/fleetsu-users-api-openapi.yml
+  - type: Postman
+    url: >-
+      https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  - type: Documentation
+    url: https://api-docs.fleetsu.com/
+x-coverage:
+  state: covered
+  reason: identity-verified
+  detail: fleetsu.com serves a SiteGround bot challenge (202) to plain clients but renders in a browser; pages
+    rendered and titled "... - Rand McNally". help.fleetsu.com redirects cross-domain to help.randmcnally.io
+    (parent-brand support center; rebrand not applied here). api-docs.fleetsu.com is a Postman Documenter
+    page titled "Fleetsu - API"; no production base URL was readable from it, so no API entry was added.
+    github.com/fleetsu is a user account with 0 repos and no link to the company, so not recorded.
+  evidence:
+  - url: https://fleetsu.com/
+    status: 202
+  - url: https://api-docs.fleetsu.com/
+    status: 200
+  - url: https://fleetsu.com/blog/
+    status: 202
+  - url: https://help.fleetsu.com/
+    status: 202
+  - url: https://fleetsu.com/contact-us/
+    status: 202
+  - url: https://fleetsu.com/terms-conditions/
+    status: 202
+  - url: https://fleetsu.com/privacy-policy/
+    status: 202
+  - url: https://x.com/fleetsu_com
+    status: 200
+x-enrichment:
+  date: '2026-10-22'
+  status: enriched
+  artifacts_added: 30
+  pass: modular-v1
+  engine: identity=anthropic,contract=anthropic,surfaces=anthropic,docs=anthropic,regulatory=anthropic

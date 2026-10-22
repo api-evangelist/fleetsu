@@ -1,0 +1,203 @@
+generated: '2026-10-22'
+method: derived
+status: candidate
+source: openapi/fleetsu-openapi.yml (derived from openapi/_original/fleetsu-postman-collection.json, documented
+  at https://api-docs.fleetsu.com/)
+name: Fleetsu MCP server (candidate)
+description: No official Fleetsu (or Rand McNally) MCP server was found. This is a CANDIDATE tool list
+  derived from read-only GET operations in the Fleetsu Platform API OpenAPI; nobody ships or hosts it.
+searched:
+  query: Fleetsu MCP server OR "Rand McNally" fleet MCP server
+  date: '2026-10-22'
+  result: no official server found; preflight contract_discovery verdict mcp=absent on fleetsu.com, api-docs.fleetsu.com,
+    api.fleetsu.com, app.fleetsu.com, help.fleetsu.com; mcp_tool_table empty
+deployment:
+  mode: none
+  auth: unknown
+  verified: derived
+auth:
+  type: http-basic
+  note: The backing REST API uses HTTP Basic auth with a Fleetsu username and password (per the OpenAPI
+    info description).
+server:
+  base_url: https://api.fleetsu.com
+tool_count: 29
+tools:
+- name: list_assets
+  category: assets
+  description: List fleet assets (vehicles, trailers, plant) with filtering, sorting, _limit/_start pagination
+    and _extend.
+  operationId: getV1Assets
+  method: GET
+  path: /v1/assets
+- name: get_asset
+  category: assets
+  description: Get one asset by assetId.
+  operationId: getV1AssetsByAssetid
+  method: GET
+  path: /v1/assets/{assetId}
+- name: list_asset_locations
+  category: assets
+  description: Current locations of fleet assets.
+  operationId: getV1AssetsLocations
+  method: GET
+  path: /v1/assets/locations
+- name: list_moving_assets
+  category: assets
+  description: Assets currently moving.
+  operationId: getV1AssetsMoving
+  method: GET
+  path: /v1/assets/moving
+- name: list_offline_assets
+  category: assets
+  description: Assets whose devices are offline.
+  operationId: getV1AssetsOffline
+  method: GET
+  path: /v1/assets/offline
+- name: list_asset_trips
+  category: trips
+  description: Trips for one asset.
+  operationId: getV1AssetsByAssetidTrips
+  method: GET
+  path: /v1/assets/{assetId}/trips
+- name: list_asset_events
+  category: events
+  description: Telematics events for one asset.
+  operationId: getV1AssetsByAssetidEvents
+  method: GET
+  path: /v1/assets/{assetId}/events
+- name: list_asset_reminders
+  category: maintenance
+  description: Service reminders for one asset.
+  operationId: getV1AssetsByAssetidReminders
+  method: GET
+  path: /v1/assets/{assetId}/reminders
+- name: list_events
+  category: events
+  description: List telematics events (datetime range filters supported).
+  operationId: getV1Events
+  method: GET
+  path: /v1/events
+- name: get_event
+  category: events
+  description: Get one event by eventId.
+  operationId: getV1EventsByEventid
+  method: GET
+  path: /v1/events/{eventId}
+- name: list_event_codes
+  category: events
+  description: Reference list of event codes.
+  operationId: getV1EventsCodes
+  method: GET
+  path: /v1/events/codes
+- name: list_important_events
+  category: events
+  description: Important (alert-worthy) events.
+  operationId: getV1EventsImportant
+  method: GET
+  path: /v1/events/important
+- name: list_faults
+  category: faults
+  description: Vehicle fault codes.
+  operationId: getV1Faults
+  method: GET
+  path: /v1/faults
+- name: list_drivers
+  category: drivers
+  description: List drivers.
+  operationId: getV1Drivers
+  method: GET
+  path: /v1/drivers
+- name: get_driver
+  category: drivers
+  description: Get one driver.
+  operationId: getV1DriversByDriverid
+  method: GET
+  path: /v1/drivers/{driverId}
+- name: get_driver_score
+  category: drivers
+  description: Driver safety score.
+  operationId: getV1DriversByDriveridScore
+  method: GET
+  path: /v1/drivers/{driverId}/score
+- name: list_fences
+  category: geofences
+  description: List geofences.
+  operationId: getV1Fences
+  method: GET
+  path: /v1/fences
+- name: get_fence
+  category: geofences
+  description: Get one geofence.
+  operationId: getV1FencesByFenceid
+  method: GET
+  path: /v1/fences/{fenceId}
+- name: list_fence_assets
+  category: geofences
+  description: Assets attached to a geofence.
+  operationId: getV1FencesByFenceidAssets
+  method: GET
+  path: /v1/fences/{fenceId}/assets
+- name: list_groups
+  category: groups
+  description: List groups.
+  operationId: getV1Groups
+  method: GET
+  path: /v1/groups
+- name: list_tags
+  category: tags
+  description: List tags.
+  operationId: getV1Tags
+  method: GET
+  path: /v1/tags
+- name: list_logbooks
+  category: logbooks
+  description: List ATO logbooks.
+  operationId: getV1Logbooks
+  method: GET
+  path: /v1/logbooks
+- name: list_logbook_trips
+  category: logbooks
+  description: Logbook trips.
+  operationId: getV1LogbooksTrips
+  method: GET
+  path: /v1/logbooks/trips
+- name: report_completed_trips
+  category: reports
+  description: Fleet completed-trips report (JSON).
+  operationId: getV1ReportsFleetCompletedTrips
+  method: GET
+  path: /v1/reports/fleet/completed-trips
+- name: report_idling
+  category: reports
+  description: Fleet idling report (JSON).
+  operationId: getV1ReportsFleetIdling
+  method: GET
+  path: /v1/reports/fleet/idling
+- name: report_driver_scores
+  category: reports
+  description: Driver scores report.
+  operationId: getV1ReportsDriversScores
+  method: GET
+  path: /v1/reports/drivers/scores
+- name: report_fence_interactions
+  category: reports
+  description: Geofence entry/exit interactions report.
+  operationId: getV1ReportsFencesInteractions
+  method: GET
+  path: /v1/reports/fences/interactions
+- name: report_device_health
+  category: reports
+  description: Device health report.
+  operationId: getV1ReportsDeviceHealth
+  method: GET
+  path: /v1/reports/device-health
+- name: geocode
+  category: maps
+  description: Geocode via the Fleetsu maps service.
+  operationId: getV1MapsGeocode
+  method: GET
+  path: /v1/maps/geocode
+notes: Candidate tools were limited to GET operations; write/delete operations, the /v1/logout and /v1/forgotpassword
+  endpoints, and the CSV/PDF/XLSX export variants were left out. No tool crosswalk was emitted because
+  there is no real MCP server or GraphQL surface to bind.

@@ -1,0 +1,39 @@
+{
+  "provider": "fleetsu",
+  "sources": [
+    "fleetsu-openapi.yml"
+  ],
+  "outputs": [
+    "fleetsu-accounts-api-openapi.yml",
+    "fleetsu-assets-api-openapi.yml",
+    "fleetsu-devices-api-openapi.yml",
+    "fleetsu-driver-api-openapi.yml",
+    "fleetsu-events-api-openapi.yml",
+    "fleetsu-faults-api-openapi.yml",
+    "fleetsu-fences-api-openapi.yml",
+    "fleetsu-general-api-openapi.yml",
+    "fleetsu-groups-api-openapi.yml",
+    "fleetsu-installs-api-openapi.yml",
+    "fleetsu-kpi-api-openapi.yml",
+    "fleetsu-logbooks-api-openapi.yml",
+    "fleetsu-maps-api-openapi.yml",
+    "fleetsu-reports-api-openapi.yml",
+    "fleetsu-subscriptions-api-openapi.yml",
+    "fleetsu-tags-api-openapi.yml",
+    "fleetsu-trips-api-openapi.yml",
+    "fleetsu-user-api-openapi.yml",
+    "fleetsu-users-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/fleetsu-openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "fleetsu-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "fleetsu-openapi.yml: declared missing tag: General",
+    "apis.yml register: written (+19 apis, 19 total)"
+  ],
+  "skipped": []
+}

@@ -1,0 +1,123 @@
+generated: '2026-10-22'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/fleetsu-openapi.yml
+vocabulary:
+  name: Fleetsu Domain Vocabulary
+  description: 'Terms declared by Fleetsu''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-22'
+  terms:
+  - term: Reports
+    definition: 'Resource group in the contract; its operation GET /reports/fleet/breadcrumb/{imei}: reports/fleet/breadcrumb/{imei}'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Accounts
+    definition: 'Resource group in the contract; its operation GET /v1/account/groups: List of Groups associated with account'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Assets
+    definition: 'Resource group in the contract; its operation GET /v1/assets: Return a list of assets Fields Field Type Description deviceId/assetId
+      string System defined unique identifier in the system for the asset, often expressed as a UUID enabled integer An Integer indicating the
+      current asset state 0 = Enabled, 4 = Paused label string Label used to identify an asset in the system accountId integer Integer Identifying
+      the account where the asset is assigned groupId int'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Devices
+    definition: 'Resource group in the contract; its operation GET /v1/device/check/{deviceId}: v1/device/check/{deviceId}'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Driver
+    definition: 'Resource group in the contract; its operation GET /v1/driverid/assets: v1/driverid/assets'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Events
+    definition: 'Resource group in the contract; its operation GET /v1/events: List of Events Fields eventId - (int) - Event ID imei - (string)
+      - Unique Asset ID label - (string) - Asset label latitude - (Float) - Asset location''s latitude longitude - (Float) - Asset location''s
+      longitude formattedAddress - (String) - Asset location''s Full Address gpsIndicator - (String) - Device''s GPS Indicator numSatellites -
+      (int) - Device''s total number of satellites heading - (int) - Dev'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Faults
+    definition: 'Resource group in the contract; its operation GET /v1/faults: v1/faults'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Fences
+    definition: 'Resource group in the contract; its operation GET /v1/fences: All GeoFences in WKT format Fields fenceId - (string) Unique fence
+      ID accountId - (string) Unique Customer/Account ID fenceType - (string) Fence type (GeoPolygon) fenceName - (string) Fence name shapePoints
+      - (geometry) Fence geometry or shape details radius - (int) Fence radius status - (int) Fence status (0/1 - Disabled/Enabled) lineColor
+      - (string) Color code used to draw the border lines of th'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: User
+    definition: 'Resource group in the contract; its operation POST /v1/forgotpassword: Trigger password eeset email, for enabled and pause users'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Groups
+    definition: 'Resource group in the contract; its operation GET /v1/groups: List of Departments'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Installs
+    definition: 'Resource group in the contract; its operation GET /v1/installs/{deviceId}: v1/installs/{deviceId}'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: KPI
+    definition: 'Resource group in the contract; its operation GET /v1/kpi/rules: v1/kpi/rules'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Logbooks
+    definition: 'Resource group in the contract; its operation GET /v1/logbooks: logbooks'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: General
+    definition: 'Resource group in the contract; its operation GET /v1/logout: logout'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Maps
+    definition: 'Resource group in the contract; its operation GET /v1/maps/geocode: Convert Latitude &amp; Longitude into Street Address/Location'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Subscriptions
+    definition: 'Resource group in the contract; its operation GET /v1/subscriptions: List of Subscriptions Fields subscriptionKey - (string)-
+      Unique Subscription Key deviceId - (string) - Unique Device ID subscriptionPlanKey - (string) - Subscription Plan Key price - (float) -
+      Subscription Place status - (int) - Subscription Status accountSubscriptionKey - (string) - Subscription Provider Key dateCreated - (datetime)
+      - Date Subscription was Created dateUpdated - (datetime) - Date '
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Tags
+    definition: 'Resource group in the contract; its operation GET /v1/tags: List All Tags ###Fields tagId - (string) Unique Tag ID accountId
+      - (string) Unique Customer/Account ID groupId - (string) Unique Group ID tagName - (string) Tag Name tagBgColor - (string) Tag Background
+      Colour (Colour Code) status - (bool) Tag Status dateCreated - (datetime) Tag Create Date tagType - (string) Tag Type (''TRACKER'',''FENCE'',''FENCE
+      RESTRICTED'',''ASSET RESTRICTED'',''GLOBAL'') Custom Query '
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Trips
+    definition: 'Resource group in the contract; its operation GET /v1/trips: List of Trips ###Fields tripId - (string) Unique Trip ID tripDistance
+      - (number) Distance travelled in the trip (in Metres) dateFrom - (datetime) Trip start date and time dateTo - (datetime) Trip end date and
+      time maxSpeed - (number) Maximum speed travelled during the trip avgSpeed - (number) Average speed travelled during the trip imei - (string)
+      Unique asset identifier startEventId - (string) Id'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml
+  - term: Users
+    definition: 'Resource group in the contract; its operation GET /v1/user/logins: v1/user/logins'
+    tags:
+    - Resource Group
+    source: openapi/fleetsu-openapi.yml

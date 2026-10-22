@@ -1,0 +1,748 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu User API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: User
+paths:
+  /v1/forgotpassword:
+    post:
+      operationId: postV1Forgotpassword
+      summary: v1/forgotpassword
+      tags:
+      - User
+      description: Trigger password eeset email, for enabled and pause users
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/user:
+    get:
+      operationId: getV1User
+      summary: v1/user
+      tags:
+      - User
+      description: 'View Current Authenticated user details
+
+
+        User,Groups, Account & Sub Accounts
+
+
+        Fields
+
+
+        userId - (string) - Unique User ID
+
+
+        email - (string) - User''s Email address
+
+
+        active - (bool) - User''s Status (Enabled/Disabled)
+
+
+        type - (string) - User''s Type
+
+
+        customerId - (string) - User Account
+
+
+        firstName - (string) - User''s First name
+
+
+        lastName - (string) - User''s Last Name
+
+
+        dateCreated - (datetime) - Date user is created
+
+
+        fbtActive - (bool) - FBT user or not
+
+
+        landingPage - (string) - User''s Landing page
+
+
+        isAccountHolder - (bool) - User holding any account
+
+
+        customer - (List) List of customer accounts to which the user has access
+
+
+        customerId - (string) Uniquer customer/account ID
+
+
+        parentId - (string) Parent customer/account ID
+
+
+        enabled - (bool) Customer/account status
+
+
+        customerName - (string) Customer''s Name
+
+
+        address - (string) Customer''s address
+
+
+        city - (string) Customer''s city
+
+
+        state - (string) Customer''s state
+
+
+        postcode - (string) Customer''s postal code
+
+
+        country - (string) Customer''s country
+
+
+        timezone - (string) Customer''s timezone
+
+
+        brandingDomain - (string) Customer''s domain in which the app is available
+
+
+        billingType - (string) Customer''s billing choice
+
+
+        accountType - (string) Customer''s subscription choice
+
+
+        role - (List) Details of the role which the current user is entitled
+
+
+        roleId - (string) Unique role ID
+
+
+        role - (string) Role name
+
+
+        level - (integer) Role hierarchy level
+
+
+        landingPage - (string) Role''s default landing page
+
+
+        description - (string) Role description
+
+
+        termsandconditions - (List) Details of the terms and conditions the current user has agreed/not
+
+
+        tncId - (string) Unique Termns and Conditions Identifier
+
+
+        dateAccepted - (datetime) Date in which the user has agreed the terms and conditions
+
+
+        version - (string) Terms and conditions revision number
+
+
+        features - (List) List of features to which the current user has access'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                userId: 0
+                email: ''
+                active: false
+                type: ''
+                customerId: 0
+                firstName: ''
+                lastName: ''
+                mobile: ''
+                avatar: ''
+                dateCreated: '0000-00-00T00:00:00+00:00'
+                fbtActive: false
+                dashboard: ''
+                landingPage: ''
+                customer:
+                  customerId: 0
+                  parentId: 0
+                  enabled: true
+                  customerName: ''
+                  abn: ''
+                  location: ''
+                  address: ''
+                  city: ''
+                  state: ''
+                  postcode: ''
+                  country: ''
+                  timezone: ''
+                  firstName: ''
+                  LastName: ''
+                  email: ''
+                  contactNumber1: ''
+                  contactNumber2: ''
+                  dateAdded: 0000-00-00T00:00:0+00:00
+                  accountManager: ''
+                  subscriptionStartDate: '0000-00-00T00:00:00+00:00'
+                  brandingDomain: app.fleetsu.com
+                  customerNo: 0
+                  accountId: 0
+                  groups:
+                  - groupId: 0
+                    parentId: 0
+                    name: ''
+                    customerId: 0
+                    parent: true
+                    userId: 0
+                  branding:
+                    domain: ''
+                    logo: ''
+                    emailLogo: ''
+                    title: ''
+                    caption: ''
+                    stylesheet: ''
+                  elementRoles:
+                  - elementRoleId: 0
+                    elementKey: ''
+                    minRoleLevel: 10
+                    customerId: 0
+                    groupId: 0
+                role:
+                  roleId: 1
+                  role: ''
+                  level: 10
+                  landingPage: ''
+  /v1/user/account:
+    get:
+      operationId: getV1UserAccount
+      summary: v1/user/account
+      tags:
+      - User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                customerId: 0
+                parentId: 0
+                enabled: true
+                customerName: Fleetsu Demo
+                abn: ''
+                location: ''
+                address: ''
+                city: ''
+                state: ''
+                postcode: ''
+                country: Australia
+                timezone: Australia/Perth
+                firstName: ''
+                LastName: ''
+                email: ''
+                contactNumber1: ''
+                contactNumber2: ''
+                dateAdded: '0000-00-00T00:00:00+00:00'
+                accountManager: ''
+                subscriptionStartDate: '0000-00-00T00:00:00+00:00'
+                brandingDomain: app.fleetsu.com
+                customerNo: 0
+                accountId: 0
+                groups:
+                - groupId: 0
+                  parentId: 0
+                  name: All Assets
+                  customerId: 0
+                  parent: true
+                  userId: 0
+                branding:
+                  domain: app.fleetsu.com
+                  logo: /img/fleetsu-logo-horizontal.svg
+                  emailLogo: //cdn.fleetsu.com/logo/fleetsu-logo-vertical.png
+                  title: Connect. Manage. Optimise.
+                  caption: ''
+                  stylesheet: ''
+                elementRoles:
+                - elementRoleId: 0
+                  elementKey: '0'
+                  minRoleLevel: 10
+                  customerId: 0
+                  groupId: 0
+  /v1/user/configuration:
+    get:
+      operationId: getV1UserConfiguration
+      summary: v1/user/configuration
+      tags:
+      - User
+      description: User's Mobile Software Tracking Application Configuration
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                user:
+                  firstName: ''
+                  lastName: ''
+                  email: ''
+                  userId: 0
+                account:
+                  accountId: 0
+                  accountName: ''
+                device: []
+                features:
+                  app.dashboard: 1
+                  app.dashboard.live: 1
+                  app.dashboard.beta: 1
+                  app.assets.locations.beta: 1
+                  app.assets.locations.asset-locations-summary: 1
+                  app.assets.locations.geofences-summary: 1
+                  app.dashboard.unigas: 0
+                  app.dashboard.device-health: 0
+                  app.assets: 1
+                  app.assets.beta: 1
+                  app.assets.pdf: 0
+                  app.assets.live-map: 1
+                  app.assets.important-events: 1
+                  app.assets.asset-notes: 0
+                  app.assets.asset-settings: 0
+                  app.assets.devices: 0
+                  app.assets.events: 1
+                  app.assets.reminders: 0
+                  app.assets.sensors: 1
+                  app.assets.trips: 1
+                  app.assets.edit: 0
+                  app.assets.export: 0
+                  app.assets.locations: 1
+                  app.trips: 1
+                  app.rescue: 0
+                  app.timemanagement: 1
+                  app.jobmanagement: 0
+                  app.logbook: 1
+                  app.tags: 1
+                  app.groups: 0
+                  app.events: 1
+                  app.events.create: 0
+                  api.events.create: 0
+                  app.user: 1
+                  app.fences: 1
+                  app.fences.editor: 0
+                  app.fences.assets: 0
+                  app.fences.alerts: 0
+                  app.fences.interactions: 0
+                  app.fences.create: 0
+                  app.fences.export: 0
+                  app.reports: 1
+                  app.reports.beta: 1
+                  app.reports.devices.health: 1
+                  app.reports.devices.health.export: 1
+                  app.reports.fleet.last-movements: 1
+                  app.reports.fleet.last-movements.export: 1
+                  app.reports.fleet.events: 1
+                  app.reports.fleet.events.export: 1
+                  app.reports.fleet.important-events: 1
+                  app.reports.fleet.important-events.export: 1
+                  app.reports.fleet.usage: 0
+                  app.reports.fleet.usage.export: 0
+                  app.reports.fleet.completed-trips: 1
+                  app.reports.fleet.completed-trips.export: 1
+                  app.reports.fences.interaction: 1
+                  app.reports.fences.interaction.export: 1
+                  app.reports.scheduled: 1
+                  app.system: 0
+                  app.system.profile: 0
+                  app.system.groups: 0
+                  app.system.tags: 0
+                  app.system.tags.alerts: 0
+                  app.system.tags.assets: 0
+                  app.system.tags.fences: 0
+                  app.system.tags.users: 0
+                  app.system.users: 0
+                  app.system.users.groups: 0
+                  app.system.users.logons: 0
+                  app.system.users.tokens: 0
+                  app.system.users.password-resets: 0
+                  app.system.users.impersonate: 0
+                  app.system.users.create: 0
+                  app.system.users.export: 0
+                  app.system.fuelcosts: 0
+                  app.system.accounts: 0
+                  app.system.accounts.users: 0
+                  app.system.accounts.devices: 0
+                  app.system.accounts.features: 0
+                  app.system.accounts.notes: 0
+                  app.system.accounts.groups: 0
+                  app.system.devices: 0
+                  app.system.devices.event-history: 0
+                  app.system.devices.events: 0
+                  app.system.devices.live-map: 0
+                  app.system.devices.sensors: 0
+                  app.system.devices.command-out: 0
+                  app.system.devices.trips: 0
+                  app.system.devices.important-events: 0
+                  app.system.devices.export: 0
+                  app.system.devices.reset: 0
+                  app.system.devices.extended-info: 0
+                  app.system.devices.provision: 0
+                  app.system.logs.user.logons: 0
+                  app.system.logs.command-out: 0
+                  app.system.logs.command-out.export: 0
+                  app.system.logs.logons: 0
+                  app.system.logs.logons.export: 0
+                  mobile.onduty: 0
+                  mobile.distress: 1
+                  mobile.logout: 0
+                config:
+                  trackingInterval: 60
+                  heartbeatInterval: 900
+                  configInterval: 900
+                  bgGeoConfig:
+                    enabled: false
+                    notificationTitle: Fleetsu
+                    notificationText: Active
+                    foregroundService: true
+                    desiredAccuracy: 0
+                    stationaryRadius: 20
+                    distanceFilter: 10
+                    disableElasticity: false
+                    locationUpdateInterval: 60000
+                    minimumActivityRecognitionConfidence: 80
+                    fastestLocationUpdateInterval: 5000
+                    activityRecognitionInterval: 10000
+                    stopDetectionDelay: 1
+                    stopTimeout: 2
+                    activityType: ''
+                    debug: false
+                    forceReloadOnLocationChange: true
+                    forceReloadOnMotionChange: true
+                    stopOnTerminate: false
+                    startOnBoot: true
+                    url: ''
+                    method: POST
+                    batchSync: false
+                    autoSync: true
+                    maxDaysToPersist: 1
+  /v1/user/devices:
+    get:
+      operationId: getV1UserDevices
+      summary: v1/user/devices
+      tags:
+      - User
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/user/driving:
+    get:
+      operationId: getV1UserDriving
+      summary: v1/user/driving
+      tags:
+      - User
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/user/features:
+    get:
+      operationId: getV1UserFeatures
+      summary: v1/user/features
+      tags:
+      - User
+      description: Authenticated user's enabled/disabled feature flags
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/user/groups:
+    get:
+      operationId: getV1UserGroups
+      summary: v1/user/groups
+      tags:
+      - User
+      description: List of groups associated with authenticated user
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/user/tags:
+    get:
+      operationId: getV1UserTags
+      summary: v1/user/tags
+      tags:
+      - User
+      description: Current User's Assigned Tags
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - tagId: 0
+                  accountId: 0
+                  groupId: null
+                  tagName: fleet
+                  tagBgColor: 2196f3
+                  status: true
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  tagType: ASSET RESTRICTED
+                  userId: 0
+                params:
+                  groupId: []
+                  _sort: tagName
+                  userId: 0
+                  accountId: 0
+  /v1/user/tnc:
+    get:
+      operationId: getV1UserTnc
+      summary: v1/user/tnc
+      tags:
+      - User
+      description: Get Terms & Conditions for User
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1UserTnc
+      summary: v1/user/tnc
+      tags:
+      - User
+      description: Accept Terms & Conditions for Current User
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v2/user/driver/configuration:
+    get:
+      operationId: getV2UserDriverConfiguration
+      summary: v2/user/driver/configuration
+      tags:
+      - User
+      description: User's Mobile Software Tracking Application Configuration
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v2/user/manager/configuration:
+    get:
+      operationId: getV2UserManagerConfiguration
+      summary: v2/user/manager/configuration
+      tags:
+      - User
+      description: User's Mobile Software Tracking Application Configuration
+      responses:
+        default:
+          description: Response not documented in the collection
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

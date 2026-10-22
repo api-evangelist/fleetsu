@@ -1,0 +1,1078 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Trips API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Trips
+paths:
+  /v1/trips:
+    get:
+      operationId: getV1Trips
+      summary: v1/trips
+      tags:
+      - Trips
+      description: 'List of Trips
+
+
+        ###Fields
+
+
+        tripId - (string) Unique Trip ID
+
+
+        tripDistance - (number) Distance travelled in the trip (in Metres)
+
+
+        dateFrom - (datetime) Trip start date and time
+
+
+        dateTo - (datetime) Trip end date and time
+
+
+        maxSpeed - (number) Maximum speed travelled during the trip
+
+
+        avgSpeed - (number) Average speed travelled during the trip
+
+
+        imei - (string) Unique asset identifier
+
+
+        startEventId - (string) Identifier of the event from which the trip began
+
+
+        endEventId - (string) Identifier of the event till which the trip lasted
+
+
+        type - (string) Trips type
+
+
+        fuelConsumed - (number) Amount of fuel consumed during the trip(in Millilitres)
+
+
+        avgFuelConsumed - (number) Average Fuel Consumed by the asset
+
+
+        cost - (float) Additional cost to be associated to the trip
+
+
+        odometerStart - (number) Odometer reading at the beginning of trip
+
+
+        odometerEnd - (number) Odometer reading at the end of trip
+
+
+        co2 - (number) co2 emission details
+
+
+        description - (string) Trip Description
+
+
+        stopDuration - (number) Asset stop duration at the destination
+
+
+        stopDescription - (string) Trip stop description
+
+
+        stopType - (string) Trip stop type (C-Buisness/Classified,P-Personal,N-Non-Classified)
+
+
+        jobStageId - (string) Unique Job Stage ID
+
+
+        engineHourStart - (number) Engine hour/Runtime at the start of the trip
+
+
+        engineHourEnd - (number) Engine hour/Runtime at the end of the trip
+
+
+        engineHourUsed - (number) Engine hour/Runtime spent in the trip
+
+
+        jobId - (string) Unique Job ID
+
+
+        driverId - (string) Unique Driver ID
+
+
+        totalDuration - (number) Total trip duration (in Seconds)
+
+
+        movingDuration - (number) Trip asset moving time (in Seconds)
+
+
+        idleDuration - (number) Trip asset idle time (in Seconds)
+
+
+        stationaryDuration - (number) Trip asset stationary time (in Seconds)
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search assetId,imei,label,vehicleRegistration
+
+
+        tagId - (string) - Related Tag
+
+
+        dateFrom - (datetime) - Trip start date
+
+
+        dateTo - (datetime) - Trip end date
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        assetId,imei
+
+
+        label
+
+
+        jobId
+
+
+        vehicleRegitration
+
+
+        vehicleMake
+
+
+        vehicleModel
+
+
+        vehicleVin
+
+
+        groupId
+
+
+        tagId
+
+
+        stopType
+
+
+        dateFrom
+
+
+        dateTo
+
+
+        accountId,customerId
+
+
+        dateInstalled
+
+
+        _extend : Available Extentions
+
+
+        asset
+
+
+        customer
+
+
+        trip/address
+
+
+        trip/driver
+
+
+        trip/events
+
+
+        trip/parameters
+
+
+        _sort : Available sort fields
+
+
+        label
+
+
+        dateFrom
+
+
+        dateTo
+
+
+        tripDistance
+
+
+        avgSpeed
+
+
+        maxSpeed
+
+
+        stopDuration'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - tripId: 0
+                  imei: 01234567891234567
+                  startEventId: 0
+                  endEventId: 0
+                  avgSpeed: 0
+                  maxSpeed: 0
+                  stopDuration: 0
+                  tripDistance: 0
+                  dateFrom: '0000-00-00T00:00:00+00:00'
+                  dateTo: '0000-00-00T00:00:00+00:00'
+                  fuelConsumed: 0
+                  driverId: null
+                  id: 0
+                  tripDuration: 0
+                  asset:
+                    imei: 01234567891234567
+                    label: 01234567891234567
+                    groupId: 0
+                    avatar: '0'
+                    vehicleMake: ''
+                    vehicleRegistration: ''
+                    customerId: 0
+                    deviceId: ''
+                    customer:
+                      customerId: 0
+                      customerName: ''
+                      accountId: 0
+                    group:
+                      groupId: 0
+                      name: All Assets
+                  startAddress:
+                    id: 0
+                    formattedAddress: ''
+                    streetName: ''
+                    suburb: ''
+                    state: ''
+                    country: ''
+                    postcode: ''
+                    source: ''
+                    latitude: 0
+                    longitude: 0
+                    eventId: 0
+                  endAddress:
+                    id: 0
+                    formattedAddress: ''
+                    streetName: ''
+                    suburb: ''
+                    state: ''
+                    country: ''
+                    postcode: ''
+                    source: ''
+                    latitude: 0
+                    longitude: 0
+                    eventId: 0
+                params:
+                  _sort: '!stopDuration'
+                  _fields: tripId,imei,startEventId,endEventId,avgSpeed,maxSpeed,stopDuration,tripDuration,tripDistance,dateFrom,dateTo,jobId,fuelConsumed,driverId
+                  _extend: asset:imei|label|groupId|avatar|vehicleMake|vehicleRegistration|customerId,customer:customerId|customerName,trip/address,asset/group:groupId|name,asset/tags,trip/driver:userId|firstName|lastName
+                  _timezone: Asia/Kolkata
+                  customerId: 0
+                  dateFrom:
+                    start:
+                      date: '0000-00-00 00:00:00.000000'
+                      timezone_type: 1
+                      timezone: +05:30
+                    current: null
+                    end:
+                      date: '0000-00-00 00:00:00.000000'
+                      timezone_type: 1
+                      timezone: +05:30
+                  _limit: '200'
+                  groupId: 0
+                  total: 3
+  /v1/trips/top-durations:
+    get:
+      operationId: getV1TripsTopDurations
+      summary: v1/trips/top-durations
+      tags:
+      - Trips
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - tripId: 10809580
+                  tripStatusId: 0
+                  tripStateId: 0
+                  tripDistance: 817
+                  dateFrom: '0000-00-00T00:00:00+00:00'
+                  dateTo: '0000-00-00T00:00:00+00:00'
+                  maxSpeed: 50
+                  avgSpeed: 29
+                  imei: ''
+                  startEventId: 565179750
+                  endEventId: 1661477260
+                  type: ''
+                  odometerStart: 161514711
+                  odometerEnd: 161515528
+                  stopDuration: 0
+                  stopType: ''
+                  engineHourStart: 10483920
+                  engineHourEnd: 10483920
+                  jobId: ''
+                  totalHarshBrakes: 0
+                  totalHarshAccelerations: 0
+                  totalSpeedingEvents: 0
+                  driverScore: 100
+                  label: ''
+                  tripDuration: 81243218
+                  state: ''
+                  id: 10809580
+  /v1/trips/total:
+    get:
+      operationId: getV1TripsTotal
+      summary: v1/trips/total
+      tags:
+      - Trips
+      description: Count Total Number of Trips
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 209932
+                private: 231
+                business: 1467
+                unknown: 208234
+  /v1/trips/total-distance:
+    get:
+      operationId: getV1TripsTotalDistance
+      summary: v1/trips/total-distance
+      tags:
+      - Trips
+      description: Total Distance Travelled (m)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 11688216509
+                private: 0
+                business: 0
+                unknown: 11688216509
+  /v1/trips/total-fuel:
+    get:
+      operationId: getV1TripsTotalFuel
+      summary: v1/trips/total-fuel
+      tags:
+      - Trips
+      description: Total Fuel Consumed Travelled (L)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                private: 0
+                business: 0
+                unknown: 0
+  /v1/trips/total-stops:
+    get:
+      operationId: getV1TripsTotalStops
+      summary: v1/trips/total-stops
+      tags:
+      - Trips
+      description: 'Total # of Stops'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/trips/total-time:
+    get:
+      operationId: getV1TripsTotalTime
+      summary: v1/trips/total-time
+      tags:
+      - Trips
+      description: Total Distance Travelled (s)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 770103
+                private: 0
+                business: 0
+                unknown: 770103
+  /v1/trips/visited-locations:
+    get:
+      operationId: getV1TripsVisitedLocations
+      summary: v1/trips/visited-locations
+      tags:
+      - Trips
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/trips/{tripId}:
+    get:
+      operationId: getV1TripsByTripid
+      summary: v1/trips/{id}
+      tags:
+      - Trips
+      description: 'Load Trip Details
+
+
+        ###Fields
+
+
+        tripId - (string) Unique Trip ID
+
+
+        tripDistance - (number) Distance travelled in the trip (in Metres)
+
+
+        dateFrom - (datetime) Trip start date and time
+
+
+        dateTo - (datetime) Trip end date and time
+
+
+        maxSpeed - (number) Maximum speed travelled during the trip
+
+
+        avgSpeed - (number) Average speed travelled during the trip
+
+
+        imei - (string) Unique asset identifier
+
+
+        startEventId - (string) Identifier of the event from which the trip began
+
+
+        endEventId - (string) Identifier of the event till which the trip lasted
+
+
+        type - (string) Trips type
+
+
+        fuelConsumed - (number) Amount of fuel consumed during the trip(in Millilitres)
+
+
+        avgFuelConsumed - (number) Average Fuel Consumed by the asset
+
+
+        cost - (float) Additional cost to be associated to the trip
+
+
+        odometerStart - (number) Odometer reading at the beginning of trip
+
+
+        odometerEnd - (number) Odometer reading at the end of trip
+
+
+        co2 - (number) co2 emission details
+
+
+        description - (string) Trip Description
+
+
+        stopDuration - (number) Asset stop duration at the destination
+
+
+        stopDescription - (string) Trip stop description
+
+
+        stopType - (string) Trip stop type (C-Buisness/Classified,P-Personal,N-Non-Classified)
+
+
+        jobStageId - (string) Unique Job Stage ID
+
+
+        engineHourStart - (number) Engine hour/Runtime at the start of the trip
+
+
+        engineHourEnd - (number) Engine hour/Runtime at the end of the trip
+
+
+        engineHourUsed - (number) Engine hour/Runtime spent in the trip
+
+
+        jobId - (string) Unique Job ID
+
+
+        driverId - (string) Unique Driver ID
+
+
+        totalDuration - (number) Total trip duration (in Seconds)
+
+
+        movingDuration - (number) Trip asset moving time (in Seconds)
+
+
+        idleDuration - (number) Trip asset idle time (in Seconds)
+
+
+        stationaryDuration - (number) Trip asset stationary time (in Seconds)
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        assetId,imei
+
+
+        label
+
+
+        jobId
+
+
+        vehicleRegitration
+
+
+        vehicleMake
+
+
+        vehicleModel
+
+
+        vehicleVin
+
+
+        groupId
+
+
+        tagId
+
+
+        stopType
+
+
+        dateFrom
+
+
+        dateTo
+
+
+        accountId,customerId
+
+
+        dateInstalled
+
+
+        _extend : Available Extentions
+
+
+        asset
+
+
+        customer
+
+
+        trip/address
+
+
+        trip/driver
+
+
+        trip/events
+
+
+        trip/parameters
+
+
+        _sort : Available sort fields
+
+
+        label
+
+
+        dateFrom
+
+
+        dateTo
+
+
+        tripDistance
+
+
+        avgSpeed
+
+
+        maxSpeed
+
+
+        stopDuration'
+      parameters:
+      - name: tripId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - tripId: 0
+                  imei: 01234567891234567
+                  startEventId: 0
+                  endEventId: 0
+                  avgSpeed: 0
+                  maxSpeed: 0
+                  stopDuration: 0
+                  tripDistance: 0
+                  dateFrom: '0000-00-00T00:00:00+00:00'
+                  dateTo: '0000-00-00T00:00:00+00:00'
+                  fuelConsumed: 0
+                  driverId: null
+                  id: 0
+                  tripDuration: 0
+                  asset:
+                    imei: 01234567891234567
+                    label: ''
+                    groupId: 0
+                    avatar: ''
+                    vehicleMake: ''
+                    vehicleRegistration: ''
+                    customerId: 0
+                    deviceId: ''
+                    customer:
+                      customerId: 0
+                      customerName: '0'
+                      accountId: 0
+                    group:
+                      groupId: 0
+                      name: All Assets
+                  startAddress:
+                    id: 0
+                    formattedAddress: ''
+                    streetName: ''
+                    suburb: ''
+                    state: ''
+                    country: ''
+                    postcode: ''
+                    source: ''
+                    latitude: 0
+                    longitude: 0
+                    eventId: 0
+                  endAddress:
+                    id: 0
+                    formattedAddress: ''
+                    streetName: ''
+                    suburb: ''
+                    state: ''
+                    country: ''
+                    postcode: ''
+                    source: ''
+                    latitude: 0
+                    longitude: 0
+                    eventId: 0
+                params:
+                  _sort: '!stopDuration'
+                  _fields: tripId,imei,startEventId,endEventId,avgSpeed,maxSpeed,stopDuration,tripDuration,tripDistance,dateFrom,dateTo,jobId,fuelConsumed,driverId
+                  _extend: asset:imei|label|groupId|avatar|vehicleMake|vehicleRegistration|customerId,customer:customerId|customerName,trip/address,asset/group:groupId|name,asset/tags,trip/driver:userId|firstName|lastName
+                  _timezone: Asia/Kolkata
+                  customerId: 0
+                  dateFrom:
+                    start:
+                      date: '0000-00-00T00:00:00.000000'
+                      timezone_type: 1
+                      timezone: +05:30
+                    current: null
+                    end:
+                      date: '0000-00-00T00:00:00.000000'
+                      timezone_type: 1
+                      timezone: +05:30
+                  tripId: '0'
+                  _limit: '200'
+                  groupId: 0
+                  total: 1
+    post:
+      operationId: postV1TripsByTripid
+      summary: v1/trips/{id}
+      tags:
+      - Trips
+      description: Update Trip Details
+      parameters:
+      - name: tripId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/trips/{tripId}/close:
+    get:
+      operationId: getV1TripsByTripidClose
+      summary: v1/trips/{tripId}/close
+      tags:
+      - Trips
+      parameters:
+      - name: tripId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/trips/{tripId}/events:
+    get:
+      operationId: getV1TripsByTripidEvents
+      summary: v1/trips/{tripId}/events
+      tags:
+      - Trips
+      parameters:
+      - name: tripId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                results: []
+                total: 0
+  /v1/trips/{tripId}/notes:
+    post:
+      operationId: postV1TripsByTripidNotes
+      summary: v1/trips/{tripId}/notes
+      tags:
+      - Trips
+      parameters:
+      - name: tripId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                title:
+                  type: string
+                note:
+                  type: string
+                datetime:
+                  type: string
+      responses:
+        '200':
+          description: OK
+  /v1/trips/{tripId}/notes/{jobNoteId}:
+    post:
+      operationId: postV1TripsByTripidNotesByJobnoteid
+      summary: v1/trips/{tripId}/notes/{jobNoteId}
+      tags:
+      - Trips
+      parameters:
+      - name: tripId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: jobNoteId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                title:
+                  type: string
+                note:
+                  type: string
+                datetime:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                imei: ''
+                jobNoteId: 21235
+                eventId: 1692938706
+                dateTimeCreated: '0000-00-00T00:00:00+00:00'
+                jobNoteType: ''
+                jobNoteTitle: ''
+                jobNote: ''
+  /v1/trips/{tripId}/sensors:
+    get:
+      operationId: getV1TripsByTripidSensors
+      summary: v1/trips/{tripId}/sensors
+      tags:
+      - Trips
+      parameters:
+      - name: tripId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - parameter: ''
+                  description: ''
+                  unit: ''
+                  deviceId: ''
+                  parameterGroup: ''
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

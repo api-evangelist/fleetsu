@@ -1,0 +1,1016 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Users API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Users
+paths:
+  /v1/user/logins:
+    get:
+      operationId: getV1UserLogins
+      summary: v1/user/logins
+      tags:
+      - Users
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/user/logins.csv:
+    get:
+      operationId: getV1UserLoginsCsv
+      summary: v1/user/logins.csv
+      tags:
+      - Users
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users:
+    get:
+      operationId: getV1Users
+      summary: v1/users
+      tags:
+      - Users
+      description: 'Return a list of available users associated with current user account and sub accounts.
+
+
+        Fields
+
+
+        userId - (string) - Unique User ID
+
+
+        email - (string) - User''s Email address
+
+
+        active - (bool) - User''s Status (Enabled/Disabled)
+
+
+        roleId - (string) - User''s Type
+
+
+        accountId - (string) - User Account
+
+
+        driverToken - (string) - User with a driver Token is a driver
+
+
+        firstName - (string) - User''s First name
+
+
+        lastName - (string) - User''s Last Name
+
+
+        mobile - (string) - User''s Mobile Number
+
+
+        dateCreated - (datetime) - Date user is created
+
+
+        fbtActive - (bool) - FBT user or not
+
+
+        avatar - (string) - User''s avatar URI
+
+
+        landingPage - (string) - User''s Landing page
+
+
+        Custom Query Parameters
+
+
+        q - (string) - *Search firstname,lastname,email
+
+
+        tagId - (string) - Related Tag
+
+
+        status - (int) - User''s status (0/1)
+
+
+        mobile_number - (string) - User''s mobile number
+
+
+        Modifier Query Parameters
+
+
+        _fields : Available Fields
+
+
+        userId
+
+
+        email
+
+
+        active
+
+
+        type
+
+
+        customerId
+
+
+        firstName
+
+
+        lastName
+
+
+        _extend : Available Extensions
+
+
+        user/preferences - Preferences User''s Preferences
+
+
+        user/devices - Devices User''s Devices
+
+
+        features - Features User privileges
+
+
+        customer - Account Associated user account
+
+
+        group - Group Associated user group
+
+
+        user/lastlogin - Last login User''s last login details
+
+
+        user/role - Role User''s role in the system e.g.:sysadmin, user, manager etc
+
+
+        user/tags - Tags ssociated tags
+
+
+        user/termsandconditions - Terms and conditions TnC acceptance details including version and date
+
+
+        user/trips - Trips * Driver/User trips *
+
+
+        _sort : Available sort fields
+
+
+        active
+
+
+        firstName
+
+
+        lastName'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - userId: 0
+                  email: ''
+                  active: true
+                  roleId: ''
+                  accountId: 0
+                  firstName: ''
+                  lastName: ''
+                  dateCreated: ''
+                  fbtActive: false
+                  dashboard: ''
+                  landingPage: ''
+                  isAccountHolder: false
+                  tags:
+                  - tagId: '1'
+                    accountId: 0
+                    tagName: Tag name
+                    tagBgColor: 2196f3
+                    status: true
+                    dateCreated: '0000-00-00T00:00:00+00:00'
+                    tagType: TRACKER
+                    userId: 0
+                params:
+                  accountId: 0
+                  groupId: 0
+    post:
+      operationId: postV1Users
+      summary: v1/users
+      tags:
+      - Users
+      description: Create User
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                customerId:
+                  type: string
+                groupId:
+                  type: string
+                type:
+                  type: string
+                password:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                mobile:
+                  type: string
+                avatar:
+                  type: string
+                driverId:
+                  type: string
+                driverToken:
+                  type: string
+                landingPage:
+                  type: string
+                jobTitle:
+                  type: string
+                welcome:
+                  type: string
+                tagIds:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users.csv:
+    get:
+      operationId: getV1UsersCsv
+      summary: users.csv
+      tags:
+      - Users
+      description: 'Returns a list of users and details as comma seperated values(CSV).
+
+
+        See /v1/users for search & filtering options'
+      responses:
+        '200':
+          description: OK
+  /v1/users/roles:
+    get:
+      operationId: getV1UsersRoles
+      summary: v1/users/roles
+      tags:
+      - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - roleId: 8
+                  role: app
+                  level: 1
+                  landingPage: fleetmap
+                  description: Mobile App User
+                  status: true
+  /v1/users/sessions:
+    get:
+      operationId: getV1UsersSessions
+      summary: v1/users/sessions
+      tags:
+      - Users
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1UsersSessions
+      summary: v1/users/sessions
+      tags:
+      - Users
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{id}/enable:
+    get:
+      operationId: getV1UsersByIdEnable
+      summary: v1/users/{id}/enable
+      tags:
+      - Users
+      description: Enable User Account
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}:
+    get:
+      operationId: getV1UsersByUserid
+      summary: v1/users/{id}
+      tags:
+      - Users
+      description: 'Load a User''s Details
+
+
+        Fields
+
+
+        userId - (string) - Unique User ID
+
+
+        email - (string) - User''s Email address
+
+
+        active - (bool) - User''s Status (Enabled/Disabled)
+
+
+        type - (string) - User''s Type
+
+
+        customerId - (string) - User Account
+
+
+        firstName - (string) - User''s First name
+
+
+        lastName - (string) - User''s Last Name
+
+
+        dateCreated - (datetime) - Date user is created
+
+
+        fbtActive - (bool) - FBT user or not
+
+
+        avatar - (string) - User''s avatar URI
+
+
+        landingPage - (string) - User''s Landing page
+
+
+        Modifier Query Parameters
+
+
+        _fields : Available Fields
+
+
+        userId
+
+
+        email
+
+
+        active
+
+
+        type
+
+
+        customerId
+
+
+        firstName
+
+
+        lastName
+
+
+        _extend : Available Extensions
+
+
+        asset - Assets User''s Asset
+
+
+        features - Features User privileges
+
+
+        customer - Account associated user account
+
+
+        group - Group associated user group
+
+
+        user/lastlogin - Last login User''s last login details
+
+
+        user/role - Role User''s role in the system e.g.:sysadmin, user, manager etc
+
+
+        user/tags - Tags associated tags
+
+
+        user/termsandconditions - Terms and conditions TnC acceptance details including version and date
+
+
+        _sort : Available sort fields
+
+
+        active
+
+
+        firstName
+
+
+        lastName'
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - userId: 13
+                  email: test@fleetsu.com
+                  active: 0
+                  roleId: manager
+                  accountId: '1'
+                  firstName: John
+                  lastName: Smith
+                  dateCreated: '2022-04-11T06:04:21+00:00'
+                  fbtActive: false
+                  dashboard: default
+                  landingPage: fleetmap
+                  isAccountHolder: true
+                  authMethod: local
+    post:
+      operationId: postV1UsersByUserid
+      summary: v1/users/{id}
+      tags:
+      - Users
+      description: Update User
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/disable:
+    get:
+      operationId: getV1UsersByUseridDisable
+      summary: v1/users/{id}/disable
+      tags:
+      - Users
+      description: 'Disable User Account
+
+        Disabled user accounts can no logger log into the system'
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/groups:
+    get:
+      operationId: getV1UsersByUseridGroups
+      summary: v1/users/{userId}/groups
+      tags:
+      - Users
+      description: List of Groups user is associated with
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1UsersByUseridGroups
+      summary: users/{userId}/groups
+      tags:
+      - Users
+      description: List of Groups user is associated with
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                groupId:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                groupId: 3
+                userId: 1
+                status: true
+                userGroupId: 5
+  /v1/users/{userId}/groups/{groupId}:
+    get:
+      operationId: getV1UsersByUseridGroupsByGroupid
+      summary: v1/users/{userId}/groups/{groupId}
+      tags:
+      - Users
+      description: List of Groups user is associated with
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - userId: 1
+                  email: ''
+                  active: 0
+                  roleId: ''
+                  accountId: '0'
+                  firstName: ''
+                  lastName: ''
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  fbtActive: false
+                  dashboard: ''
+                  landingPage: ''
+                  isAccountHolder: true
+                  authMethod: ''
+    delete:
+      operationId: deleteV1UsersByUseridGroupsByGroupid
+      summary: v1/users/{userId}/groups/{groupId}
+      tags:
+      - Users
+      description: List of Groups user is associated with
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/logins:
+    get:
+      operationId: getV1UsersByUseridLogins
+      summary: v1/users/{userId}/logins
+      tags:
+      - Users
+      description: List of Enabled Features
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/logins.csv:
+    get:
+      operationId: getV1UsersByUseridLoginsCsv
+      summary: v1/users/{userId}/logins.csv
+      tags:
+      - Users
+      description: List of Enabled Features
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/preferences:
+    get:
+      operationId: getV1UsersByUseridPreferences
+      summary: v1/users/{userId}/preferences
+      tags:
+      - Users
+      description: List of Enabled Features
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/preferences/{parameter}:
+    get:
+      operationId: getV1UsersByUseridPreferencesByParameter
+      summary: v1/users/{userId}/preferences/{parameter}
+      tags:
+      - Users
+      description: List of Enabled Features
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: parameter
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/push/tokens:
+    get:
+      operationId: getV1UsersByUseridPushTokens
+      summary: v1/users/{userId}/push/tokens
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/sessions:
+    get:
+      operationId: getV1UsersByUseridSessions
+      summary: v1/users/{userId}/sessions
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/sessions/{sessionId}:
+    delete:
+      operationId: deleteV1UsersByUseridSessionsBySessionid
+      summary: v1/users/{userId}/sessions/{sessionId}
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/tags:
+    get:
+      operationId: getV1UsersByUseridTags
+      summary: v1/users/{userId}/tags
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1UsersByUseridTags
+      summary: v1/users/{userId}/tags
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1UsersByUseridTags
+      summary: v1/users/{userId}/tags
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/users/{userId}/tags/{tagId}:
+    delete:
+      operationId: deleteV1UsersByUseridTagsByTagid
+      summary: v1/users/{userId}/tags/{tagId}
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v2/users/{userId}:
+    get:
+      operationId: getV2UsersByUserid
+      summary: v2/users/{id}
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                userId: 13
+                email: test@fleetsu.com
+                active: 0
+                roleId: manager
+                accountId: '1'
+                firstName: John
+                lastName: Smith
+                dateCreated: '2022-03-11T06:04:21+00:00'
+                fbtActive: false
+                dashboard: default
+                landingPage: fleetmap
+                isAccountHolder: true
+                authMethod: local
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

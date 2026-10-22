@@ -1,0 +1,1373 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Accounts API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Accounts
+paths:
+  /v1/account/groups:
+    get:
+      operationId: getV1AccountGroups
+      summary: account/groups
+      tags:
+      - Accounts
+      description: List of Groups associated with account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                customerId: 10
+                customerName: Fleetsu
+                parentId: 2
+                accountId: 10
+                companyName: Fleetsu
+                groups:
+                - groupId: 11
+                  parentId: 11
+                  name: Child Group 1
+                  accountId: 10
+                  status: true
+                  parent: true
+                  assetCount: 41
+                  userCount: 5
+                  children:
+                  - groupId: 1281
+                    parentId: 1197
+                    name: Grand Child group
+                    accountId: 98
+                    status: true
+                    parent: false
+                    assetCount: 2
+                    children:
+                    - groupId: 1297
+                      parentId: 1281
+                      name: AAA
+                      accountId: 98
+                      status: true
+                      parent: false
+                      assetCount: 3
+                children:
+                - customerId: 12
+                  customerName: Account 2
+                  parentId: 10
+                  accountId: 12
+                  companyName: Account 2
+                  groups:
+                  - groupId: 1160
+                    parentId: 1160
+                    name: New group 1
+                    accountId: 12
+                    status: true
+                    parent: true
+                    assetCount: 15
+                - customerId: 13
+                  customerName: Account 3
+                  parentId: 10
+                  accountId: 13
+                  companyName: Account 3
+                  groups:
+                  - groupId: 1174
+                    parentId: 1174
+                    name: All Assets
+                    accountId: 12
+                    status: true
+                    parent: true
+                    userCount: 1
+                    children:
+                    - groupId: 1304
+                      parentId: 1174
+                      name: Test 1
+                      accountId: 5003
+                      status: true
+                      parent: false
+                  children:
+                  - customerId: 14
+                    customerName: Child Account 3
+                    parentId: 5003
+                    accountId: 14
+                    companyName: Child Account 3
+                    groups:
+                    - groupId: 1272
+                      parentId: 1272
+                      name: All Assets
+                      accountId: 14
+                      status: true
+                      parent: true
+  /v1/account/invoices:
+    get:
+      operationId: getV1AccountInvoices
+      summary: account/invoices
+      tags:
+      - Accounts
+      description: List of Enabled Features
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/accounts:
+    get:
+      operationId: getV1Accounts
+      summary: accounts
+      tags:
+      - Accounts
+      description: 'Return a list of Accounts
+
+
+        Fields
+
+
+        Field
+
+        Type
+
+        Description
+
+
+        customerId
+
+        int
+
+        Unique Customer ID
+
+
+        customerName
+
+        string
+
+        Customer Name
+
+
+        firstName
+
+        string
+
+        Customer''s First Name
+
+
+        lastName
+
+        string
+
+        Customer''s last Name
+
+
+        accountType
+
+        string
+
+        Customer''s Account Type
+
+
+        location
+
+        string
+
+        Customer''s Location
+
+
+        address
+
+        string
+
+        Customer''s Address
+
+
+        city
+
+        string
+
+        Customer''s City
+
+
+        state
+
+        string
+
+        Customer''s State
+
+
+        postcode
+
+        string
+
+        Customer''s PostCode
+
+
+        country
+
+        string
+
+        Customer''s Country
+
+
+        email
+
+        string
+
+        Customer''s Email
+
+
+        dateAdded
+
+        datetime
+
+        Customer Added Date time
+
+
+        subscriptionStartDate
+
+        datetime
+
+        Subscription Start Date time
+
+
+        subscriptionRenewalDate
+
+        datetime
+
+        Subscription Renweal Date time
+
+
+        subscriptionDuration
+
+        datetime
+
+        Subscription Duration Date time
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search customerName
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        customerId
+
+
+        customerName
+
+
+        firstName
+
+
+        lastName
+
+
+        accountType
+
+
+        location
+
+
+        address
+
+
+        city
+
+
+        state
+
+
+        postcode
+
+
+        country
+
+
+        email
+
+
+        dateAdded
+
+
+        subscriptionStartDate
+
+
+        subscriptionRenewalDate
+
+
+        subscriptionDuration
+
+
+        _extend : Available Extentions
+
+
+        account/users - Users assocated users
+
+
+        account/groups - Groups assocated groups
+
+
+        account/devicecount - Device Count customer''s device count
+
+
+        account/usercount - User Count customer''s user count
+
+
+        account/device/category/totals - Device Counts Grouped by Category
+
+
+        account/device/subscription/category/totals - Device Subscription Totals Grouped by Category
+
+
+        account/subscription/category/totals - Account Subscription Plans Grouped by Category
+
+
+        _sort : Available sort fields
+
+
+        customerName
+
+
+        firstName
+
+
+        lastName'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 587
+                start: 1
+                end: 587
+                results:
+                - customerId: 4
+                  parentId: 77
+                  enabled: 1
+                  customerName: Fleetsu Demo
+                  address: 1 James Street
+                  city: Perth
+                  state: WA
+                  postcode: '6000'
+                  country: AU
+                  dateAdded: '2016-04-11T06:04:21+00:00'
+                  timezone: Australia/Perth
+                  contactNumber1: '0400000000'
+                  contactNumber2: '0400000000'
+                  accountManager: John
+                  subscriptionStartDate: '2015-05-04T00:00:00+00:00'
+                  brandingDomain: app.fleetsu.com
+                  billingType: contract
+                  accountType: enterprise
+                  accountId: 4
+                  companyName: Fleetsu Demo
+                  countryDefinition:
+                    countryCode: AU
+                    name: Australia
+                    lat: -25.274398
+                    lng: 133.775136
+    post:
+      operationId: postV1Accounts
+      summary: accounts
+      tags:
+      - Accounts
+      description: Create New Sub Accounts
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                billingType:
+                  type: string
+                customerName:
+                  type: string
+                phone:
+                  type: string
+                abn:
+                  type: string
+                timezone:
+                  type: string
+                address:
+                  type: string
+                suburb:
+                  type: string
+                state:
+                  type: string
+                postcode:
+                  type: string
+                country:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                mobile:
+                  type: string
+                email:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/accounts/invite/{code}:
+    get:
+      operationId: getV1AccountsInviteByCode
+      summary: accounts/invite/{code}
+      tags:
+      - Accounts
+      description: Request Access Token for a Invite Code
+      parameters:
+      - name: code
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Valid Code
+          content:
+            application/json:
+              example:
+                token: '1234567890123567890123456789012345678901235678901234567890'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                code: 400
+                message: Invalid Invite Code ID
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              example:
+                code: 4040003
+                message: Invite Not Found
+  /v1/accounts/tree:
+    get:
+      operationId: getV1AccountsTree
+      summary: accounts/tree
+      tags:
+      - Accounts
+      description: List of Enabled Features
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/accounts/{accountId}:
+    get:
+      operationId: getV1AccountsByAccountid
+      summary: accounts/{id}
+      tags:
+      - Accounts
+      description: Load Account Details
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: accounts/{id}
+          content:
+            application/json:
+              example:
+                customerId: 4
+                parentId: 77
+                enabled: 1
+                customerName: Fleetsu Demo
+                address: 1 James Street
+                city: Perth
+                state: WA
+                postcode: '6000'
+                country: Australia
+                dateAdded: '2016-04-11T06:04:21+00:00'
+                timezone: Australia/Perth
+                contactNumber1: '0400000000'
+                contactNumber2: '0400000000'
+                accountManager: manager
+                subscriptionStartDate: '2015-05-04T00:00:00+00:00'
+                brandingDomain: app.fleetsu.com
+                billingType: contract
+                accountType: enterprise
+                accountId: 4
+                companyName: Fleetsu Demo
+    post:
+      operationId: postV1AccountsByAccountid
+      summary: accounts/{id}
+      tags:
+      - Accounts
+      description: Update Account Details
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                billingType:
+                  type: string
+                customerName:
+                  type: string
+                phone:
+                  type: string
+                location:
+                  type: string
+                address:
+                  type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                postcode:
+                  type: string
+                country:
+                  type: string
+                contactNumber1:
+                  type: string
+                contactNumber2:
+                  type: string
+                timezone:
+                  type: string
+                enabled:
+                  type: string
+                accountManager:
+                  type: string
+                accountType:
+                  type: string
+                subscriptionStartDate:
+                  type: string
+                brandingDomain:
+                  type: string
+                billingEmail:
+                  type: string
+      responses:
+        default:
+          description: accounts/{id}
+          content:
+            application/json:
+              example:
+                customerId: 4
+                parentId: 77
+                enabled: 0
+                customerName: Test Account 247
+                address: 49 Hay St
+                city: Subiaco
+                state: WA
+                postcode: '6008'
+                country: Australia
+                dateAdded: '2016-04-11T06:04:21+00:00'
+                timezone: Australia/Perth
+                contactNumber1: '0400000000'
+                contactNumber2: '0400000000'
+                accountManager: Manager
+                subscriptionStartDate: '2020-12-03T04:42:14+00:00'
+                brandingDomain: app.fleetsu.com
+                billingType: contract
+                accountType: starter
+                billingEmail: test907@fleetsu.com
+                accountId: 4
+                companyName: Test Account 247
+  /v1/accounts/{accountId}/devices:
+    get:
+      operationId: getV1AccountsByAccountidDevices
+      summary: accounts/{id}/devices
+      tags:
+      - Accounts
+      description: List of Enabled Features
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 19
+                start: 1
+                end: 19
+                results:
+                - deviceId: mobileapp-1
+                  type: phone
+                  enabled: 0
+                  label: Test Device
+                  accountId: 10
+                  userId: 9
+                  groupId: 11
+                  avatar: ''
+                  dateActivated: ''
+                  maker: ''
+                  model: ''
+                  dateProvisioned: ''
+                  allowApiEvents: true
+                  fuelTankSize: 55
+                  fuelTankFullPercentage: 99
+                  driverIdMethod: ''
+                  entityTypeKey: ''
+                  isDriverLocked: false
+                  assetId: ''
+                  odometerLocked: false
+                  runtimeLocked: false
+                  firmwareDeploymentStatus: ''
+  /v1/accounts/{accountId}/devices/{deviceId}:
+    get:
+      operationId: getV1AccountsByAccountidDevicesByDeviceid
+      summary: accounts/{id}/devices/{deviceId}
+      tags:
+      - Accounts
+      description: List of Enabled Features
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceId: mobileapp-3193
+                type: phone
+                enabled: 0
+                label: Test User
+                accountId: 1
+                userId: 1
+                groupId: 1
+                avatar: ''
+                dateActivated: 0000-000-00T00:00:00+00:00
+                maker: app
+                model: app
+                dateProvisioned: 0000-000-00T00:00:00+00:00
+                allowApiEvents: true
+                fuelTankSize: 55
+                fuelTankFullPercentage: 99
+                driverIdMethod: manager
+                entityTypeKey: deviceasset
+                isDriverLocked: false
+                assetId: mobileapp-3193
+                odometerLocked: false
+                runtimeLocked: false
+                firmwareDeploymentStatus: UNKNOWN
+  /v1/accounts/{accountId}/features:
+    get:
+      operationId: getV1AccountsByAccountidFeatures
+      summary: accounts/{id}/features
+      tags:
+      - Accounts
+      description: List of Enabled Features
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+  /v1/accounts/{accountId}/integrations:
+    get:
+      operationId: getV1AccountsByAccountidIntegrations
+      summary: v1/accounts/(\d+)/integrations
+      tags:
+      - Accounts
+      description: 'Accounts Integrations Module
+
+
+        accountIntegrationKey
+
+
+        accountIntegrationKey Readonly string, Unique Id
+
+
+        Unique string for the integration record
+
+
+        userName
+
+
+        userName Required string, max 100 chars
+
+
+        External API Integration user name for basic auth
+
+
+        Password
+
+
+        password Required string, max 100 chars
+
+
+        External API Integration password for basic auth
+
+
+        Status
+
+
+        status Required, boolean
+
+
+        Status 1= Active, 0 = Disabled
+
+
+        type Required string, max 50 chars
+
+
+        Integration provider type eg: fleetcam
+
+
+        data Optional array, max 20 chars
+
+
+        Array of extended information/fields
+
+
+        For type = fleetcam
+
+
+        data[''group_id''] value is required. This group is used for auto provisioning the new devices'
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/accounts/{accountId}/integrations/{accountIntegrationkey}:
+    post:
+      operationId: postV1AccountsByAccountidIntegrationsByAccountintegrationkey
+      summary: v1/accounts/(\d+)/integrations/{accountIntegrationkey}
+      tags:
+      - Accounts
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: accountIntegrationkey
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                password:
+                  type: string
+                status:
+                  type: string
+                type:
+                  type: string
+                data:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1AccountsByAccountidIntegrationsByAccountintegrationkey
+      summary: v1/accounts/(\d+)/integrations/{accountIntegrationkey}
+      tags:
+      - Accounts
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: accountIntegrationkey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/accounts/{accountId}/notes:
+    get:
+      operationId: getV1AccountsByAccountidNotes
+      summary: accounts/{id}/notes
+      tags:
+      - Accounts
+      description: List of Enabled Features
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - customerNoteId: 246
+                  customerId: 10
+                  datetime: '2021-10-07T06:46:23+00:00'
+                  userId: 698
+                  note: Test note here.....
+                  statusId: 1
+                  dateCreated: '2021-10-07T06:46:23+00:00'
+                  dateUpdated: '2021-10-07T06:46:23+00:00'
+    post:
+      operationId: postV1AccountsByAccountidNotes
+      summary: accounts/{id}/notes
+      tags:
+      - Accounts
+      description: List of Enabled Features
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                customerId: 1
+                datetime: '2021-12-21T08:36:37+00:00'
+                userId: 2
+                note: Another note .......
+                customerNoteId: 258
+  /v1/accounts/{accountId}/notes/{customerNoteId}:
+    delete:
+      operationId: deleteV1AccountsByAccountidNotesByCustomernoteid
+      summary: accounts/{id}/notes/{customerNoteId}
+      tags:
+      - Accounts
+      description: List of Enabled Features
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: customerNoteId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                customerNoteId: 1
+                customerId: 1
+                datetime: '2021-12-21T08:36:37+00:00'
+                userId: 2
+                note: Another note .......
+                statusId: 0
+                dateCreated: '2021-12-21T08:36:38+00:00'
+                dateUpdated: '2021-12-21T08:36:38+00:00'
+  /v1/accounts/{accountId}/settings:
+    get:
+      operationId: getV1AccountsByAccountidSettings
+      summary: accounts/{id}/settings
+      tags:
+      - Accounts
+      description: List of Enabled Features
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 5
+                start: 1
+                end: 5
+                results:
+                - parameter: authorisedFMO
+                  description: Authorised FMO
+                  template: noyes
+                  dateUpdated: '2020-07-17T06:53:43+00:00'
+                  value:
+                    accountId: '4980'
+                    parameter: authorisedFMO
+                    value: '1'
+                    dateUpdated: '2021-09-09T07:22:48+00:00'
+                    description: Authorised FMO
+                    template: noyes
+                - parameter: authorisedFMOLogoURL
+                  description: Authorised FMO Logo
+                  template: text
+                  dateUpdated: '2020-09-10T17:54:24+00:00'
+                  value:
+                    accountId: '4980'
+                    parameter: authorisedFMOLogoURL
+                    value: https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
+                    dateUpdated: '2021-09-09T07:24:47+00:00'
+                    description: Authorised FMO Logo
+                    template: text
+                - parameter: customerReferenceId
+                  description: Customer Reference Number
+                  template: text
+                  dateUpdated: '2020-12-22T12:19:17+00:00'
+                  value:
+                    accountId: '4980'
+                    parameter: customerReferenceId
+                    value: '98'
+                    dateUpdated: '2021-10-08T11:39:27+00:00'
+                    description: Customer Reference Number
+                    template: text
+                - parameter: segmentAnalytics
+                  description: Segment Analytics
+                  template: segmentAnalytics
+                  dateUpdated: '2020-08-21T02:18:23+00:00'
+                - parameter: tripCount
+                  description: Trip Count
+                  template: numeric
+                  dateUpdated: '2019-03-17T01:25:36+00:00'
+  /v1/accounts/{accountId}/settings/fields:
+    get:
+      operationId: getV1AccountsByAccountidSettingsFields
+      summary: accounts/{id}/settings/fields Copy
+      tags:
+      - Accounts
+      description: List of Enabled Features
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 5
+                start: 1
+                end: 5
+                results:
+                - accountSettingFieldId: 1
+                  parameter: tripCount
+                  description: Trip Count
+                  template: numeric
+                  dateCreated: '2019-03-17T01:25:36+00:00'
+                  dateUpdated: '2019-03-17T01:25:36+00:00'
+                - accountSettingFieldId: 2
+                  parameter: authorisedFMO
+                  description: Authorised FMO
+                  template: noyes
+                  dateCreated: '2020-07-17T06:53:43+00:00'
+                  dateUpdated: '2020-07-17T06:53:43+00:00'
+                - accountSettingFieldId: 4
+                  parameter: segmentAnalytics
+                  description: Segment Analytics
+                  template: segmentAnalytics
+                  dateCreated: '2020-07-17T06:55:31+00:00'
+                  dateUpdated: '2020-08-21T02:18:23+00:00'
+                - accountSettingFieldId: 5
+                  parameter: authorisedFMOLogoURL
+                  description: Authorised FMO Logo
+                  template: text
+                  dateCreated: '2020-09-10T17:54:24+00:00'
+                  dateUpdated: '2020-09-10T17:54:24+00:00'
+                - accountSettingFieldId: 6
+                  parameter: customerReferenceId
+                  description: Customer Reference Number
+                  template: text
+                  dateCreated: '2020-12-22T12:19:17+00:00'
+                  dateUpdated: '2020-12-22T12:19:17+00:00'
+  /v1/accounts/{accountId}/users:
+    get:
+      operationId: getV1AccountsByAccountidUsers
+      summary: accounts/{id}/users
+      tags:
+      - Accounts
+      description: List of users associated with customer
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 23
+                start: 1
+                end: 23
+                results:
+                - userId: 239
+                  email: john@fleetsu.com
+                  active: 1
+                  accountId: '4'
+                  firstName: John
+                  lastName: Smith
+                  dateCreated: '2016-04-22T05:34:53+00:00'
+                  fbtActive: false
+                  dashboard: default
+                  landingPage: fleetmap
+                  isAccountHolder: false
+                  authMethod: local
+  /v1/accounts/{accountId}/users/{userId}:
+    get:
+      operationId: getV1AccountsByAccountidUsersByUserid
+      summary: accounts/{id}/users/{userId}
+      tags:
+      - Accounts
+      description: List of users associated with customer
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - userId: 3117
+                  email: john@fleetsu.com
+                  active: 0
+                  roleId: sysadmin
+                  accountId: '4980'
+                  firstName: John
+                  lastName: Smith
+                  dateCreated: '2020-12-03T04:59:05+00:00'
+                  fbtActive: false
+                  dashboard: default
+                  landingPage: fleetmap
+                  isAccountHolder: false
+                  passwordLastChanged: '2021-11-15T00:00:00+00:00'
+                  authMethod: local
+    post:
+      operationId: postV1AccountsByAccountidUsersByUserid
+      summary: accounts/{id}/users/{userId}
+      tags:
+      - Accounts
+      description: List of users associated with customer
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                avatar:
+                  type: string
+                active:
+                  type: string
+                roleId:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                mobile:
+                  type: string
+                landingPage:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                userId: 3604
+                email: test390@fleetsu.com
+                active: 1
+                roleId: user
+                accountId: '4980'
+                firstName: John
+                lastName: Smith
+                dateCreated: '2021-11-01T07:55:43+00:00'
+                fbtActive: false
+                dashboard: default
+                landingPage: fleetmap
+                isAccountHolder: false
+                passwordLastChanged: '2021-11-01T00:00:00+00:00'
+                authMethod: local
+                mobile: '0400000000'
+                preferences:
+                  resetPass: '0'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

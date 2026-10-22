@@ -1,0 +1,920 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Driver API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Driver
+paths:
+  /v1/driverid/assets:
+    get:
+      operationId: getV1DriveridAssets
+      summary: v1/driverid/assets
+      tags:
+      - Driver
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                start: 1
+                end: 0
+                results: []
+  /v1/drivers:
+    get:
+      operationId: getV1Drivers
+      summary: v1/drivers
+      tags:
+      - Driver
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 5
+                results:
+                - userId: 1
+                  email: ''
+                  active: 2
+                  roleId: user
+                  accountId: '1'
+                  firstName: ''
+                  lastName: ''
+                  avatar: ''
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  fbtActive: false
+                  dashboard: default
+                  landingPage: fleetmap
+                  isAccountHolder: false
+                  driverToken: gd1
+                  authMethod: local
+                  tags:
+                  - tagId: '1'
+                    accountId: 1
+                    tagName: '1'
+                    tagBgColor: '1'
+                    status: true
+                    dateCreated: '0000-00-00T00:00:00+00:00'
+                    tagType: TRACKER
+                    userId: 1
+                  - tagId: '2'
+                    accountId: 2
+                    tagName: '2'
+                    tagBgColor: 419A51
+                    status: true
+                    dateCreated: '0000-00-00T00:00:00+00:00'
+                    tagType: TRACKER
+                    userId: 1
+                  driverId: 1
+    post:
+      operationId: postV1Drivers
+      summary: v1/drivers
+      tags:
+      - Driver
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                userId:
+                  type: string
+                driverToken:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                accountId: '1'
+                active: 2
+                roleId: driver
+                driverToken: GB1
+                email: ''
+                userId: 1
+                driverId: 1
+  /v1/drivers/{driverId}:
+    get:
+      operationId: getV1DriversByDriverid
+      summary: v1/drivers/{driverId}
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                userId: 1
+                email: ''
+                active: 2
+                roleId: user
+                accountId: '14'
+                firstName: grange
+                lastName: driver1
+                avatar: ''
+                dateCreated: '0000-00-00T00:00:00+00:00'
+                fbtActive: false
+                dashboard: default
+                landingPage: fleetmap
+                isAccountHolder: false
+                driverToken: gd1
+                authMethod: local
+                driverId: 1
+    post:
+      operationId: postV1DriversByDriverid
+      summary: v1/drivers/{driverId}
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                lastName:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                userId: 1
+                email: ''
+                active: 2
+                roleId: user
+                accountId: '14'
+                firstName: ''
+                lastName: ''
+                avatar: ''
+                dateCreated: '0000-00-00T00:00:00+00:00'
+                fbtActive: false
+                dashboard: default
+                landingPage: fleetmap
+                isAccountHolder: false
+                driverToken: gd1
+                authMethod: local
+                driverId: 1
+  /v1/drivers/{driverId}/attachments:
+    get:
+      operationId: getV1DriversByDriveridAttachments
+      summary: v1/drivers/{driverId}/attachments
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - driverAttachmentId: ''
+                  driverId: '1'
+                  fileName: test.jpg
+                  fileType: jpeg
+                  fileSize: 123
+                  status: true
+                  title: ''
+                  description: ''
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+    post:
+      operationId: postV1DriversByDriveridAttachments
+      summary: v1/drivers/{driverId}/attachments
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                start: 1
+                end: 0
+                results:
+                - driverAttachmentId: ''
+                  driverId: '2449'
+                  fileName: test.jpg
+                  fileType: jpeg
+                  fileSize: 123
+                  status: true
+                  title: Test file
+                  description: Test Description
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+  /v1/drivers/{driverId}/attachments/{driverAttachmentId}:
+    post:
+      operationId: postV1DriversByDriveridAttachmentsByDriverattachmentid
+      summary: v1/drivers/{driverId}/attachments/{driverAttachmentId}
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: driverAttachmentId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                status:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                success: true
+                attachment:
+                  driverAttachmentId: ''
+                  driverId: '2449'
+                  fileName: test.jpg
+                  fileType: jpeg
+                  fileSize: 123
+                  status: true
+                  title: Test file
+                  description: Test Description
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+    delete:
+      operationId: deleteV1DriversByDriveridAttachmentsByDriverattachmentid
+      summary: v1/drivers/{driverId}/attachments/{driverAttachmentId}
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: driverAttachmentId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                status:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                success: true
+                attachment:
+                  driverAttachmentId: ''
+                  driverId: '2449'
+                  fileName: test.jpg
+                  fileType: jpeg
+                  fileSize: 123
+                  status: false
+                  title: Test file
+                  description: Test Description
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+  /v1/drivers/{driverId}/attachments/{driverAttachmentId}/{fileName}:
+    get:
+      operationId: getV1DriversByDriveridAttachmentsByDriverattachmentidByFilename
+      summary: v1/drivers/{driverId}/attachments/{driverAttachmentId}/{fileName}
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: driverAttachmentId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fileName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                driverAttachmentId: ''
+                driverId: '2'
+                fileName: test.jpg
+                fileType: jpeg
+                fileSize: 123
+                status: false
+                title: Test file
+                description: Test Description
+                dateCreated: '0000-00-00T00:00:00+00:00'
+                dateUpdated: '0000-00-00T00:00:00+00:00'
+  /v1/drivers/{driverId}/fields:
+    get:
+      operationId: getV1DriversByDriveridFields
+      summary: v1/drivers/{driverId}/fields
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - driverCustomFieldId: 2449-param1
+                  driverId: '2449'
+                  fieldName: param1
+                  fieldValue: value1
+                  dateCreated: '2021-12-27T15:36:07+00:00'
+                  dateUpdated: '2021-12-27T15:36:07+00:00'
+                  status: true
+    post:
+      operationId: postV1DriversByDriveridFields
+      summary: v1/drivers/{driverId}/fields
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fieldName:
+                  type: string
+                fieldValue:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                success: true
+                field:
+                  driverId: '2449'
+                  dateCreated: '2021-12-27T15:36:07+00:00'
+                  dateUpdated: '2021-12-27T15:36:07+00:00'
+                  status: true
+                  fieldName: param1
+                  fieldValue: value1
+                  driverCustomFieldId: 2449-param1
+  /v1/drivers/{driverId}/fields/{driverCustomFieldId}:
+    get:
+      operationId: getV1DriversByDriveridFieldsByDrivercustomfieldid
+      summary: v1/drivers/{driverId}/fields/{driverCustomFieldId}
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: driverCustomFieldId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                driverCustomFieldId: 2449-param1
+                driverId: '2449'
+                fieldName: param1
+                fieldValue: value1
+                dateCreated: '2021-12-27T15:36:07+00:00'
+                dateUpdated: '2021-12-27T15:36:07+00:00'
+                status: true
+    post:
+      operationId: postV1DriversByDriveridFieldsByDrivercustomfieldid
+      summary: v1/drivers/{driverId}/fields/{driverCustomFieldId}
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: driverCustomFieldId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fieldValue:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                success: true
+                field:
+                  driverCustomFieldId: 2449-param1
+                  driverId: '2449'
+                  fieldName: param1
+                  fieldValue: value1-1
+                  dateCreated: '2021-12-27T15:36:07+00:00'
+                  dateUpdated: '2021-12-27T15:36:07+00:00'
+                  status: true
+    delete:
+      operationId: deleteV1DriversByDriveridFieldsByDrivercustomfieldid
+      summary: v1/drivers/{driverId}/fields/{driverCustomFieldId}
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: driverCustomFieldId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                success: true
+                field:
+                  driverCustomFieldId: 2449-param1
+                  driverId: '2449'
+                  fieldName: param1
+                  fieldValue: value1-1
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+                  status: false
+  /v1/drivers/{driverId}/notes:
+    post:
+      operationId: postV1DriversByDriveridNotes
+      summary: v1/drivers/{driverId}/notes
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                driverId: '1'
+                datetime: '0000-00-00T00:00:00+00:00'
+                userId: 1
+                note: note1
+                driverNoteId: 1
+    get:
+      operationId: getV1DriversByDriveridNotes
+      summary: v1/drivers/{driverId}/notes
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - driverNoteId: 375
+                  driverId: '2449'
+                  datetime: '0000-00-00T00:00:00+00:00'
+                  userId: 3611
+                  note: note1
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+                  statusId: 1
+  /v1/drivers/{driverId}/notes/{driverNoteId}:
+    post:
+      operationId: postV1DriversByDriveridNotesByDrivernoteid
+      summary: v1/drivers/{driverId}/notes/{driverNoteId}
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: driverNoteId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                statusId:
+                  type: string
+                dateClosed:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                driverNoteId: 375
+                driverId: '2449'
+                datetime: '0000-00-00T00:00:00+00:00'
+                userId: 3611
+                note: note1
+                dateCreated: '0000-00-00T00:00:00+00:00'
+                dateUpdated: '0000-00-00T00:00:00+00:00'
+                statusId: 3
+                dateClosed: '0000-00-00T00:00:00+00:00'
+    delete:
+      operationId: deleteV1DriversByDriveridNotesByDrivernoteid
+      summary: v1/drivers/{driverId}/notes/{driverNoteId}
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: driverNoteId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                driverNoteId: 375
+                driverId: '2449'
+                datetime: '0000-00-00T00:00:00+00:00'
+                userId: 3611
+                note: note1
+                dateCreated: '0000-00-00T00:00:00+00:00'
+                dateUpdated: '0000-00-00T00:00:00+00:00'
+                statusId: 0
+                dateClosed: '0000-00-00T00:00:00+00:00'
+  /v1/drivers/{driverId}/score:
+    get:
+      operationId: getV1DriversByDriveridScore
+      summary: v1/drivers/{driverId}/score
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/drivers/{driverId}/trip:
+    get:
+      operationId: getV1DriversByDriveridTrip
+      summary: v1/drivers/{driverId}/trip
+      tags:
+      - Driver
+      parameters:
+      - name: driverId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

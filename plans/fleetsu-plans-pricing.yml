@@ -1,0 +1,12 @@
+name: Fleetsu pricing
+generated: '2026-10-22'
+method: none
+source: https://fleetsu.com/
+audience: business-product
+pricing_basis: negotiated
+published: false
+plan_count: 0
+plans: []
+delivery:
+  model: managed
+note: 'fleetsu.com (rendered; now branded Rand McNally) publishes no price list. Its pricing links go to a quote form (https://fleetsu.com/#price_quote): "Modular pricing! Only pay for what you need" and "Get a personalised quote". No API-specific pricing is published.'

@@ -1,0 +1,741 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Tags API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Tags
+paths:
+  /v1/tags:
+    get:
+      operationId: getV1Tags
+      summary: tags
+      tags:
+      - Tags
+      description: 'List All Tags
+
+
+        ###Fields
+
+
+        tagId - (string) Unique Tag ID
+
+
+        accountId - (string) Unique Customer/Account ID
+
+
+        groupId - (string) Unique Group ID
+
+
+        tagName - (string) Tag Name
+
+
+        tagBgColor - (string) Tag Background Colour (Colour Code)
+
+
+        status - (bool) Tag Status
+
+
+        dateCreated - (datetime) Tag Create Date
+
+
+        tagType - (string) Tag Type (''TRACKER'',''FENCE'',''FENCE RESTRICTED'',''ASSET RESTRICTED'',''GLOBAL'')
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search tagName
+
+
+        customerId - (string) - Customer Id
+
+
+        status - (bool) - Tag Status
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        tagName
+
+
+        tagType
+
+
+        status
+
+
+        tagId
+
+
+        groupId
+
+
+        accountId,customerId
+
+
+        dateCreated
+
+
+        _extend : Available Extentions
+
+
+        account - Account restricted tag names
+
+
+        assets - Assets which are associated
+
+
+        tag/usercount - Number of users associated
+
+
+        tag/assetcount - Number of assets associated
+
+
+        tag/fencecount - Number of fences associated
+
+
+        tag/alertcount - Number of alerts associated
+
+
+        _sort : Available sort fields
+
+
+        tagName'
+      responses:
+        '200':
+          description: OK
+    post:
+      operationId: postV1Tags
+      summary: tags
+      tags:
+      - Tags
+      description: Add Tag
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                tagName:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                accountId: 98
+                tagId: c722d7c5-f97b-4122-854c-95e7f3cc76e3
+                status: true
+                tagType: TRACKER
+                tagBgColor: 419A51
+                tagName: New Tag2
+  /v1/tags/{id}/alerts:
+    get:
+      operationId: getV1TagsByIdAlerts
+      summary: tags/{id}/alerts
+      tags:
+      - Tags
+      description: List of Fences Associated with Tag
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/tags/{id}/trips:
+    get:
+      operationId: getV1TagsByIdTrips
+      summary: tags/{id}/trips
+      tags:
+      - Tags
+      description: List of Trips Associated with Tag
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/tags/{tagId}:
+    get:
+      operationId: getV1TagsByTagid
+      summary: tags/{id}
+      tags:
+      - Tags
+      description: 'Get Tag Details
+
+
+        ###Fields
+
+
+        tagId - (string) Unique Tag ID
+
+
+        accountId - (string) Unique Customer/Account ID
+
+
+        groupId - (string) Unique Group ID
+
+
+        tagName - (string) Tag Name
+
+
+        tagBgColor - (string) Tag Background Colour (Colour Code)
+
+
+        status - (bool) Tag Status
+
+
+        dateCreated - (datetime) Tag Create Date
+
+
+        tagType - (string) Tag Type (''TRACKER'',''FENCE'',''FENCE RESTRICTED'',''ASSET RESTRICTED'',''GLOBAL'')
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        tagName
+
+
+        tagType
+
+
+        status
+
+
+        tagId
+
+
+        groupId
+
+
+        accountId,customerId
+
+
+        dateCreated
+
+
+        _extend : Available Extentions
+
+
+        account - Account restricted tag names
+
+
+        assets - Assets which are associated
+
+
+        tag/usercount - Number of users associated
+
+
+        tag/assetcount - Number of assets associated
+
+
+        tag/fencecount - Number of fences associated
+
+
+        tag/alertcount - Number of alerts associated'
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                tagId: c722d7c5-f97b-4122-854c-95e7f3cc76e3
+                accountId: 98
+                tagName: New Tag2
+                tagBgColor: 419A51
+                status: true
+                dateCreated: '2022-01-31T13:59:32+00:00'
+                tagType: TRACKER
+    post:
+      operationId: postV1TagsByTagid
+      summary: tags/{id}
+      tags:
+      - Tags
+      description: Update Tag Details
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                tagId: c722d7c5-f97b-4122-854c-95e7f3cc76e3
+                accountId: 98
+                tagName: New Tag2
+                tagBgColor: 419A51
+                status: true
+                dateCreated: '2022-01-31T13:59:32+00:00'
+                tagType: TRACKER
+    delete:
+      operationId: deleteV1TagsByTagid
+      summary: tags/{id}
+      tags:
+      - Tags
+      description: Get Tag Details
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                tagId: c722d7c5-f97b-4122-854c-95e7f3cc76e3
+                accountId: 98
+                tagName: New Tag2
+                tagBgColor: 419A51
+                status: false
+                dateCreated: '2022-01-31T13:59:32+00:00'
+                tagType: TRACKER
+  /v1/tags/{tagId}/assets:
+    get:
+      operationId: getV1TagsByTagidAssets
+      summary: tags/{id}/assets
+      tags:
+      - Tags
+      description: List of Assets Associated with Tag
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1TagsByTagidAssets
+      summary: tags/{id}/assets
+      tags:
+      - Tags
+      description: Add Assets to Tag
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                start: 1
+                end: 0
+                results:
+                - assetId: 0-0000000
+                  tagId: string
+                  status: true
+  /v1/tags/{tagId}/assets/all:
+    get:
+      operationId: getV1TagsByTagidAssetsAll
+      summary: v1/tags/{tagId}/assets/all
+      tags:
+      - Tags
+      description: List of Fences Associated with Tag
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - assetTagId: 60942
+                  tagId: d56a0860-48fc-4c6b-bc24-ad5f5aaf60c7
+                  assetId: '00770003'
+                  dateCreated: '2022-02-08T18:38:36+00:00'
+                  status: true
+    delete:
+      operationId: deleteV1TagsByTagidAssetsAll
+      summary: v1/tags/{tagId}/assets/all
+      tags:
+      - Tags
+      description: List of Fences Associated with Tag
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - assetTagId: 60942
+                  tagId: d56a0860-48fc-4c6b-bc24-ad5f5aaf60c7
+                  assetId: '00770003'
+                  dateCreated: '2022-02-08T18:38:36+00:00'
+                  status: false
+  /v1/tags/{tagId}/assets/{assetId}:
+    post:
+      operationId: postV1TagsByTagidAssetsByAssetid
+      summary: tags/{id}/assets/{assetId}
+      tags:
+      - Tags
+      description: Update Tag -> Asset Link Details
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1TagsByTagidAssetsByAssetid
+      summary: tags/{id}/assets/{assetId}
+      tags:
+      - Tags
+      description: Remove Asset from Tag
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/tags/{tagId}/fences:
+    get:
+      operationId: getV1TagsByTagidFences
+      summary: tags/{id}/fences
+      tags:
+      - Tags
+      description: List of Fences Associated with Tag
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1TagsByTagidFences
+      summary: tags/{id}/fences
+      tags:
+      - Tags
+      description: Link Fences to Tag
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/tags/{tagId}/fences/{fenceId}:
+    delete:
+      operationId: deleteV1TagsByTagidFencesByFenceid
+      summary: tags/{id}/fences/{fenceId}
+      tags:
+      - Tags
+      description: Unlink Fence with Tag
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/tags/{tagId}/users:
+    get:
+      operationId: getV1TagsByTagidUsers
+      summary: tags/{id}/users
+      tags:
+      - Tags
+      description: List of Users Associated with Tag
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

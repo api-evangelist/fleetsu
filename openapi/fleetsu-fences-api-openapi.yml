@@ -1,0 +1,744 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Fences API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Fences
+paths:
+  /v1/fences:
+    get:
+      operationId: getV1Fences
+      summary: v1/fences
+      tags:
+      - Fences
+      description: 'All GeoFences in WKT format
+
+
+        Fields
+
+
+        fenceId - (string) Unique fence ID
+
+
+        accountId - (string) Unique Customer/Account ID
+
+
+        fenceType - (string) Fence type (GeoPolygon)
+
+
+        fenceName - (string) Fence name
+
+
+        shapePoints - (geometry) Fence geometry or shape details
+
+
+        radius - (int) Fence radius
+
+
+        status - (int) Fence status (0/1 - Disabled/Enabled)
+
+
+        lineColor - (string) Color code used to draw the border lines of the fence
+
+
+        fillColor - (string) Color code used to fill the fence
+
+
+        lineOpacity - (float) Opacity of the fence border line
+
+
+        fillOpacity - (float) Opacity of the fence area
+
+
+        lineWidth - (int) Width of the fence border line
+
+
+        description - (string) Fence Description
+
+
+        groupId - (int) Fence''s Group ID
+
+
+        tags - (array) List of tags associated with the fence3
+
+
+        dateCreated - (datetime) Date Fence is created
+
+
+        isReportingFence - (bool) Is the fence used for reporting
+
+
+        Custom Query Parameters
+
+
+        tagId - (string) - Related Tag
+
+
+        CustomerId - (string) - Customer ID
+
+
+        status - (int) - Fence Status
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        fenceId
+
+
+        fenceType
+
+
+        fenceName
+
+
+        status
+
+
+        groupId
+
+
+        accountId,customerId
+
+
+        dateCreated
+
+
+        _extend : Available Extentions
+
+
+        device -Asset/Device Entered/Exited the fence
+
+
+        event - Event device communicated with platform for fence in/out
+
+
+        account - Account associated account
+
+
+        group - Group associated group
+
+
+        device/health - Device Health * device health while interaction with fence*
+
+
+        fence/tags - Tags associated tags
+
+
+        fence/summary - Fence Asset Summary Fence Asset interaction summary
+
+
+        _sort : Available sort fields
+
+
+        fenceId
+
+
+        fenceName'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - fenceId: 0
+                  accountId: 0
+                  fenceType: ''
+                  fenceName: ''
+                  shapePoints: ''
+                  radius: null
+                  status: 1
+                  lineColor: ''
+                  fillColor: ''
+                  lineOpacity: 0
+                  fillOpacity: 0
+                  lineWidth: 3
+                  description: ''
+                  groupId: 0
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  isReportingFence: true
+                params:
+                  _limit: '200'
+                  _sort: fenceName
+                  customerId: 0
+                  status: 1
+                  total: 1
+    post:
+      operationId: postV1Fences
+      summary: v1/fences
+      tags:
+      - Fences
+      description: Create Geo Fence
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/fences/types:
+    get:
+      operationId: getV1FencesTypes
+      summary: v1/fences/types
+      tags:
+      - Fences
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - fenceTypeId: ''
+                  status: true
+                  accountId: 0
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+    post:
+      operationId: postV1FencesTypes
+      summary: v1/fences/types
+      tags:
+      - Fences
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                accountId:
+                  type: string
+                fenceType:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/fences/types/{fenceTypeId}:
+    get:
+      operationId: getV1FencesTypesByFencetypeid
+      summary: v1/fences/types/{fenceTypeId}
+      tags:
+      - Fences
+      parameters:
+      - name: fenceTypeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1FencesTypesByFencetypeid
+      summary: v1/fences/types/{fenceTypeId}
+      tags:
+      - Fences
+      parameters:
+      - name: fenceTypeId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                accountId:
+                  type: string
+                fenceType:
+                  type: string
+                status:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1FencesTypesByFencetypeid
+      summary: v1/fences/types/{fenceTypeId}
+      tags:
+      - Fences
+      parameters:
+      - name: fenceTypeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/fences/{fenceId}:
+    get:
+      operationId: getV1FencesByFenceid
+      summary: v1/fences/{id}
+      tags:
+      - Fences
+      description: Load Geo Fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1FencesByFenceid
+      summary: v1/fences/{id}
+      tags:
+      - Fences
+      description: Update Geo Fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fenceType:
+                  type: string
+                fenceName:
+                  type: string
+                shapePoints:
+                  type: string
+                status:
+                  type: string
+                radius:
+                  type: string
+                color:
+                  type: string
+                lineColor:
+                  type: string
+                fillColor:
+                  type: string
+                lineOpacity:
+                  type: string
+                fillOpacity:
+                  type: string
+                lineWidth:
+                  type: string
+                lineDash:
+                  type: string
+                description:
+                  type: string
+                tags:
+                  type: string
+                isReportingFence:
+                  type: string
+                metadata:
+                  type: string
+                fenceTypeId:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1FencesByFenceid
+      summary: v1/fences/{id}
+      tags:
+      - Fences
+      description: Delete Geo Fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/fences/{fenceId}/assets:
+    get:
+      operationId: getV1FencesByFenceidAssets
+      summary: v1/fences/{id}/assets
+      tags:
+      - Fences
+      description: Load Assets Associated with Fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1FencesByFenceidAssets
+      summary: v1/fences/{id}/assets
+      tags:
+      - Fences
+      description: Link Assets with Fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1FencesByFenceidAssets
+      summary: v1/fences/{id}/assets
+      tags:
+      - Fences
+      description: Link Assets with Fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/fences/{fenceId}/assets/all:
+    post:
+      operationId: postV1FencesByFenceidAssetsAll
+      summary: v1/fences/{id}/assets/all
+      tags:
+      - Fences
+      description: Link All Assets with Fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1FencesByFenceidAssetsAll
+      summary: v1/fences/{id}/assets/all
+      tags:
+      - Fences
+      description: Unlink all assets with Fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/fences/{fenceId}/assets/{assetId}:
+    get:
+      operationId: getV1FencesByFenceidAssetsByAssetid
+      summary: v1/fences/{id}/assets/{assetId}
+      tags:
+      - Fences
+      description: Load Asset Fence Link Details
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/fences/{fenceId}/tags:
+    get:
+      operationId: getV1FencesByFenceidTags
+      summary: v1/fences/{id}/tags
+      tags:
+      - Fences
+      description: Load Tags Associated with Fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1FencesByFenceidTags
+      summary: v1/fences/{id}/tags
+      tags:
+      - Fences
+      description: Load Tags Associated with Fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                tagId:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/fences/{fenceId}/tags/{tagId}:
+    delete:
+      operationId: deleteV1FencesByFenceidTagsByTagid
+      summary: v1/fences/{id}/tags/{tagId}
+      tags:
+      - Fences
+      description: Remove Tag from associated fence
+      parameters:
+      - name: fenceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                tagId:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

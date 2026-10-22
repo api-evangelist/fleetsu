@@ -1,0 +1,34 @@
+generated: '2026-10-22'
+method: searched
+source:
+- openapi/_original/fleetsu-postman-collection.json
+- https://zapier.com/apps/fleetsu/integrations
+- https://n8n.io/integrations/fleetsu/
+- https://composio.dev/toolkits/fleetsu
+- https://monid.ai/tools/fleetsu
+checked:
+- https://zapier.com/apps/fleetsu/integrations (404)
+- https://www.make.com/en/integrations/fleetsu (403)
+- https://n8n.io/integrations/fleetsu/ (404)
+- https://www.workato.com/integrations/fleetsu (404)
+- https://fleetsu.com/ (rendered; no integrations or partners page linked)
+- openapi/fleetsu-openapi.yml and openapi/_original/fleetsu-postman-collection.json
+- https://composio.dev/toolkits/fleetsu
+- https://monid.ai/tools/fleetsu
+- https://n8n.io/integrations/fleetsu/
+- https://zapier.com/apps/fleetsu/integrations
+summary: null
+marketplace_apps: []
+edges:
+- partner_name: FleetCam
+  partner: null
+  type: contract
+  direction: unknown
+  operations:
+  - getV1AccountsByAccountidIntegrations
+  - postV1AccountsByAccountidIntegrationsByAccountintegrationkey
+  - deleteV1AccountsByAccountidIntegrationsByAccountintegrationkey
+  evidence: https://api-docs.fleetsu.com/
+  use_case: 'Account integrations endpoints take a "type" field documented as "eg: fleetCam" (example value "fleetcam")
+    with a third-party userName/password, in the provider Postman collection at api-docs.fleetsu.com.'
+templates: []

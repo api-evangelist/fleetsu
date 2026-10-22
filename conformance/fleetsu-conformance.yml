@@ -1,0 +1,29 @@
+generated: '2026-10-22'
+method: searched
+source: https://api-docs.fleetsu.com/
+standards:
+- id: rfc7617
+  name: HTTP Basic authentication
+  conforms: true
+  evidence: 'api-docs.fleetsu.com: "The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate."; openapi
+    securitySchemes.basicAuth {type: http, scheme: basic}'
+- id: iso8601
+  name: ISO 8601 date-times
+  conforms: partial
+  evidence: 'api-docs.fleetsu.com: "Datetime fields can be searched using most common formats including relative, although it is recommended to
+    use ISO 8601 standard dates."'
+- id: pagination
+  conforms: partial
+  evidence: 'api-docs.fleetsu.com: offset pagination via _limit ("Min: 1, Max: 1000, default: 200") and _start; no standard link headers.'
+- id: rfc9457
+  conforms: false
+  evidence: Error bodies are {"code","message"} JSON, not application/problem+json.
+- id: idempotency
+  conforms: false
+  evidence: No idempotency key is documented.
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.3
+- id: oauth2
+  conforms: false
+  evidence: 'securitySchemes: basicAuth (http)'

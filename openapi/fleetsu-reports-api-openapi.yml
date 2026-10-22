@@ -1,0 +1,2408 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Reports API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Reports
+paths:
+  /reports/fleet/breadcrumb/{imei}:
+    get:
+      operationId: getReportsFleetBreadcrumbByImei
+      summary: reports/fleet/breadcrumb/{imei}
+      tags:
+      - Reports
+      parameters:
+      - name: imei
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /reports/fleet/breadcrumb/{imei}.kml:
+    get:
+      operationId: getReportsFleetBreadcrumbByImeiKml
+      summary: reports/fleet/breadcrumb/{imei}.kml
+      tags:
+      - Reports
+      parameters:
+      - name: imei
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /scheduledReportId/v1/reports/scheduled/{scheduledReportId}:
+    post:
+      operationId: postScheduledreportidV1ReportsScheduledByScheduledreportid
+      summary: reports/scheduled/{id}
+      tags:
+      - Reports
+      description: Update Scheduled Report Details
+      parameters:
+      - name: scheduledReportId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/device-health:
+    get:
+      operationId: getV1ReportsDeviceHealth
+      summary: reports/device-health
+      tags:
+      - Reports
+      description: Device Health Report
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/device-health.csv:
+    get:
+      operationId: getV1ReportsDeviceHealthCsv
+      summary: reports/device-health.csv
+      tags:
+      - Reports
+      description: Device Health Report as CSV file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/device-health.pdf:
+    get:
+      operationId: getV1ReportsDeviceHealthPdf
+      summary: reports/device-health.pdf
+      tags:
+      - Reports
+      description: Device Health Report as PDF file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/device-health.xlsx:
+    get:
+      operationId: getV1ReportsDeviceHealthXlsx
+      summary: reports/device-health.xlsx
+      tags:
+      - Reports
+      description: Device Health Report as Excel XLSX file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/devices/installs:
+    get:
+      operationId: getV1ReportsDevicesInstalls
+      summary: v1/reports/devices/installs
+      tags:
+      - Reports
+      description: 'Assets Last Movements Report
+
+
+        ###Fields
+
+
+        assetID,imei - (string) - Unique Asset ID
+
+
+        label - (string) - Asset label
+
+
+        jobId - (string) - External Job Reference No. (scheduled for v9.22)
+
+
+        type - (string) - Asset Type
+
+
+        vehicleRegitration - (string) - Vehicle Registration No
+
+
+        vehicleMake - (string) - Vehicle Manufacturer
+
+
+        vehicleModel - (string) - Vehicle Model
+
+
+        vehicleVin - (string) - Vechicle VIN Number
+
+
+        avatar - (string) - URL to Asset Avatar
+
+
+        mapIconId - (int) - Map Icon Id
+
+
+        groupId - (int) - Assigned Asset Group
+
+
+        accountID,customerId - (int) - Asset Account
+
+
+        dateInstalled - (datetime) - Date Tracker Device Installed
+
+
+        dateLastPing - (datetime) - Last Ping last time device communicated with platform
+
+
+        dateLastMovement - (datetime) - Last Movement last time asset moved
+
+
+        dateLastEvent - (datetime) - Last Event last valid location received
+
+
+        daysSinceLastMovement - (int) - No. of days since last movement
+
+
+        deviceHealthSort - (int) - Device Health Sort Number
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search assetId,imei,label,vehicleRegistration
+
+
+        deviceHealthId - (string) - Device Health Status (online,review,investigate,offline,not-monitored,not-deployed)
+
+
+        tagId - (int) - Search based on Tag Id
+
+
+        lastMovementStatusId - (string) - Assets last movement''s status (today,yesterday,+48hrs,not-deployed)
+
+
+        daysSinceLastMovement - (int) - No. of days since last movement
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        assetId,imei
+
+
+        label
+
+
+        jobId
+
+
+        type
+
+
+        vehicleRegitration
+
+
+        vehicleMake
+
+
+        vehicleModel
+
+
+        vehicleVin
+
+
+        avatar
+
+
+        mapIconId
+
+
+        groupId
+
+
+        accountId,customerId
+
+
+        dateInstalled
+
+
+        _extend : Available Extentionss
+
+
+        event - Associated Event
+
+
+        asset/group - Groups
+
+
+        device/health - Device Health Details
+
+
+        asset/tags - Associated Asset''s Tags
+
+
+        customer - Customer Details
+
+
+        _sort : Available sort fields
+
+
+        label
+
+
+        vehicleRegistration
+
+
+        deviceHealthSort
+
+
+        dateLastPIng
+
+
+        daysSinceLastMovement
+
+
+        dateLastMovement'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/distance/total:
+    get:
+      operationId: getV1ReportsDriversDistanceTotal
+      summary: v1/reports/drivers/distance/total
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/duration/total:
+    get:
+      operationId: getV1ReportsDriversDurationTotal
+      summary: v1/reports/drivers/duration/total
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/events:
+    get:
+      operationId: getV1ReportsDriversEvents
+      summary: v1/reports/drivers/events
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/events/total:
+    get:
+      operationId: getV1ReportsDriversEventsTotal
+      summary: v1/reports/drivers/events/total
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/history.csv:
+    get:
+      operationId: getV1ReportsDriversHistoryCsv
+      summary: v1/reports/drivers/history.csv
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/history.pdf:
+    get:
+      operationId: getV1ReportsDriversHistoryPdf
+      summary: v1/reports/drivers/history.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/history.xlsx:
+    get:
+      operationId: getV1ReportsDriversHistoryXlsx
+      summary: v1/reports/drivers/history.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/performance:
+    get:
+      operationId: getV1ReportsDriversPerformance
+      summary: v1/reports/drivers/performance
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/performance.csv:
+    get:
+      operationId: getV1ReportsDriversPerformanceCsv
+      summary: v1/reports/drivers/performance.csv
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/performance.pdf:
+    get:
+      operationId: getV1ReportsDriversPerformancePdf
+      summary: v1/reports/drivers/performance.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/performance.xlsx:
+    get:
+      operationId: getV1ReportsDriversPerformanceXlsx
+      summary: v1/reports/drivers/performance.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/scores:
+    get:
+      operationId: getV1ReportsDriversScores
+      summary: v1/reports/drivers/scores
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/scores/grouped:
+    get:
+      operationId: getV1ReportsDriversScoresGrouped
+      summary: v1/reports/drivers/scores/grouped
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/statistics:
+    get:
+      operationId: getV1ReportsDriversStatistics
+      summary: v1/reports/drivers/statistics
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/drivers/total:
+    get:
+      operationId: getV1ReportsDriversTotal
+      summary: v1/reports/drivers/total
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fences/interactions:
+    get:
+      operationId: getV1ReportsFencesInteractions
+      summary: reports/fences/interactions
+      tags:
+      - Reports
+      description: Fence Interactions Report
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fences/interactions.csv:
+    get:
+      operationId: getV1ReportsFencesInteractionsCsv
+      summary: reports/fences/interactions.csv
+      tags:
+      - Reports
+      description: 'Fence Interactions Report as CSV file
+
+
+        see reports/fences/interactions for filtering options'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fences/interactions.pdf:
+    get:
+      operationId: getV1ReportsFencesInteractionsPdf
+      summary: reports/fences/interactions.pdf
+      tags:
+      - Reports
+      description: 'Fence Interactions Report as PDF Document
+
+
+        see reports/fences/interactions for filtering options'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fences/interactions.xlsx:
+    get:
+      operationId: getV1ReportsFencesInteractionsXlsx
+      summary: reports/fences/interactions.xlsx
+      tags:
+      - Reports
+      description: 'Fence Interactions Report as Excel XLSX file
+
+
+        see reports/fences/interactions for filtering options'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fences/time-in-fences:
+    get:
+      operationId: getV1ReportsFencesTimeInFences
+      summary: v1/reports/fences/time-in-fences
+      tags:
+      - Reports
+      description: 'Fence Interactions Report as PDF Document
+
+
+        see reports/fences/interactions for filtering options'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fences/time-in-fences.csv:
+    get:
+      operationId: getV1ReportsFencesTimeInFencesCsv
+      summary: v1/reports/fences/time-in-fences.csv
+      tags:
+      - Reports
+      description: 'Fence Interactions Report as PDF Document
+
+
+        see reports/fences/interactions for filtering options'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fences/time-in-fences.xlsx:
+    get:
+      operationId: getV1ReportsFencesTimeInFencesXlsx
+      summary: v1/reports/fences/time-in-fences.xlsx
+      tags:
+      - Reports
+      description: 'Fence Interactions Report as PDF Document
+
+
+        see reports/fences/interactions for filtering options'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/completed-trips:
+    get:
+      operationId: getV1ReportsFleetCompletedTrips
+      summary: reports/fleet/completed-trips
+      tags:
+      - Reports
+      description: 'Completed Trips Report
+
+
+        ###Fields
+
+
+        tripId - (string) Unique Trip ID
+
+
+        tripDistance - (number) Distance travelled in the trip (in Metres)
+
+
+        dateFrom - (datetime) Trip start date and time
+
+
+        dateTo - (datetime) Trip end date and time
+
+
+        maxSpeed - (number) Maximum speed travelled during the trip
+
+
+        avgSpeed - (number) Average speed travelled during the trip
+
+
+        imei - (string) Unique asset identifier
+
+
+        startEventId - (string) Identifier of the event from which the trip began
+
+
+        endEventId - (string) Identifier of the event till which the trip lasted
+
+
+        type - (string) Trips type
+
+
+        fuelConsumed - (number) Amount of fuel consumed during the trip(in Millilitres)
+
+
+        avgFuelConsumed - (number) Average Fuel Consumed by the asset
+
+
+        cost - (float) Additional cost to be associated to the trip
+
+
+        odometerStart - (number) Odometer reading at the beginning of trip
+
+
+        odometerEnd - (number) Odometer reading at the end of trip
+
+
+        co2 - (number) co2 emission details
+
+
+        description - (string) Trip Description
+
+
+        stopDuration - (number) Asset stop duration at the destination
+
+
+        stopDescription - (string) Trip stop description
+
+
+        stopType - (string) Trip stop type (C-Buisness/Classified,P-Personal,N-Non-Classified)
+
+
+        jobStageId - (string) Unique Job Stage ID
+
+
+        engineHourStart - (number) Engine hour/Runtime at the start of the trip
+
+
+        engineHourEnd - (number) Engine hour/Runtime at the end of the trip
+
+
+        engineHourUsed - (number) Engine hour/Runtime spent in the trip
+
+
+        jobId - (string) Unique Job ID
+
+
+        driverId - (string) Unique Driver ID
+
+
+        totalDuration - (number) Total trip duration (in Seconds)
+
+
+        movingDuration - (number) Trip asset moving time (in Seconds)
+
+
+        idleDuration - (number) Trip asset idle time (in Seconds)
+
+
+        stationaryDuration - (number) Trip asset stationary time (in Seconds)
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search assetId,imei,label,vehicleRegistration
+
+
+        tagId - (string) - Related Tag
+
+
+        dateFrom - (datetime) - Trip start date
+
+
+        dateTo - (datetime) - Trip end date
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        assetId,imei
+
+
+        label
+
+
+        jobId
+
+
+        vehicleRegitration
+
+
+        vehicleMake
+
+
+        vehicleModel
+
+
+        vehicleVin
+
+
+        groupId
+
+
+        tagId
+
+
+        stopType
+
+
+        dateFrom
+
+
+        dateTo
+
+
+        accountId,customerId
+
+
+        dateInstalled
+
+
+        _extend : Available Extentions
+
+
+        asset
+
+
+        customer
+
+
+        trip/address
+
+
+        trip/driver
+
+
+        trip/events
+
+
+        trip/parameters
+
+
+        _sort : Available sort fields
+
+
+        label
+
+
+        dateFrom
+
+
+        dateTo
+
+
+        tripDistance
+
+
+        avgSpeed
+
+
+        maxSpeed
+
+
+        stopDuration'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 999999
+                start: 1
+                end: 200
+                results:
+                - tripId: 0
+                  tripStatusId: 0
+                  tripStateId: 0
+                  tripDistance: null
+                  dateFrom: '0000-00-00T00:00:00+00:00'
+                  maxSpeed: null
+                  avgSpeed: null
+                  imei: 012345678901234567
+                  startEventId: 0
+                  endEventId: null
+                  type: ''
+                  fuelConsumed: null
+                  avgFuelConsumed: null
+                  odometerStart: 0
+                  odometerEnd: 0
+                  co2: null
+                  stopDuration: null
+                  stopType: U
+                  jobStageId: null
+                  engineHourStart: null
+                  engineHourEnd: null
+                  engineHourUsed: null
+                  driverId: null
+                  totalDuration: null
+                  movingDuration: null
+                  idleDuration: null
+                  stationaryDuration: null
+                  id: 0
+                  tripDuration: 0
+                params:
+                  customerId: 0
+                  groupId: []
+                  _limit: 200
+                  total: 999999
+  /v1/reports/fleet/completed-trips.csv:
+    get:
+      operationId: getV1ReportsFleetCompletedTripsCsv
+      summary: reports/fleet/completed-trips.csv
+      tags:
+      - Reports
+      description: 'Completed Trips Report as CSV file
+
+
+        See reports/fleet/completed-trips for filtering details'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/completed-trips.pdf:
+    get:
+      operationId: getV1ReportsFleetCompletedTripsPdf
+      summary: reports/fleet/completed-trips.pdf
+      tags:
+      - Reports
+      description: 'Completed Trips Report as PDF
+
+
+        See reports/fleet/completed-trips for filtering details'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/completed-trips.xlsx:
+    get:
+      operationId: getV1ReportsFleetCompletedTripsXlsx
+      summary: reports/fleet/completed-trips.xlsx
+      tags:
+      - Reports
+      description: 'Completed Trips Report as XLSX file
+
+
+        See reports/fleet/completed-trips for filtering details'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/events.csv:
+    get:
+      operationId: getV1ReportsFleetEventsCsv
+      summary: reports/fleet/events.csv
+      tags:
+      - Reports
+      description: 'Full Events Report as CSV File
+
+
+        See reports/fleet/events for filtering details'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/events.pdf:
+    get:
+      operationId: getV1ReportsFleetEventsPdf
+      summary: reports/fleet/events.pdf
+      tags:
+      - Reports
+      description: 'Full Events Report as PDF Document
+
+
+        See reports/fleet/events for filtering details'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/events.xlsx:
+    get:
+      operationId: getV1ReportsFleetEventsXlsx
+      summary: reports/fleet/events.xlsx
+      tags:
+      - Reports
+      description: 'Full Events Report as Excel XLSX File
+
+
+        See reports/fleet/events for filtering details'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/fault.pdf:
+    get:
+      operationId: getV1ReportsFleetFaultPdf
+      summary: v1/reports/fleet/fault.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/fault.xlsx:
+    get:
+      operationId: getV1ReportsFleetFaultXlsx
+      summary: v1/reports/fleet/fault.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/fleet-details.csv:
+    get:
+      operationId: getV1ReportsFleetFleetDetailsCsv
+      summary: v1/reports/fleet/fleet-details.csv
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+  /v1/reports/fleet/fleet-details.pdf:
+    get:
+      operationId: getV1ReportsFleetFleetDetailsPdf
+      summary: v1/reports/fleet/fleet-details.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/fleet-details.xlsx:
+    get:
+      operationId: getV1ReportsFleetFleetDetailsXlsx
+      summary: v1/reports/fleet/fleet-details.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/idling:
+    get:
+      operationId: getV1ReportsFleetIdling
+      summary: v1/reports/fleet/idling
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 10
+                start: 1
+                end: 10
+                results:
+                - segmentKey: 1641774873
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672369073
+                  startDatetime: '2022-01-10T00:34:33+00:00'
+                  startEventKey: 20220110003433-TEST-IMEI-004-129
+                  stopEventId: 1672405376
+                  stopDatetime: '2022-01-10T00:59:13+00:00'
+                - segmentKey: 1641776281
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672402825
+                  startDatetime: '2022-01-10T00:58:01+00:00'
+                  startEventKey: 20220110005801-TEST-IMEI-004-129
+                  stopEventId: 1672405376
+                  stopDatetime: '2022-01-10T00:59:13+00:00'
+                - segmentKey: 1641777686
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672439149
+                  startDatetime: '2022-01-10T01:21:26+00:00'
+                  startEventKey: 20220110012126-TEST-IMEI-004-129
+                  stopEventId: 1672456993
+                  stopDatetime: '2022-01-10T01:38:05+00:00'
+                - segmentKey: 1641781933
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672545888
+                  startDatetime: '2022-01-10T02:32:13+00:00'
+                  startEventKey: 20220110023213-TEST-IMEI-004-129
+                  stopEventId: 1672547111
+                  stopDatetime: '2022-01-10T02:49:28+00:00'
+                - segmentKey: 1641788107
+                  segmentType: idling
+                  accountId: 4
+                  deviceId: vt357330053061248
+                  startEventId: 1672650220
+                  startDatetime: '2022-01-10T04:15:07+00:00'
+                  startEventKey: 20220110041507-vt357330053061248-129
+                  stopEventId: 1672651901
+                  stopDatetime: '2022-01-10T04:16:15+00:00'
+                  device:
+                    deviceId: vt357330053061248
+                    label: vt357330053061248
+                    avatar: //bugdriveravatars.s3.amazonaws.com/53b8bc8722231.png
+                    groupId: 227
+                    accountId: 4
+                    assetId: vt357330053061248
+                    account:
+                      customerId: 4
+                      customerName: Test Account Demo
+                      accountId: 4
+                      companyName: Test Account Demo
+                    odometerLocked: false
+                    runtimeLocked: false
+                    firmwareDeploymentStatus: UNKNOWN
+                    group:
+                      groupId: 227
+                      name: WA
+                - segmentKey: 1641790059
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672711215
+                  startDatetime: '2022-01-10T04:47:39+00:00'
+                  startEventKey: 20220110044739-TEST-IMEI-004-129
+                  stopEventId: 1672710677
+                  stopDatetime: '2022-01-10T05:04:24+00:00'
+                - segmentKey: 1641796776
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672835170
+                  startDatetime: '2022-01-10T06:39:36+00:00'
+                  startEventKey: 20220110063936-TEST-IMEI-004-129
+                - segmentKey: 1641799462
+                  segmentType: idling
+                  accountId: 4
+                  deviceId: vt357330053061248
+                  startEventId: 1672870586
+                  startDatetime: '2022-01-10T07:24:22+00:00'
+                  startEventKey: 20220110072422-vt357330053061248-129
+                  stopEventId: 1672872432
+                  stopDatetime: '2022-01-10T07:25:46+00:00'
+                  device:
+                    deviceId: vt357330053061248
+                    label: vt357330053061248
+                    avatar: //bugdriveravatars.s3.amazonaws.com/53b8bc8722231.png
+                    groupId: 227
+                    accountId: 4
+                    assetId: vt357330053061248
+                    account:
+                      customerId: 4
+                      customerName: Test Account Demo
+                      accountId: 4
+                      companyName: Test Account Demo
+                    odometerLocked: false
+                    runtimeLocked: false
+                    firmwareDeploymentStatus: UNKNOWN
+                    group:
+                      groupId: 227
+                      name: WA
+                - segmentKey: 1641799890
+                  segmentType: idling
+                  accountId: 4
+                  deviceId: vt357330053061248
+                  startEventId: 1672877816
+                  startDatetime: '2022-01-10T07:31:30+00:00'
+                  startEventKey: 20220110073130-vt357330053061248-129
+                  stopEventId: 1672878839
+                  stopDatetime: '2022-01-10T07:32:06+00:00'
+                  device:
+                    deviceId: vt357330053061248
+                    label: vt357330053061248
+                    avatar: //bugdriveravatars.s3.amazonaws.com/53b8bc8722231.png
+                    groupId: 227
+                    accountId: 4
+                    assetId: vt357330053061248
+                    account:
+                      customerId: 4
+                      customerName: Test Account Demo
+                      accountId: 4
+                      companyName: Test Account Demo
+                    odometerLocked: false
+                    runtimeLocked: false
+                    firmwareDeploymentStatus: UNKNOWN
+                    group:
+                      groupId: 227
+                      name: WA
+                - segmentKey: 1641807508
+                  segmentType: idling
+                  accountId: 4
+                  deviceId: vt357330053061248
+                  startEventId: 1673065125
+                  startDatetime: '2022-01-10T09:38:28+00:00'
+                  startEventKey: 20220110093828-vt357330053061248-129
+                  device:
+                    deviceId: vt357330053061248
+                    label: vt357330053061248
+                    avatar: //bugdriveravatars.s3.amazonaws.com/53b8bc8722231.png
+                    groupId: 227
+                    accountId: 4
+                    assetId: vt357330053061248
+                    account:
+                      customerId: 4
+                      customerName: Test Account Demo
+                      accountId: 4
+                      companyName: Test Account Demo
+                    odometerLocked: false
+                    runtimeLocked: false
+                    firmwareDeploymentStatus: UNKNOWN
+                    group:
+                      groupId: 227
+                      name: WA
+  /v1/reports/fleet/idling.csv:
+    get:
+      operationId: getV1ReportsFleetIdlingCsv
+      summary: v1/reports/fleet/idling.csv
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+  /v1/reports/fleet/idling.pdf:
+    get:
+      operationId: getV1ReportsFleetIdlingPdf
+      summary: v1/reports/fleet/idling.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/idling.xlsx:
+    get:
+      operationId: getV1ReportsFleetIdlingXlsx
+      summary: v1/reports/fleet/idling.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/important-events.csv:
+    get:
+      operationId: getV1ReportsFleetImportantEventsCsv
+      summary: v1/reports/fleet/important-events.csv
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/important-events.pdf:
+    get:
+      operationId: getV1ReportsFleetImportantEventsPdf
+      summary: v1/reports/fleet/important-events.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/important-events.xlsx:
+    get:
+      operationId: getV1ReportsFleetImportantEventsXlsx
+      summary: v1/reports/fleet/important-events.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/last-movement.csv:
+    get:
+      operationId: getV1ReportsFleetLastMovementCsv
+      summary: v1/reports/fleet/last-movement.csv
+      tags:
+      - Reports
+      description: 'Asset Last Movements Report as CSV File
+
+
+        See reports/last-movements for filtering details'
+      responses:
+        '200':
+          description: OK
+  /v1/reports/fleet/last-movement.pdf:
+    get:
+      operationId: getV1ReportsFleetLastMovementPdf
+      summary: v1/reports/fleet/last-movement.pdf
+      tags:
+      - Reports
+      description: 'Asset Last Movements Report as PDF Document
+
+
+        See reports/last-movements for filtering details'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/last-movement.xlsx:
+    get:
+      operationId: getV1ReportsFleetLastMovementXlsx
+      summary: v1/reports/fleet/last-movement.xlsx
+      tags:
+      - Reports
+      description: 'Asset Last Movements Report as Excel XLSX File
+
+
+        See reports/last-movements for filtering details'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/on-duty:
+    get:
+      operationId: getV1ReportsFleetOnDuty
+      summary: v1/reports/fleet/on-duty
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 0
+                start: 1
+                end: 0
+                results: []
+  /v1/reports/fleet/on-duty.csv:
+    get:
+      operationId: getV1ReportsFleetOnDutyCsv
+      summary: v1/reports/fleet/on-duty.csv
+      tags:
+      - Reports
+      description: 'Asset Last Movements Report as CSV File
+
+
+        See reports/last-movements for filtering details'
+      responses:
+        '200':
+          description: OK
+  /v1/reports/fleet/on-duty.pdf:
+    get:
+      operationId: getV1ReportsFleetOnDutyPdf
+      summary: v1/reports/fleet/on-duty.pdf
+      tags:
+      - Reports
+      description: 'Asset Last Movements Report as PDF Document
+
+
+        See reports/last-movements for filtering details'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/on-duty.xlsx:
+    get:
+      operationId: getV1ReportsFleetOnDutyXlsx
+      summary: v1/reports/fleet/on-duty.xlsx
+      tags:
+      - Reports
+      description: 'Asset Last Movements Report as Excel XLSX File
+
+
+        See reports/last-movements for filtering details'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/reminders:
+    get:
+      operationId: getV1ReportsFleetReminders
+      summary: v1/reports/fleet/reminders
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 10
+                start: 1
+                end: 10
+                results:
+                - reminderKey: a2bb90ba-4b2e-4ec4-bf4c-44f0dabb931b
+                  description: Cypress test
+                  parameter: assetRuntime
+                  reminderValue: '1'
+                  dueValue: '3'
+                  overdueValue: '4'
+                  dateOverdueNotified: '2022-01-10T21:22:30+00:00'
+                  dateOverdueSent: '2022-01-10T21:24:39+00:00'
+                  accountId: 4931
+                  deviceId: test-imei-002
+                  dateCreated: '2022-01-10T20:41:45+00:00'
+                  dateUpdated: '2022-01-10T21:24:39+00:00'
+                  status: true
+                - reminderKey: 8b56d365-2c46-4fae-9fe4-969f22d7f1b4
+                  description: Cypress test
+                  parameter: assetOdometer
+                  reminderValue: '1'
+                  dueValue: '3'
+                  overdueValue: '4'
+                  dateOverdueNotified: '2022-01-10T21:22:30+00:00'
+                  dateOverdueSent: '2022-01-10T21:24:37+00:00'
+                  accountId: 4931
+                  deviceId: test-imei-002
+                  dateCreated: '2022-01-10T20:41:42+00:00'
+                  dateUpdated: '2022-01-10T21:24:37+00:00'
+                  status: true
+                - reminderKey: 7f53a9e8-8ac3-455c-aee9-4752c9553245
+                  description: Cypress test
+                  parameter: assetFuelConsumed
+                  reminderValue: '1'
+                  dueValue: '3'
+                  overdueValue: '4'
+                  accountId: 4931
+                  deviceId: test-imei-002
+                  dateCreated: '2022-01-10T20:41:39+00:00'
+                  dateUpdated: '2022-01-10T20:41:39+00:00'
+                  status: true
+                - reminderKey: 00d5d2cf-28d3-4746-a7e2-305a4d7b3cc5
+                  description: Cypress test
+                  parameter: datetime
+                  reminderValue: 2022-12-10T00:00:00+0800
+                  dueValue: 2022-12-11T00:00:00+0800
+                  overdueValue: 2022-12-12T00:00:00+0800
+                  accountId: 4931
+                  deviceId: user-3605
+                  dateCreated: '2022-01-10T14:12:08+00:00'
+                  dateUpdated: '2022-01-10T20:58:55+00:00'
+                  dateCompleted: '2022-01-10T20:58:29+00:00'
+                  status: false
+                - reminderKey: 057288b0-2559-4145-9127-888796600646
+                  description: Cypress test
+                  parameter: datetime
+                  reminderValue: 2022-12-10T00:00:00+0800
+                  dueValue: 2022-12-10T00:00:00+0800
+                  overdueValue: 2022-12-11T00:00:00+0800
+                  accountId: 4931
+                  deviceId: user-3605
+                  dateCreated: '2022-01-10T14:10:28+00:00'
+                  dateUpdated: '2022-01-10T14:10:29+00:00'
+                  dateCompleted: '2022-12-10T14:10:27+00:00'
+                  status: true
+                - reminderKey: edfa2b71-5e20-44be-bca8-a8232c3bd087
+                  description: Cypress test
+                  parameter: datetime
+                  reminderValue: 2022-12-10T00:00:00+0800
+                  dueValue: 2022-11-10T00:00:00+0800
+                  overdueValue: 2022-12-11T00:00:00+0800
+                  accountId: 4931
+                  deviceId: user-3605
+                  dateCreated: '2022-01-10T14:09:21+00:00'
+                  dateUpdated: '2022-01-10T14:12:08+00:00'
+                  dateCompleted: '2022-12-10T14:12:06+00:00'
+                  status: true
+                - reminderKey: dc530702-b88b-49d3-a7b2-9c421baecaea
+                  description: Cypress test
+                  parameter: datetime
+                  reminderValue: 2022-12-10T00:00:00+0800
+                  dueValue: 2022-11-10T00:00:00+0800
+                  overdueValue: 2022-12-11T00:00:00+0800
+                  accountId: 4931
+                  deviceId: user-3605
+                  dateCreated: '2022-01-10T14:05:54+00:00'
+                  dateUpdated: '2022-01-10T14:05:55+00:00'
+                  dateCompleted: '2022-12-10T14:05:53+00:00'
+                  status: false
+                - reminderKey: f5f7041e-84ca-4e40-87c4-5613c9a619db
+                  description: Cypress test
+                  parameter: datetime
+                  reminderValue: 2022-12-10T00:00:00+0800
+                  dueValue: 2022-11-11T00:00:00+0800
+                  overdueValue: 2022-12-12T00:00:00+0800
+                  accountId: 4931
+                  deviceId: user-3605
+                  dateCreated: '2022-01-10T14:01:49+00:00'
+                  dateUpdated: '2022-01-10T14:01:51+00:00'
+                  dateCompleted: '2022-12-10T14:01:48+00:00'
+                  status: false
+                - reminderKey: cb2a160a-063b-419f-83e6-3982f5e88ccb
+                  description: Cypress test
+                  parameter: datetime
+                  reminderValue: 2022-12-10T00:00:00+0800
+                  dueValue: 2022-12-11T00:00:00+0800
+                  overdueValue: 2022-12-12T00:00:00+0800
+                  accountId: 4931
+                  deviceId: user-3605
+                  dateCreated: '2022-01-10T13:58:37+00:00'
+                  dateUpdated: '2022-01-10T13:58:39+00:00'
+                  dateCompleted: '2022-12-10T13:58:36+00:00'
+                  status: false
+                - reminderKey: b277a18d-5ba6-491d-9e55-eb8947df0cbf
+                  description: Cypress test
+                  parameter: datetime
+                  reminderValue: 2022-01-10T00:00:00+0800
+                  dueValue: 2022-01-11T00:00:00+0800
+                  overdueValue: 2022-01-12T00:00:00+0800
+                  accountId: 4931
+                  deviceId: user-3605
+                  dateCreated: '2022-01-10T13:57:32+00:00'
+                  dateUpdated: '2022-01-10T13:57:34+00:00'
+                  dateCompleted: '2022-01-10T13:57:33+00:00'
+                  status: false
+  /v1/reports/fleet/reminders.csv:
+    get:
+      operationId: getV1ReportsFleetRemindersCsv
+      summary: v1/reports/fleet/reminders.csv
+      tags:
+      - Reports
+      description: 'Asset Last Movements Report as CSV File
+
+
+        See reports/last-movements for filtering details'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/reminders.pdf:
+    get:
+      operationId: getV1ReportsFleetRemindersPdf
+      summary: v1/reports/fleet/reminders.pdf
+      tags:
+      - Reports
+      description: 'Asset Last Movements Report as PDF Document
+
+
+        See reports/last-movements for filtering details'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/reminders.xlsx:
+    get:
+      operationId: getV1ReportsFleetRemindersXlsx
+      summary: v1/reports/fleet/reminders.xlsx
+      tags:
+      - Reports
+      description: 'Asset Last Movements Report as Excel XLSX File
+
+
+        See reports/last-movements for filtering details'
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/reminders/notifications.csv:
+    get:
+      operationId: getV1ReportsFleetRemindersNotificationsCsv
+      summary: v1/reports/fleet/reminders/notifications.csv
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+  /v1/reports/fleet/reminders/notifications.pdf:
+    get:
+      operationId: getV1ReportsFleetRemindersNotificationsPdf
+      summary: v1/reports/fleet/reminders/notifications.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/reminders/notifications.xlsx:
+    get:
+      operationId: getV1ReportsFleetRemindersNotificationsXlsx
+      summary: v1/reports/fleet/reminders/notifications.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/segments:
+    get:
+      operationId: getV1ReportsFleetSegments
+      summary: v1/reports/fleet/segments
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 10
+                start: 1
+                end: 10
+                results:
+                - segmentKey: 1641774873
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672369073
+                  startDatetime: '2022-01-10T00:34:33+00:00'
+                  startEventKey: 20220110003433-TEST-IMEI-004-129
+                  stopEventId: 1672405376
+                  stopDatetime: '2022-01-10T00:59:13+00:00'
+                - segmentKey: 1641776281
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672402825
+                  startDatetime: '2022-01-10T00:58:01+00:00'
+                  startEventKey: 20220110005801-TEST-IMEI-004-129
+                  stopEventId: 1672405376
+                  stopDatetime: '2022-01-10T00:59:13+00:00'
+                - segmentKey: 1641777686
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672439149
+                  startDatetime: '2022-01-10T01:21:26+00:00'
+                  startEventKey: 20220110012126-TEST-IMEI-004-129
+                  stopEventId: 1672456993
+                  stopDatetime: '2022-01-10T01:38:05+00:00'
+                - segmentKey: 1641781933
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672545888
+                  startDatetime: '2022-01-10T02:32:13+00:00'
+                  startEventKey: 20220110023213-TEST-IMEI-004-129
+                  stopEventId: 1672547111
+                  stopDatetime: '2022-01-10T02:49:28+00:00'
+                - segmentKey: 1641788107
+                  segmentType: idling
+                  accountId: 4
+                  deviceId: vt357330053061248
+                  startEventId: 1672650220
+                  startDatetime: '2022-01-10T04:15:07+00:00'
+                  startEventKey: 20220110041507-vt357330053061248-129
+                  stopEventId: 1672651901
+                  stopDatetime: '2022-01-10T04:16:15+00:00'
+                  device:
+                    deviceId: vt357330053061248
+                    label: vt357330053061248
+                    avatar: //bugdriveravatars.s3.amazonaws.com/53b8bc8722231.png
+                    groupId: 227
+                    accountId: 4
+                    assetId: vt357330053061248
+                    account:
+                      customerId: 4
+                      customerName: Test Account Demo
+                      accountId: 4
+                      companyName: Test Account Demo
+                    odometerLocked: false
+                    runtimeLocked: false
+                    firmwareDeploymentStatus: UNKNOWN
+                    group:
+                      groupId: 227
+                      name: WA
+                - segmentKey: 1641790059
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672711215
+                  startDatetime: '2022-01-10T04:47:39+00:00'
+                  startEventKey: 20220110044739-TEST-IMEI-004-129
+                  stopEventId: 1672710677
+                  stopDatetime: '2022-01-10T05:04:24+00:00'
+                - segmentKey: 1641796776
+                  segmentType: idling
+                  accountId: 4956
+                  deviceId: TEST-IMEI-004
+                  startEventId: 1672835170
+                  startDatetime: '2022-01-10T06:39:36+00:00'
+                  startEventKey: 20220110063936-TEST-IMEI-004-129
+                - segmentKey: 1641799462
+                  segmentType: idling
+                  accountId: 4
+                  deviceId: vt357330053061248
+                  startEventId: 1672870586
+                  startDatetime: '2022-01-10T07:24:22+00:00'
+                  startEventKey: 20220110072422-vt357330053061248-129
+                  stopEventId: 1672872432
+                  stopDatetime: '2022-01-10T07:25:46+00:00'
+                  device:
+                    deviceId: vt357330053061248
+                    label: vt357330053061248
+                    avatar: //bugdriveravatars.s3.amazonaws.com/53b8bc8722231.png
+                    groupId: 227
+                    accountId: 4
+                    assetId: vt357330053061248
+                    account:
+                      customerId: 4
+                      customerName: Test Account Demo
+                      accountId: 4
+                      companyName: Test Account Demo
+                    odometerLocked: false
+                    runtimeLocked: false
+                    firmwareDeploymentStatus: UNKNOWN
+                    group:
+                      groupId: 227
+                      name: WA
+                - segmentKey: 1641799890
+                  segmentType: idling
+                  accountId: 4
+                  deviceId: vt357330053061248
+                  startEventId: 1672877816
+                  startDatetime: '2022-01-10T07:31:30+00:00'
+                  startEventKey: 20220110073130-vt357330053061248-129
+                  stopEventId: 1672878839
+                  stopDatetime: '2022-01-10T07:32:06+00:00'
+                  device:
+                    deviceId: vt357330053061248
+                    label: vt357330053061248
+                    avatar: //bugdriveravatars.s3.amazonaws.com/53b8bc8722231.png
+                    groupId: 227
+                    accountId: 4
+                    assetId: vt357330053061248
+                    account:
+                      customerId: 4
+                      customerName: Test Account Demo
+                      accountId: 4
+                      companyName: Test Account Demo
+                    odometerLocked: false
+                    runtimeLocked: false
+                    firmwareDeploymentStatus: UNKNOWN
+                    group:
+                      groupId: 227
+                      name: WA
+                - segmentKey: 1641807508
+                  segmentType: idling
+                  accountId: 4
+                  deviceId: vt357330053061248
+                  startEventId: 1673065125
+                  startDatetime: '2022-01-10T09:38:28+00:00'
+                  startEventKey: 20220110093828-vt357330053061248-129
+                  device:
+                    deviceId: vt357330053061248
+                    label: vt357330053061248
+                    avatar: //bugdriveravatars.s3.amazonaws.com/53b8bc8722231.png
+                    groupId: 227
+                    accountId: 4
+                    assetId: vt357330053061248
+                    account:
+                      customerId: 4
+                      customerName: Test Account Demo
+                      accountId: 4
+                      companyName: Test Account Demo
+                    odometerLocked: false
+                    runtimeLocked: false
+                    firmwareDeploymentStatus: UNKNOWN
+                    group:
+                      groupId: 227
+                      name: WA
+  /v1/reports/fleet/segments.csv:
+    get:
+      operationId: getV1ReportsFleetSegmentsCsv
+      summary: v1/reports/fleet/segments.csv
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+  /v1/reports/fleet/segments.pdf:
+    get:
+      operationId: getV1ReportsFleetSegmentsPdf
+      summary: v1/reports/fleet/segments.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/segments.xlsx:
+    get:
+      operationId: getV1ReportsFleetSegmentsXlsx
+      summary: v1/reports/fleet/segments.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/sensors.csv:
+    get:
+      operationId: getV1ReportsFleetSensorsCsv
+      summary: v1/reports/fleet/sensors.csv
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/speed.csv:
+    get:
+      operationId: getV1ReportsFleetSpeedCsv
+      summary: v1/reports/fleet/speed.csv
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+  /v1/reports/fleet/speed.pdf:
+    get:
+      operationId: getV1ReportsFleetSpeedPdf
+      summary: v1/reports/fleet/speed.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/speed.xlsx:
+    get:
+      operationId: getV1ReportsFleetSpeedXlsx
+      summary: v1/reports/fleet/speed. xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/usage.csv:
+    get:
+      operationId: getV1ReportsFleetUsageCsv
+      summary: v1/reports/fleet/usage.csv
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: OK
+  /v1/reports/fleet/usage.pdf:
+    get:
+      operationId: getV1ReportsFleetUsagePdf
+      summary: v1/reports/fleet/usage.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/fleet/usage.xlsx:
+    get:
+      operationId: getV1ReportsFleetUsageXlsx
+      summary: v1/reports/fleet/usage.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/last-movements:
+    get:
+      operationId: getV1ReportsLastMovements
+      summary: reports/last-movements
+      tags:
+      - Reports
+      description: 'Assets Last Movements Report
+
+
+        ###Fields
+
+
+        assetID,imei - (string) - Unique Asset ID
+
+
+        label - (string) - Asset label
+
+
+        jobId - (string) - External Job Reference No. (scheduled for v9.22)
+
+
+        type - (string) - Asset Type
+
+
+        vehicleRegitration - (string) - Vehicle Registration No
+
+
+        vehicleMake - (string) - Vehicle Manufacturer
+
+
+        vehicleModel - (string) - Vehicle Model
+
+
+        vehicleVin - (string) - Vechicle VIN Number
+
+
+        avatar - (string) - URL to Asset Avatar
+
+
+        mapIconId - (int) - Map Icon Id
+
+
+        groupId - (int) - Assigned Asset Group
+
+
+        accountID,customerId - (int) - Asset Account
+
+
+        dateInstalled - (datetime) - Date Tracker Device Installed
+
+
+        dateLastPing - (datetime) - Last Ping last time device communicated with platform
+
+
+        dateLastMovement - (datetime) - Last Movement last time asset moved
+
+
+        dateLastEvent - (datetime) - Last Event last valid location received
+
+
+        daysSinceLastMovement - (int) - No. of days since last movement
+
+
+        deviceHealthSort - (int) - Device Health Sort Number
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search assetId,imei,label,vehicleRegistration
+
+
+        deviceHealthId - (string) - Device Health Status (online,review,investigate,offline,not-monitored,not-deployed)
+
+
+        tagId - (int) - Search based on Tag Id
+
+
+        lastMovementStatusId - (string) - Assets last movement''s status (today,yesterday,+48hrs,not-deployed)
+
+
+        daysSinceLastMovement - (int) - No. of days since last movement
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        assetId,imei
+
+
+        label
+
+
+        jobId
+
+
+        type
+
+
+        vehicleRegitration
+
+
+        vehicleMake
+
+
+        vehicleModel
+
+
+        vehicleVin
+
+
+        avatar
+
+
+        mapIconId
+
+
+        groupId
+
+
+        accountId,customerId
+
+
+        dateInstalled
+
+
+        _extend : Available Extentionss
+
+
+        event - Associated Event
+
+
+        asset/group - Groups
+
+
+        device/health - Device Health Details
+
+
+        asset/tags - Associated Asset''s Tags
+
+
+        customer - Customer Details
+
+
+        _sort : Available sort fields
+
+
+        label
+
+
+        vehicleRegistration
+
+
+        deviceHealthSort
+
+
+        dateLastPIng
+
+
+        daysSinceLastMovement
+
+
+        dateLastMovement'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 2
+                results:
+                - imei: 012345678901234567
+                  enabled: 0
+                  label: ''
+                  customerId: 4
+                  userId: null
+                  groupId: 228
+                  avatar: ''
+                  simSerial: ''
+                  authcode: null
+                  vehicleMake: ''
+                  vehicleModel: ''
+                  vehicleRegistration: ''
+                  vehicleVin: ''
+                  maker: ''
+                  model: ''
+                  dateProvisioned: 000-00-00T00:00:00+00:00
+                  fbtEnabled: true
+                  reminderUserId: null
+                  mapIconId: 14
+                  allowApiEvents: false
+                  fuelSource: ''
+                  odoSource: ''
+                  driverId: null
+                  dateLastMovement: 000-00-00T00:00:00+00:00
+                  daysSinceLastMovement: 103
+                  dateLastPing: 000-00-00T00:00:00+00:00
+                  deviceHealthSort: 4
+                  deviceId: 012345678901234567
+                params:
+                  customerId: 0
+                  groupId: []
+  /v1/reports/scheduled:
+    get:
+      operationId: getV1ReportsScheduled
+      summary: reports/scheduled
+      tags:
+      - Reports
+      description: Load list of Scheduled Reports
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1ReportsScheduled
+      summary: reports/scheduled
+      tags:
+      - Reports
+      description: Create New Scheduled Report
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                command:
+                  type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/scheduled/{scheduledReportId}:
+    get:
+      operationId: getV1ReportsScheduledByScheduledreportid
+      summary: reports/scheduled/{id}
+      tags:
+      - Reports
+      description: Load Scheduled Report Details
+      parameters:
+      - name: scheduledReportId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    delete:
+      operationId: deleteV1ReportsScheduledByScheduledreportid
+      summary: reports/scheduled/{id}
+      tags:
+      - Reports
+      description: Delete/Disable Scheduled Report
+      parameters:
+      - name: scheduledReportId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/subscriptions/accounts.csv:
+    get:
+      operationId: getV1ReportsSubscriptionsAccountsCsv
+      summary: v1/reports/subscriptions/accounts.csv
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/subscriptions/accounts/totals:
+    get:
+      operationId: getV1ReportsSubscriptionsAccountsTotals
+      summary: v1/reports/subscriptions/accounts/totals
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/subscriptions/assets.csv:
+    get:
+      operationId: getV1ReportsSubscriptionsAssetsCsv
+      summary: v1/reports/subscriptions/assets.csv
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/subscriptions/assets/totals:
+    get:
+      operationId: getV1ReportsSubscriptionsAssetsTotals
+      summary: v1/reports/subscriptions/assets/totals
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/timemgt/efficiency:
+    get:
+      operationId: getV1ReportsTimemgtEfficiency
+      summary: v1/reports/timemgt/efficiency
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/timemgt/efficiency.csv:
+    get:
+      operationId: getV1ReportsTimemgtEfficiencyCsv
+      summary: v1/reports/timemgt/efficiency.csv
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/timemgt/efficiency.pdf:
+    get:
+      operationId: getV1ReportsTimemgtEfficiencyPdf
+      summary: v1/reports/timemgt/efficiency.pdf
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/timemgt/efficiency.xlsx:
+    get:
+      operationId: getV1ReportsTimemgtEfficiencyXlsx
+      summary: v1/reports/timemgt/efficiency.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/timemgt/time-management.csv:
+    get:
+      operationId: getV1ReportsTimemgtTimeManagementCsv
+      summary: v1/reports/timemgt/time-management.csv
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/timemgt/time-management.xlsx:
+    get:
+      operationId: getV1ReportsTimemgtTimeManagementXlsx
+      summary: v1/reports/timemgt/time-management.xlsx
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/reports/usage:
+    get:
+      operationId: getV1ReportsUsage
+      summary: v1/reports/usage
+      tags:
+      - Reports
+      responses:
+        default:
+          description: Response not documented in the collection
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

@@ -1,0 +1,574 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Logbooks API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Logbooks
+paths:
+  /v1/logbooks:
+    get:
+      operationId: getV1Logbooks
+      summary: logbooks
+      tags:
+      - Logbooks
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1Logbooks
+      summary: logbooks
+      tags:
+      - Logbooks
+      description: Create New Logbook
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/logbooks.csv:
+    get:
+      operationId: getV1LogbooksCsv
+      summary: v1/logbooks.csv
+      tags:
+      - Logbooks
+      responses:
+        '200':
+          description: OK
+  /v1/logbooks/periods:
+    get:
+      operationId: getV1LogbooksPeriods
+      summary: v1/logbooks/periods
+      tags:
+      - Logbooks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - periodId: 2
+                  country: BD
+                  status: true
+                  duration: 2
+                  lastLogbookDate: '2019-11-22T00:00:00+00:00'
+                  dateCreated: '2019-11-06T03:15:58+00:00'
+                  dateUpdated: '2021-05-28T17:52:27+00:00'
+    post:
+      operationId: postV1LogbooksPeriods
+      summary: v1/logbooks/periods
+      tags:
+      - Logbooks
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                periodId:
+                  type: string
+                country:
+                  type: string
+                status:
+                  type: string
+                duration:
+                  type: string
+                lastLogbookDate:
+                  type: string
+                dateCreated:
+                  type: string
+                dateUpdated:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                country: ' BD'
+                status: true
+                duration: 2
+                lastLogbookDate: '2019-11-22T00:00:00+00:00'
+                dateCreated: '2022-01-17T17:12:12+00:00'
+                periodId: 120
+  /v1/logbooks/periods/{periodId}:
+    post:
+      operationId: postV1LogbooksPeriodsByPeriodid
+      summary: v1/logbooks/periods/{logbookId}
+      tags:
+      - Logbooks
+      parameters:
+      - name: periodId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                periodId: 2
+                country: BD
+                status: true
+                duration: 2
+                lastLogbookDate: '2019-11-22T00:00:00+00:00'
+                dateCreated: '2019-11-06T03:15:58+00:00'
+                dateUpdated: '2021-05-28T17:52:27+00:00'
+  /v1/logbooks/purposes:
+    get:
+      operationId: getV1LogbooksPurposes
+      summary: v1/logbooks/purposes
+      tags:
+      - Logbooks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - purposeId: 58
+                  name: testing-flee
+                  status: true
+                  accountId: 0
+                  dateCreated: '2021-05-30T16:14:30+00:00'
+                  dateUpdated: '2021-05-30T16:14:30+00:00'
+                  type: B
+                  isPrivateMode: false
+    post:
+      operationId: postV1LogbooksPurposes
+      summary: v1/logbooks/purposes
+      tags:
+      - Logbooks
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                purposeId:
+                  type: string
+                name:
+                  type: string
+                status:
+                  type: string
+                accountId:
+                  type: string
+                dateCreated:
+                  type: string
+                dateUpdated:
+                  type: string
+                type:
+                  type: string
+                isPrivateMode:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                status: true
+                name: testing-flee,
+                type: ' B,'
+                dateCreated: '2022-01-17T17:21:53+00:00'
+                isPrivateMode: true
+                purposeId: 119
+  /v1/logbooks/purposes/tree:
+    get:
+      operationId: getV1LogbooksPurposesTree
+      summary: v1/logbooks/purposes/tree
+      tags:
+      - Logbooks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                Personal:
+                  '24': Home to Work/Work to Home
+                Business:
+                  '2': Site Visit1
+                  '3': Store Visit
+  /v1/logbooks/purposes/{purposeId}:
+    post:
+      operationId: postV1LogbooksPurposesByPurposeid
+      summary: v1/logbooks/purposes/{purposeId}
+      tags:
+      - Logbooks
+      parameters:
+      - name: purposeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                purposeId: 58
+                name: testing-flee
+                status: true
+                accountId: 0
+                dateCreated: '2021-05-30T16:14:30+00:00'
+                dateUpdated: '2021-05-30T16:14:30+00:00'
+                type: B
+                isPrivateMode: false
+  /v1/logbooks/totals:
+    get:
+      operationId: getV1LogbooksTotals
+      summary: v1/logbooks/totals
+      tags:
+      - Logbooks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - totalLogbooks: 188
+                  totalInProgress: 40
+                  businessMeters: 229020664473
+                  personalMeters: 10706308367
+                  totalMeters: 493864469296
+                  totalEWD: 0
+  /v1/logbooks/trips:
+    get:
+      operationId: getV1LogbooksTrips
+      summary: v1/logbooks/trips
+      tags:
+      - Logbooks
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/logbooks/trips.csv:
+    get:
+      operationId: getV1LogbooksTripsCsv
+      summary: v1/logbooks/trips.csv
+      tags:
+      - Logbooks
+      responses:
+        '200':
+          description: OK
+  /v1/logbooks/trips.pdf:
+    get:
+      operationId: getV1LogbooksTripsPdf
+      summary: v1/logbooks/trips.pdf
+      tags:
+      - Logbooks
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/logbooks/trips.xlsx:
+    get:
+      operationId: getV1LogbooksTripsXlsx
+      summary: v1/logbooks/trips.xlsx
+      tags:
+      - Logbooks
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/logbooks/{logbookId}:
+    get:
+      operationId: getV1LogbooksByLogbookid
+      summary: v1/logbooks/{logbookId}
+      tags:
+      - Logbooks
+      parameters:
+      - name: logbookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                logbookId: 376
+                deviceId: 0046e927-a75b-4d82-9255-6
+                accountId: 4931
+                userId: 3605
+                type: fbt
+                creatorId: 3601
+                label: test
+                dateFrom: '2022-01-07T10:33:55+00:00'
+                dateCreated: '2022-01-07T10:33:55+00:00'
+                status: 2
+                modifierId: 3601
+                sendReminderNotifications: never
+    post:
+      operationId: postV1LogbooksByLogbookid
+      summary: v1/logbooks/{logbookId}
+      tags:
+      - Logbooks
+      parameters:
+      - name: logbookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                logbookId: 376
+                deviceId: 0046e927-a75b-4d82-9255-6
+                accountId: 4931
+                userId: 3605
+                type: fbt
+                creatorId: 3601
+                label: test
+                dateFrom: '2022-01-07T10:33:55+00:00'
+                dateCreated: '2022-01-07T10:33:55+00:00'
+                status: 2
+                modifierId: 3601
+                sendReminderNotifications: never
+  /v1/logbooks/{logbookId}.pdf:
+    get:
+      operationId: getV1LogbooksByLogbookidPdf
+      summary: v1/logbooks/{logbookId}.pdf
+      tags:
+      - Logbooks
+      parameters:
+      - name: logbookId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

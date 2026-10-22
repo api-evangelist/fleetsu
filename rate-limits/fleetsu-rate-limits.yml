@@ -1,0 +1,8 @@
+name: Fleetsu rate limits
+generated: '2026-10-22'
+method: none
+source: https://api-docs.fleetsu.com/
+limit_count: 0
+limits: []
+headers: []
+note: The API documentation (Postman collection description and folder docs at api-docs.fleetsu.com) publishes no request rate limits, quota, throttling status code or rate-limit headers. The only documented bound is the page size, _limit Max 1000, which is a pagination cap rather than a rate limit.

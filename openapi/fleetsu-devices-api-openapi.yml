@@ -1,0 +1,3770 @@
+openapi: 3.2.0
+info:
+  title: Fleetsu Devices API
+  version: 1.0.0
+  description: 'Platform API Documentation
+
+
+    The Fleetsu API is organised around REST. Our REST URls return JSON-encoded responses. Standard HTTP Response codes are returned on all requests.
+
+    Ensure a Header Value Key = "Accept" Value = "application/json"
+
+
+    All API Requests must be made over HTTPS
+
+
+    Authentication
+
+
+    The Fleetsu API uses HTTP Basic Authentication use your Fleetsu username and password to authenticate.
+
+
+    Unauthenticated requests will fail with a 401 Unauthorized HTTP Response
+
+
+    Basic Authentication
+
+
+    Using standard basic http authentication headers,using a user''s login credentials e.g.
+
+
+    Authorization: Basic OgXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+
+
+    Filtering/Searching
+
+
+    String Fields
+
+
+    Examples
+
+
+    ?label=Asset123 Specific Search
+
+
+    ?label=Asset* Wildcard Search
+
+
+    ?label=*123 Wildcard Search
+
+
+    ?label=Asset123,Asset456 Multivalue OR search
+
+
+    Integer,Float Fields
+
+
+    Examples
+
+
+    ?groupId=12 Specific Search
+
+
+    ?groupId=12,76,100 Multivalue OR search
+
+
+    ?groupId[0]=12&groupId[1]=76&groupId[2]=100 Multivalue OR search
+
+
+    Datetime Fields
+
+
+    Datetime fields can be searched using most common formats including relative, although it is recommended to use ISO 8601 standard dates.
+
+
+    If a timezone is not specified in the date string UTC will be assumed.
+
+
+    Examples
+
+
+    ?datetime=>2017-01-01T00:00:00Z
+
+
+    ?datetime=<2017-11-30T00:00:00+00:00
+
+
+    ?datetime=>2017-11-14T00:00:00+08:00,<2017-11-17T23:59:59+08:00
+
+
+    ?datetime=-7 day
+
+
+    ?datetime=>last monday midnight,<today midnight
+
+
+    Sorting
+
+
+    _sort - Sort Results Set by specifed field e.g.
+
+
+    _sort=label - Sort by label field in ascending order
+
+
+    _sort=!label - Sort by label field in decending order
+
+
+    _sort=make,model - Sort by Make and then Model in ascending order
+
+
+    Pagination
+
+
+    _limit - Limit returned results Min: 1, Max: 1000, default: 200
+
+
+    _start - Start point for returning results e.g. _start=201
+
+
+    Extending Datasets
+
+
+    _extend - Append related data to the search results e.g.
+
+
+    _extend=event - Single Extend
+
+
+    _extend=event,account - Multiple Extends
+
+
+    Basic Extend
+
+
+    The returned fields in the extended objects can also restricted to the fields you require e.g.
+
+
+    _extend=event:eventId|latitude|longitude|heading|speed|datetime
+
+
+    Advanced Extend
+
+
+    _extend[event][_fields]=eventId|latitude|longitude|heading|speed|datetime
+
+
+    _extend[event][datetime]=>2018-06-01,<2018-06-30
+
+
+    _extend[event][code]=144
+
+
+    _extend[event][_sort]=datetime
+
+
+    Grouping
+
+
+    _group - Group Results By Field e.g.
+
+
+    _group=datetime:hour Group By Hour
+
+
+    Available Datetime field modifiers
+
+
+    HOUR - Hour of Day
+
+
+    DATE - Day
+
+
+    MONTH - Month
+
+
+    DAYOFMONTH - Day of Month e.g. 1st of every month
+
+
+    DAYOFWEEK - Day of the Week
+
+
+    DAYOFYEAR - Day of Year 1 to 365
+
+
+    MINUTE - Minute
+
+
+    WEEK - Week of Year
+
+
+    WEEKDAY
+
+
+    WEEKOFYEAR
+
+
+    YEAR
+
+
+    YEARWEEK
+
+
+    DATEHOUR'
+servers:
+- url: https://api.fleetsu.com
+security:
+- basicAuth: []
+tags:
+- name: Devices
+paths:
+  /v1/device/check/{deviceId}:
+    get:
+      operationId: getV1DeviceCheckByDeviceid
+      summary: v1/device/check/{deviceId}
+      tags:
+      - Devices
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceId: ''
+                deviceState: ''
+                networkState: ''
+                platformState: ''
+                gpsState: ''
+                speedPulseState: ''
+                platformLastActivity: '0000-00-00T00:00:00+00:00'
+                gpsLastActivity: '0000-00-00T00:00:00+00:00'
+  /v1/device/check/{deviceId}/{iccid}:
+    get:
+      operationId: getV1DeviceCheckByDeviceidByIccid
+      summary: v1/device/check/{deviceId}/{iccid}
+      tags:
+      - Devices
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: iccid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceId: 014869001721887
+                deviceState: offline
+                networkState: offline
+                platformState: offline
+                gpsState: offline
+                speedPulseState: offline
+                platformLastActivity: '2019-04-30T09:05:42+00:00'
+                gpsLastActivity: '2019-04-30T09:05:42+00:00'
+  /v1/devices:
+    get:
+      operationId: getV1Devices
+      summary: v1/devices
+      tags:
+      - Devices
+      description: 'List of Tracker Devices
+
+
+        Fields
+
+
+        assetID,imei - (string) - Unique Asset ID
+
+
+        label - (string) - Asset label
+
+
+        jobId - (string) - External Job Reference No. (scheduled for v9.22)
+
+
+        type - (string) - Asset Type
+
+
+        vehicleRegitration - (string) - Vehicle Registration No
+
+
+        vehicleMake - (string) - Vehicle Manufacturer
+
+
+        vehicleModel - (string) - Vehicle Model
+
+
+        vehicleVin - (string) - Vechicle VIN Number
+
+
+        avatar - (string) - URL to Asset Avatar
+
+
+        mapIconId - (int) - Map Icon Id
+
+
+        groupId - (int) - Assigned Asset Group
+
+
+        accountID,customerId - (int) - Asset Account
+
+
+        dateInstalled - (datetime) - Date Tracker Device Installed
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search assetId,imei,label,vehicleRegistration
+
+
+        tagId - (string) - Related Tag
+
+
+        deviceHealthId - (string) - Device Health ID
+
+
+        assetStateId - (string) - Asset State ID
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        assetId,imei
+
+
+        label
+
+
+        jobId
+
+
+        type
+
+
+        vehicleRegitration
+
+
+        vehicleMake
+
+
+        vehicleModel
+
+
+        vehicleVin
+
+
+        avatar
+
+
+        mapIconId
+
+
+        groupId
+
+
+        accountId,customerId
+
+
+        dateInstalled
+
+
+        _extend : Available Extentions
+
+
+        event - Last Event last valid location received
+
+
+        ping - Last Ping last time device communicated with platform
+
+
+        movement - Last Movement last time asset moved
+
+
+        account - Account assocated account
+
+
+        group - Group associated asset group
+
+
+        asset/odo - ODO Reading current odometer reading
+
+
+        asset/tags - Tags associated tags
+
+
+        asset/state - Asset State moving, parked, towing, review,investigate
+
+
+        asset/setting - Custom Setting custom asset settings e.g. fuel type
+
+
+        asset/reminders - Service Reminders pending service reminders
+
+
+        _sort : Available sort fields
+
+
+        imei
+
+
+        label
+
+
+        vehicleRegistration
+
+
+        vehicleMake
+
+
+        vehicleModel'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 29
+                start: 1
+                end: 1
+                results:
+                - deviceId: '123456789012345678'
+                  imei: '123456789012345678'
+                  phoneNo: ''
+                  enabled: 0
+                  label: Asset 1
+                  customerId: 0
+                  userId: 0
+                  groupId: 0
+                  avatar: ''
+                  simSerial: ''
+                  authcode: null
+                  vehicleMake: ''
+                  vehicleModel: ''
+                  vehicleRegistration: ''
+                  vehicleVin: ''
+                  maker: ''
+                  model: ''
+                  dateProvisioned: '0000-00-00T00:00:00+00:00'
+                  fbtEnabled: true
+                  reminderUserId: null
+                  battery: ''
+                  mapIconId: 14
+                  allowApiEvents: false
+                  driverId: null
+                params:
+                  customerId: 4
+                  groupId: []
+  /v1/devices/health:
+    get:
+      operationId: getV1DevicesHealth
+      summary: v1/devices/health
+      tags:
+      - Devices
+      description: List of Device Health Status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 3
+                start: 1
+                end: 10
+                results:
+                - deviceHealthId: not-deployed
+                  deviceHealth: Not Deployed
+                  isOnline: 0
+                  deviceHealthSortOrder: 6
+                  dateCreated: '2017-08-31T04:40:11+00:00'
+                  dateUpdated: '2017-08-31T04:40:11+00:00'
+                  assetStateId: not-deployed
+                - deviceHealthId: not-monitored
+                  deviceHealth: Not Monitored
+                  isOnline: 0
+                  deviceHealthSortOrder: 5
+                  dateCreated: '2017-08-31T04:39:58+00:00'
+                  dateUpdated: '2017-08-31T04:39:58+00:00'
+                  assetStateId: not-monitored
+                - deviceHealthId: not-monitored
+                  deviceHealth: Not Monitored
+                  isOnline: 0
+                  deviceHealthSortOrder: 5
+                  dateCreated: '2017-08-31T04:39:58+00:00'
+                  dateUpdated: '2017-08-31T04:39:58+00:00'
+                  assetStateId: not-monitored
+  /v1/devices/manufacturers:
+    get:
+      operationId: getV1DevicesManufacturers
+      summary: devices/manufacturers
+      tags:
+      - Devices
+      description: List of Device Health Status
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1DevicesManufacturers
+      summary: devices/manufacturers
+      tags:
+      - Devices
+      description: List of Device Health Status
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                deviceManufacturer:
+                  type: string
+                description:
+                  type: string
+                sortOrder:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceManufacturer: ford12-transit
+                deviceManufacturerId: ford12-transit
+                status: true
+                description: 'for12 transit '
+                sortOrder: 1
+  /v1/devices/manufacturers/{deviceManufacturerId}:
+    post:
+      operationId: postV1DevicesManufacturersByDevicemanufacturerid
+      summary: devices/manufacturers/{deviceManufactorerId}
+      tags:
+      - Devices
+      description: List of Device Health Status
+      parameters:
+      - name: deviceManufacturerId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                deviceManufacturer:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                sortOrder:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceManufacturerId: ford12-transit
+                deviceManufacturer: FORD12-TRANSIT
+                description: NEW FORD12-TRANSIT
+                status: true
+                sortOrder: 3
+                dateCreated: '2021-12-23T08:06:12+00:00'
+                dateUpdated: '2021-12-23T08:06:12+00:00'
+  /v1/devices/models:
+    get:
+      operationId: getV1DevicesModels
+      summary: v1/devices/models
+      tags:
+      - Devices
+      description: List of Device Models
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - deviceModelId: ''
+                  deviceModel: ''
+                  deviceManufacturerId: ''
+                  description: ''
+                  type: ''
+                  isActive: true
+                  isMonitored: false
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+                  subscriptionPlanKey: ''
+                  deviceCategory: ''
+  /v1/devices/parameters/types/{parameter}:
+    get:
+      operationId: getV1DevicesParametersTypesByParameter
+      summary: v1/devices/parameters/types/{parameter}
+      tags:
+      - Devices
+      description: List of Device Models
+      parameters:
+      - name: parameter
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - deviceModelId: ''
+                  deviceModel: ''
+                  deviceManufacturerId: ''
+                  description: ''
+                  type: ''
+                  isActive: true
+                  isMonitored: false
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+                  subscriptionPlanKey: ''
+                  deviceCategory: ''
+  /v1/devices/{deviceId}:
+    get:
+      operationId: getV1DevicesByDeviceid
+      summary: v1/devices/{id}
+      tags:
+      - Devices
+      description: 'Load Tracker Details
+
+
+        Fields
+
+
+        deviceID,imei - (string) - Unique Device ID
+
+
+        label - (string) - Asset label
+
+
+        jobId - (string) - External Job Reference No. (scheduled for v9.22)
+
+
+        type - (string) - Asset Type
+
+
+        vehicleRegitration - (string) - Vehicle Registration No
+
+
+        vehicleMake - (string) - Vehicle Manufacturer
+
+
+        vehicleModel - (string) - Vehicle Model
+
+
+        vehicleVin - (string) - Vechicle VIN Number
+
+
+        avatar - (string) - URL to Asset Avatar
+
+
+        mapIconId - (int) - Map Icon Id
+
+
+        groupId - (int) - Assigned Asset Group
+
+
+        accountID,customerId - (int) - Asset Account
+
+
+        dateInstalled - (datetime) - Date Tracker Device Installed
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search assetId,imei,label,vehicleRegistration
+
+
+        tagId - (string) - Related Tag
+
+
+        deviceHealthId - (string) - Device Health ID
+
+
+        assetStateId - (string) - Asset State ID
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        assetId,imei
+
+
+        label
+
+
+        jobId
+
+
+        type
+
+
+        vehicleRegitration
+
+
+        vehicleMake
+
+
+        vehicleModel
+
+
+        vehicleVin
+
+
+        avatar
+
+
+        mapIconId
+
+
+        groupId
+
+
+        accountId,customerId
+
+
+        dateInstalled
+
+
+        _extend : Available Extentions
+
+
+        device/event - Last Event last valid location received
+
+
+        device/ ping - Last Ping last time device communicated with platform
+
+
+        deivce/movement - Last Movement last time asset moved
+
+
+        account - Account assocated account
+
+
+        group - Group associated asset group
+
+
+        asset/odo - ODO Reading current odometer reading
+
+
+        asset/tags - Tags associated tags
+
+
+        asset/state - Asset State moving, parked, towing, review,investigate
+
+
+        asset/setting - Custom Setting custom asset settings e.g. fuel type
+
+
+        asset/reminders - Service Reminders pending service reminders
+
+
+        _sort : Available sort fields
+
+
+        imei
+
+
+        label
+
+
+        vehicleRegistration
+
+
+        vehicleMake
+
+
+        vehicleModel'
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 29
+                start: 1
+                end: 29
+                results:
+                - deviceId: 012345678901234567
+                  imei: 012345678901234567
+                  phoneNo: ''
+                  enabled: 0
+                  label: Service
+                  customerId: 0
+                  userId: 0
+                  groupId: 0
+                  avatar: ''
+                  simSerial: ''
+                  authcode: null
+                  vehicleMake: ''
+                  vehicleModel: ''
+                  vehicleRegistration: ''
+                  vehicleVin: ''
+                  maker: ''
+                  model: ''
+                  dateProvisioned: ''
+                  fbtEnabled: true
+                  reminderUserId: null
+                  battery: ''
+                  mapIconId: 14
+                  allowApiEvents: false
+                  fuelSource: ''
+                  odoSource: ''
+                  fuelTankSize: null
+                  fuelTankFullPercentage: null
+                  engineHourSource: ''
+                  driverId: null
+                params:
+                  customerId: 0
+                  groupId: []
+  /v1/devices/{deviceId}/assets:
+    get:
+      operationId: getV1DevicesByDeviceidAssets
+      summary: v1/devices/{id}/assets
+      tags:
+      - Devices
+      description: 'Load Tracker Details
+
+
+        Fields
+
+
+        deviceID,imei - (string) - Unique Device ID
+
+
+        label - (string) - Asset label
+
+
+        jobId - (string) - External Job Reference No. (scheduled for v9.22)
+
+
+        type - (string) - Asset Type
+
+
+        vehicleRegitration - (string) - Vehicle Registration No
+
+
+        vehicleMake - (string) - Vehicle Manufacturer
+
+
+        vehicleModel - (string) - Vehicle Model
+
+
+        vehicleVin - (string) - Vechicle VIN Number
+
+
+        avatar - (string) - URL to Asset Avatar
+
+
+        mapIconId - (int) - Map Icon Id
+
+
+        groupId - (int) - Assigned Asset Group
+
+
+        accountID,customerId - (int) - Asset Account
+
+
+        dateInstalled - (datetime) - Date Tracker Device Installed
+
+
+        Custom Query Parameters
+
+
+        q - (string) - Search assetId,imei,label,vehicleRegistration
+
+
+        tagId - (string) - Related Tag
+
+
+        deviceHealthId - (string) - Device Health ID
+
+
+        assetStateId - (string) - Asset State ID
+
+
+        Modifier Query Parameters
+
+
+        _fields : Avaliable Fields
+
+
+        assetId,imei
+
+
+        label
+
+
+        jobId
+
+
+        type
+
+
+        vehicleRegitration
+
+
+        vehicleMake
+
+
+        vehicleModel
+
+
+        vehicleVin
+
+
+        avatar
+
+
+        mapIconId
+
+
+        groupId
+
+
+        accountId,customerId
+
+
+        dateInstalled
+
+
+        _extend : Available Extentions
+
+
+        device/event - Last Event last valid location received
+
+
+        device/ ping - Last Ping last time device communicated with platform
+
+
+        deivce/movement - Last Movement last time asset moved
+
+
+        account - Account assocated account
+
+
+        group - Group associated asset group
+
+
+        asset/odo - ODO Reading current odometer reading
+
+
+        asset/tags - Tags associated tags
+
+
+        asset/state - Asset State moving, parked, towing, review,investigate
+
+
+        asset/setting - Custom Setting custom asset settings e.g. fuel type
+
+
+        asset/reminders - Service Reminders pending service reminders
+
+
+        _sort : Available sort fields
+
+
+        imei
+
+
+        label
+
+
+        vehicleRegistration
+
+
+        vehicleMake
+
+
+        vehicleModel'
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - deviceId: 014869001721887
+                  label: 014869001721887
+                  vehicleMake: BMW
+                  vehicleModel: X5 (30d)
+                  vehicleRegistration: EAF59T
+                  vehicleVin: WBACV62010LM57670
+                  groupId: 220
+                  accountId: 69
+                  enabled: 0
+                  dateProvisioned: '2019-01-09T04:55:14+00:00'
+                  dateInstalled: '2019-01-24T03:52:25+00:00'
+                  avatar: //bugdriveravatars.s3.amazonaws.com/default/car-avatar.png
+                  assetId: 014869001721887
+                  odometerLocked: false
+                  runtimeLocked: false
+                  firmwareDeploymentStatus: UNKNOWN
+                  health:
+                    deviceHealthId: offline
+                    deviceHealth: Offline
+                    isOnline: 0
+                    deviceHealthSortOrder: 4
+                    dateCreated: '2017-08-31T04:40:32+00:00'
+                    dateUpdated: '2017-08-31T04:40:32+00:00'
+                    assetStateId: offline
+  /v1/devices/{deviceId}/battery:
+    get:
+      operationId: getV1DevicesByDeviceidBattery
+      summary: v1/devices/{id}/battery
+      tags:
+      - Devices
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceId: 014869001721887
+                phoneNo: '188678'
+                type: car
+                enabled: 0
+                label: 014869001721887
+                accountId: 69
+                groupId: 220
+                avatar: //bugdriveravatars.s3.amazonaws.com/default/car-avatar.png
+                simSerial: '8944501810180114636'
+                dateActivated: '2019-04-15T08:47:44+00:00'
+                vehicleMake: BMW
+                vehicleModel: X5 (30d)
+                vehicleRegistration: EAF59T
+                vehicleVin: WBACV62010LM57670
+                maker: gosafe
+                model: G79B-3G
+                dateProvisioned: '2019-01-09T04:55:14+00:00'
+                mapIconId: 14
+                dateInstalled: '2019-01-24T03:52:25+00:00'
+                allowApiEvents: false
+                fuelSource: gosafe
+                fuelTankSize: 55
+                fuelTankFullPercentage: 99
+                driverIdMethod: manager
+                entityTypeKey: deviceasset
+                isDriverLocked: false
+                assetId: 014869001721887
+                odometerLocked: false
+                runtimeLocked: false
+                firmwareDeploymentStatus: UNKNOWN
+  /v1/devices/{deviceId}/events:
+    get:
+      operationId: getV1DevicesByDeviceidEvents
+      summary: v1/devices/{deviceId}/events
+      tags:
+      - Devices
+      description: List of events for a specific device
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - eventId: 0
+                  datetime: '0000-00-00T00:00:00+00:00'
+                  code: ''
+                  latitude: 0
+                  longitude: 0
+                  gpsIndicator: ''
+                  numSatellites: 0
+                  gsmSignal: 3
+                  heading: null
+                  hdop: 1
+                  altitude: 51
+                  rpm: null
+                  speed: null
+                  processedDate: '0000-00-00T00:00:00+00:00'
+                  imei: '12345678901234567'
+                  deviceId: '12345678901234567'
+                  batteryRemaining: 0
+                  odometer: 0
+                  engineHour: 0
+                  description: ''
+                  extendedDescription: ''
+                  type: ''
+                params:
+                  imei: '12345678901234567'
+                  customerId: 0
+                  badData: 'null'
+                  datetime:
+                    start:
+                      date: '2018-08-13 04:07:21.000000'
+                      timezone_type: 1
+                      timezone: +00:00
+                    current: null
+                    end:
+                      date: '2018-08-20 04:07:21.000000'
+                      timezone_type: 3
+                      timezone: UTC
+                    interval:
+                      y: 0
+                      m: 0
+                      d: 1
+                      h: 0
+                      i: 0
+                      s: 0
+                      weekday: 0
+                      weekday_behavior: 0
+                      first_last_day_of: 0
+                      invert: 0
+                      days: false
+                      special_type: 0
+                      special_amount: 0
+                      have_weekday_relative: 0
+                      have_special_relative: 0
+                    recurrences: 1
+                    include_start_date: true
+                  _sort: '!datetime'
+  /v1/devices/{deviceId}/events/history:
+    get:
+      operationId: getV1DevicesByDeviceidEventsHistory
+      summary: v1/devices/{deviceId}/events/history
+      tags:
+      - Devices
+      description: List of events for a specific device
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1000
+                start: 1
+                end: 1000
+                results:
+                - datetime: '0000-00-00 00:00:00'
+                  total: 2
+                - datetime: '1970-01-01 00:00:05'
+                  total: 43
+                - datetime: '1999-11-30 00:00:00'
+                  total: 109
+                - datetime: '2017-01-05 04:29:04'
+                  total: 1
+                - datetime: '2017-03-22 05:26:16'
+                  total: 1
+                - datetime: '2017-11-16 05:07:33'
+                  total: 1
+                - datetime: '2017-12-30 21:28:41'
+                  total: 3
+                - datetime: '2018-01-08 00:00:00'
+                  total: 1
+                - datetime: '2018-05-29 00:00:00'
+                  total: 1
+                - datetime: '2018-08-06 05:06:13'
+                  total: 32
+                - datetime: '2018-08-07 00:04:47'
+                  total: 38
+                - datetime: '2018-08-08 00:06:53'
+                  total: 38
+                - datetime: '2018-08-09 00:08:59'
+                  total: 38
+                - datetime: '2018-08-10 00:11:05'
+                  total: 38
+                - datetime: '2018-08-11 00:13:11'
+                  total: 38
+                - datetime: '2018-08-12 00:15:17'
+                  total: 142
+                - datetime: '2018-09-09 19:16:07'
+                  total: 26
+                - datetime: '2018-09-10 00:19:43'
+                  total: 137
+                - datetime: '2018-09-11 00:21:49'
+                  total: 152
+                - datetime: '2018-09-12 00:23:55'
+                  total: 407
+                - datetime: '2018-09-13 00:26:01'
+                  total: 153
+                - datetime: '2018-09-14 00:28:07'
+                  total: 152
+                - datetime: '2018-09-15 00:30:13'
+                  total: 153
+                - datetime: '2018-09-16 00:32:19'
+                  total: 302
+                - datetime: '2018-09-17 00:05:21'
+                  total: 158
+                - datetime: '2018-10-09 22:22:36'
+                  total: 34
+                - datetime: '2018-10-10 00:54:24'
+                  total: 310
+                - datetime: '2018-10-11 00:00:02'
+                  total: 307
+                - datetime: '2018-10-12 00:48:06'
+                  total: 229
+                - datetime: '2018-10-13 00:50:12'
+                  total: 227
+                - datetime: '2018-10-14 00:52:18'
+                  total: 229
+                - datetime: '2018-10-15 00:54:24'
+                  total: 228
+                - datetime: '2018-10-16 00:56:30'
+                  total: 435
+                - datetime: '2018-11-09 16:20:41'
+                  total: 29
+                - datetime: '2018-11-10 02:17:49'
+                  total: 91
+                - datetime: '2018-11-11 02:10:20'
+                  total: 69
+                - datetime: '2018-11-12 01:12:24'
+                  total: 128
+                - datetime: '2018-11-13 01:30:58'
+                  total: 85
+                - datetime: '2018-11-15 14:08:19'
+                  total: 55
+                - datetime: '2018-12-12 07:26:23'
+                  total: 6
+                - datetime: '2018-12-13 01:08:33'
+                  total: 4
+                - datetime: '2018-12-14 01:10:57'
+                  total: 2
+                - datetime: '2018-12-15 00:13:17'
+                  total: 5
+                - datetime: '2018-12-16 01:15:48'
+                  total: 5
+                - datetime: '2018-12-17 00:02:17'
+                  total: 6
+                - datetime: '2018-12-18 05:08:22'
+                  total: 6
+                - datetime: '2018-12-26 01:11:57'
+                  total: 1
+                - datetime: '2018-12-27 02:34:36'
+                  total: 3
+                - datetime: '2018-12-28 23:22:02'
+                  total: 1
+                - datetime: '2018-12-29 00:22:02'
+                  total: 24
+                - datetime: '2018-12-30 00:22:02'
+                  total: 49
+                - datetime: '2019-01-13 18:02:24'
+                  total: 7
+                - datetime: '2019-01-14 00:02:18'
+                  total: 13
+                - datetime: '2019-01-31 21:05:09'
+                  total: 4
+                - datetime: '2019-02-21 02:23:12'
+                  total: 1
+                - datetime: '2019-02-23 18:07:02'
+                  total: 3
+                - datetime: '2019-02-24 12:19:16'
+                  total: 7
+                - datetime: '2019-02-27 03:48:03'
+                  total: 473
+                - datetime: '2019-02-28 00:01:39'
+                  total: 371
+                - datetime: '2019-03-01 01:41:16'
+                  total: 70
+                - datetime: '2019-03-02 00:01:54'
+                  total: 68
+                - datetime: '2019-03-03 00:10:02'
+                  total: 66
+                - datetime: '2019-03-04 01:09:43'
+                  total: 1223
+                - datetime: '2019-03-05 00:00:27'
+                  total: 1687
+                - datetime: '2019-03-06 04:50:05'
+                  total: 1762
+                - datetime: '2019-03-07 06:36:09'
+                  total: 126
+                - datetime: '2019-03-08 00:06:20'
+                  total: 142
+                - datetime: '2019-03-10 08:15:28'
+                  total: 153
+                - datetime: '2019-03-11 00:51:32'
+                  total: 550
+                - datetime: '2019-03-12 02:48:26'
+                  total: 997
+                - datetime: '2019-03-13 23:01:12'
+                  total: 2011
+                - datetime: '2019-03-14 20:57:47'
+                  total: 546
+                - datetime: '2019-03-15 00:09:03'
+                  total: 1897
+                - datetime: '2019-03-16 00:49:44'
+                  total: 2140
+                - datetime: '2019-03-17 19:58:47'
+                  total: 2418
+                - datetime: '2019-03-18 08:35:52'
+                  total: 321994
+                - datetime: '2019-03-19 00:00:22'
+                  total: 867444
+                - datetime: '2019-03-20 00:20:43'
+                  total: 941295
+                - datetime: '2019-03-21 00:23:34'
+                  total: 974689
+                - datetime: '2019-03-22 00:16:25'
+                  total: 854269
+                - datetime: '2019-03-23 00:40:16'
+                  total: 558736
+                - datetime: '2019-03-24 00:40:06'
+                  total: 438892
+                - datetime: '2019-03-25 00:00:25'
+                  total: 555416
+                - datetime: '2019-03-26 00:26:29'
+                  total: 4658
+                - datetime: '2019-03-27 00:26:01'
+                  total: 4630
+                - datetime: '2019-03-28 00:22:57'
+                  total: 3272
+                - datetime: '2019-03-29 00:03:25'
+                  total: 4360
+                - datetime: '2019-03-30 00:34:56'
+                  total: 2757
+                - datetime: '2019-03-31 13:24:46'
+                  total: 3398
+                - datetime: '2019-04-01 02:19:36'
+                  total: 5194
+                - datetime: '2019-04-02 04:39:32'
+                  total: 3451
+                - datetime: '2019-04-03 03:10:06'
+                  total: 3443
+                - datetime: '2019-04-04 00:33:57'
+                  total: 4384
+                - datetime: '2019-04-05 01:15:26'
+                  total: 4695
+                - datetime: '2019-04-06 05:15:56'
+                  total: 2175
+                - datetime: '2019-04-07 01:30:52'
+                  total: 2346
+                - datetime: '2019-04-08 16:26:47'
+                  total: 3864
+                - datetime: '2019-04-09 00:01:44'
+                  total: 6162
+                - datetime: '2019-04-10 08:52:16'
+                  total: 6888
+                - datetime: '2019-04-11 03:01:25'
+                  total: 7095
+                - datetime: '2019-04-12 23:37:28'
+                  total: 2228
+                - datetime: '2019-04-13 08:30:11'
+                  total: 1885
+                - datetime: '2019-04-14 18:11:42'
+                  total: 5065
+                - datetime: '2019-04-15 07:37:51'
+                  total: 130367
+                - datetime: '2019-04-16 00:04:29'
+                  total: 37812
+                - datetime: '2019-04-17 11:00:04'
+                  total: 5287
+                - datetime: '2019-04-18 05:02:35'
+                  total: 3969
+                - datetime: '2019-04-19 06:17:55'
+                  total: 2184
+                - datetime: '2019-04-20 00:00:49'
+                  total: 756
+                - datetime: '2019-04-21 00:01:48'
+                  total: 1456
+                - datetime: '2019-04-22 06:01:07'
+                  total: 3902
+                - datetime: '2019-04-23 00:00:10'
+                  total: 4344
+                - datetime: '2019-04-24 10:59:23'
+                  total: 5777
+                - datetime: '2019-04-25 10:56:38'
+                  total: 2209
+                - datetime: '2019-04-26 11:18:25'
+                  total: 2733
+                - datetime: '2019-04-27 00:00:19'
+                  total: 2788
+                - datetime: '2019-04-28 00:19:17'
+                  total: 2492
+                - datetime: '2019-04-29 00:00:01'
+                  total: 3866
+                - datetime: '2019-04-30 00:00:02'
+                  total: 3618
+                - datetime: '2019-05-01 00:00:18'
+                  total: 988
+                - datetime: '2019-05-02 07:33:44'
+                  total: 2367
+                - datetime: '2019-05-03 11:00:01'
+                  total: 4076
+                - datetime: '2019-05-04 00:01:19'
+                  total: 938
+                - datetime: '2019-05-06 07:07:36'
+                  total: 2900
+                - datetime: '2019-05-07 03:21:49'
+                  total: 5277
+                - datetime: '2019-05-08 02:51:20'
+                  total: 1682
+                - datetime: '2019-05-09 01:21:21'
+                  total: 3477
+                - datetime: '2019-05-10 01:14:04'
+                  total: 4821
+                - datetime: '2019-05-11 11:00:01'
+                  total: 3565
+                - datetime: '2019-05-12 00:16:48'
+                  total: 3166
+                - datetime: '2019-05-13 02:14:44'
+                  total: 5554
+                - datetime: '2019-05-14 11:00:04'
+                  total: 4064
+                - datetime: '2019-05-15 01:16:27'
+                  total: 5833
+                - datetime: '2019-05-16 01:50:08'
+                  total: 5536
+                - datetime: '2019-05-17 00:01:53'
+                  total: 4617
+                - datetime: '2019-05-18 00:29:51'
+                  total: 1350
+                - datetime: '2019-05-19 00:29:39'
+                  total: 1758
+                - datetime: '2019-05-20 00:00:41'
+                  total: 3600
+                - datetime: '2019-05-21 22:50:49'
+                  total: 419
+                - datetime: '2019-05-22 11:00:01'
+                  total: 3733
+                - datetime: '2019-05-23 01:39:14'
+                  total: 201
+                - datetime: '2019-05-24 08:10:10'
+                  total: 3280
+                - datetime: '2019-05-25 00:15:33'
+                  total: 95
+                - datetime: '2019-05-26 17:39:46'
+                  total: 16
+                - datetime: '2019-05-27 01:11:18'
+                  total: 2961
+                - datetime: '2019-05-28 04:12:16'
+                  total: 3524
+                - datetime: '2019-05-29 11:00:10'
+                  total: 3342
+                - datetime: '2019-05-30 00:00:03'
+                  total: 5250
+                - datetime: '2019-05-31 04:33:39'
+                  total: 3617
+                - datetime: '2019-06-01 09:28:14'
+                  total: 1731
+                - datetime: '2019-06-02 00:06:57'
+                  total: 4739
+                - datetime: '2019-06-03 00:06:46'
+                  total: 1587
+                - datetime: '2019-06-04 00:00:12'
+                  total: 3904
+                - datetime: '2019-06-05 02:45:17'
+                  total: 2600
+                - datetime: '2019-06-06 00:00:13'
+                  total: 3422
+                - datetime: '2019-06-07 00:00:29'
+                  total: 4155
+                - datetime: '2019-06-08 00:57:56'
+                  total: 2975
+                - datetime: '2019-06-09 00:57:46'
+                  total: 2679
+                - datetime: '2019-06-10 03:41:41'
+                  total: 2860
+                - datetime: '2019-06-11 00:00:00'
+                  total: 4232
+                - datetime: '2019-06-12 00:00:16'
+                  total: 4852
+                - datetime: '2019-06-13 11:00:01'
+                  total: 4780
+                - datetime: '2019-06-14 00:00:18'
+                  total: 2334
+                - datetime: '2019-06-15 00:01:16'
+                  total: 448
+                - datetime: '2019-06-16 00:42:33'
+                  total: 200
+                - datetime: '2019-06-17 11:00:01'
+                  total: 3425
+                - datetime: '2019-06-18 01:02:00'
+                  total: 4126
+                - datetime: '2019-06-19 11:00:12'
+                  total: 2911
+                - datetime: '2019-06-20 00:00:01'
+                  total: 4628
+                - datetime: '2019-06-21 07:04:36'
+                  total: 4846
+                - datetime: '2019-06-22 00:05:08'
+                  total: 2151
+                - datetime: '2019-06-23 00:12:36'
+                  total: 2368
+                - datetime: '2019-06-24 00:00:03'
+                  total: 4827
+                - datetime: '2019-06-25 11:00:01'
+                  total: 3539
+                - datetime: '2019-06-26 11:00:15'
+                  total: 6008
+                - datetime: '2019-06-27 00:00:07'
+                  total: 6054
+                - datetime: '2019-06-28 05:50:21'
+                  total: 5804
+                - datetime: '2019-06-29 00:15:22'
+                  total: 3601
+                - datetime: '2019-06-30 00:24:19'
+                  total: 3638
+                - datetime: '2019-07-01 07:09:02'
+                  total: 5192
+                - datetime: '2019-07-02 00:00:09'
+                  total: 8526
+                - datetime: '2019-07-03 07:01:08'
+                  total: 7123
+                - datetime: '2019-07-04 22:37:45'
+                  total: 8105
+                - datetime: '2019-07-05 02:01:25'
+                  total: 7209
+                - datetime: '2019-07-06 00:01:16'
+                  total: 5871
+                - datetime: '2019-07-07 00:03:30'
+                  total: 1126
+                - datetime: '2019-07-08 01:25:13'
+                  total: 6064
+                - datetime: '2019-07-09 00:00:00'
+                  total: 7017
+                - datetime: '2019-07-10 00:00:18'
+                  total: 4619
+                - datetime: '2019-07-11 11:00:11'
+                  total: 7814
+                - datetime: '2019-07-12 11:00:01'
+                  total: 6565
+                - datetime: '2019-07-13 00:14:55'
+                  total: 2459
+                - datetime: '2019-07-14 03:05:31'
+                  total: 3601
+                - datetime: '2019-07-15 00:00:22'
+                  total: 4566
+                - datetime: '2019-07-16 00:00:12'
+                  total: 7268
+                - datetime: '2019-07-17 10:42:56'
+                  total: 8322
+                - datetime: '2019-07-18 00:00:29'
+                  total: 7367
+                - datetime: '2019-07-19 00:00:23'
+                  total: 5348
+                - datetime: '2019-07-20 00:16:54'
+                  total: 4235
+                - datetime: '2019-07-21 00:05:50'
+                  total: 1697
+                - datetime: '2019-07-22 06:32:02'
+                  total: 4027
+                - datetime: '2019-07-23 02:35:07'
+                  total: 6418
+                - datetime: '2019-07-24 11:00:09'
+                  total: 4108
+                - datetime: '2019-07-25 05:31:40'
+                  total: 4345
+                - datetime: '2019-07-26 00:00:11'
+                  total: 3534
+                - datetime: '2019-07-27 00:00:06'
+                  total: 1536
+                - datetime: '2019-07-28 07:44:08'
+                  total: 117
+                - datetime: '2019-07-29 06:45:33'
+                  total: 5458
+                - datetime: '2019-07-30 15:55:57'
+                  total: 6121
+                - datetime: '2019-07-31 11:00:01'
+                  total: 4772
+                - datetime: '2019-08-01 00:00:16'
+                  total: 5372
+                - datetime: '2019-08-02 05:25:00'
+                  total: 1389
+                - datetime: '2019-08-05 03:05:44'
+                  total: 3586
+                - datetime: '2019-08-06 13:12:53'
+                  total: 1229
+                - datetime: '2019-08-07 01:14:43'
+                  total: 6372
+                - datetime: '2019-08-08 00:04:31'
+                  total: 525
+                - datetime: '2019-08-09 10:04:51'
+                  total: 2508
+                - datetime: '2019-08-10 00:38:25'
+                  total: 1349
+                - datetime: '2019-08-12 05:53:27'
+                  total: 252
+                - datetime: '2019-08-13 03:26:39'
+                  total: 4956
+                - datetime: '2019-08-14 00:05:32'
+                  total: 5602
+                - datetime: '2019-08-15 00:00:14'
+                  total: 6329
+                - datetime: '2019-08-16 00:00:30'
+                  total: 4245
+                - datetime: '2019-08-17 00:17:29'
+                  total: 3229
+                - datetime: '2019-08-18 00:17:19'
+                  total: 2773
+                - datetime: '2019-08-19 00:00:05'
+                  total: 3880
+                - datetime: '2019-08-20 04:38:27'
+                  total: 5563
+                - datetime: '2019-08-21 11:00:07'
+                  total: 6048
+                - datetime: '2019-08-22 00:00:09'
+                  total: 5577
+                - datetime: '2019-08-23 00:06:34'
+                  total: 2477
+                - datetime: '2019-08-24 00:02:11'
+                  total: 3117
+                - datetime: '2019-08-25 00:30:54'
+                  total: 4139
+                - datetime: '2019-08-26 00:00:52'
+                  total: 6080
+                - datetime: '2019-08-27 00:01:05'
+                  total: 4541
+                - datetime: '2019-08-28 03:46:42'
+                  total: 5782
+                - datetime: '2019-08-29 11:00:01'
+                  total: 5094
+                - datetime: '2019-08-30 00:00:08'
+                  total: 4373
+                - datetime: '2019-08-31 00:04:13'
+                  total: 3362
+                - datetime: '2019-09-01 00:26:42'
+                  total: 6664
+                - datetime: '2019-09-02 00:03:03'
+                  total: 6616
+                - datetime: '2019-09-03 01:24:58'
+                  total: 7305
+                - datetime: '2019-09-04 00:05:15'
+                  total: 5478
+                - datetime: '2019-09-05 00:00:10'
+                  total: 5908
+                - datetime: '2019-09-06 10:32:44'
+                  total: 3548
+                - datetime: '2019-09-07 00:13:55'
+                  total: 4199
+                - datetime: '2019-09-08 00:05:32'
+                  total: 6210
+                - datetime: '2019-09-09 00:00:05'
+                  total: 4997
+                - datetime: '2019-09-10 00:00:30'
+                  total: 7027
+                - datetime: '2019-09-11 00:00:18'
+                  total: 5925
+                - datetime: '2019-09-12 00:00:05'
+                  total: 7581
+                - datetime: '2019-09-13 00:00:03'
+                  total: 6099
+                - datetime: '2019-09-14 00:03:10'
+                  total: 3917
+                - datetime: '2019-09-15 00:22:13'
+                  total: 4021
+                - datetime: '2019-09-16 00:00:02'
+                  total: 5121
+                - datetime: '2019-09-17 00:00:28'
+                  total: 4265
+                - datetime: '2019-09-18 12:25:00'
+                  total: 5761
+                - datetime: '2019-09-19 00:00:30'
+                  total: 6240
+                - datetime: '2019-09-20 00:00:00'
+                  total: 3466
+                - datetime: '2019-09-21 00:05:34'
+                  total: 994
+                - datetime: '2019-09-22 00:09:09'
+                  total: 2984
+                - datetime: '2019-09-23 00:00:28'
+                  total: 5364
+                - datetime: '2019-09-24 00:00:00'
+                  total: 5188
+                - datetime: '2019-09-25 00:00:10'
+                  total: 5027
+                - datetime: '2019-09-26 00:00:26'
+                  total: 4837
+                - datetime: '2019-09-27 00:00:46'
+                  total: 3790
+                - datetime: '2019-09-28 00:07:03'
+                  total: 1467
+                - datetime: '2019-09-29 00:03:26'
+                  total: 4540
+                - datetime: '2019-09-30 00:01:38'
+                  total: 4946
+                - datetime: '2019-10-01 00:05:22'
+                  total: 6589
+                - datetime: '2019-10-02 00:00:29'
+                  total: 6727
+                - datetime: '2019-10-03 00:04:39'
+                  total: 3605
+                - datetime: '2019-10-04 00:00:30'
+                  total: 4034
+                - datetime: '2019-10-05 00:04:52'
+                  total: 222
+                - datetime: '2019-10-14 08:57:32'
+                  total: 2
+                - datetime: '2019-10-15 22:07:57'
+                  total: 595
+                - datetime: '2019-10-16 00:02:49'
+                  total: 7231
+                - datetime: '2019-10-17 00:00:03'
+                  total: 2934
+                - datetime: '2019-10-18 08:43:58'
+                  total: 4454
+                - datetime: '2019-10-19 00:00:06'
+                  total: 3840
+                - datetime: '2019-10-20 00:45:49'
+                  total: 2436
+                - datetime: '2019-10-21 00:00:24'
+                  total: 6157
+                - datetime: '2019-10-22 00:00:11'
+                  total: 2036
+                - datetime: '2019-10-23 11:15:58'
+                  total: 5342
+                - datetime: '2019-10-24 00:00:26'
+                  total: 5232
+                - datetime: '2019-10-25 00:01:01'
+                  total: 7227
+                - datetime: '2019-10-26 00:08:32'
+                  total: 3319
+                - datetime: '2019-10-27 00:15:13'
+                  total: 3896
+                - datetime: '2019-10-28 00:01:44'
+                  total: 7946
+                - datetime: '2019-10-29 00:02:41'
+                  total: 1750
+                - datetime: '2019-10-30 05:08:01'
+                  total: 3758
+                - datetime: '2019-10-31 00:00:00'
+                  total: 4290
+                - datetime: '2019-11-01 00:01:06'
+                  total: 3055
+                - datetime: '2019-11-02 00:06:32'
+                  total: 2498
+                - datetime: '2019-11-03 00:21:54'
+                  total: 2128
+                - datetime: '2019-11-04 00:06:50'
+                  total: 3218
+                - datetime: '2019-11-05 00:00:04'
+                  total: 5266
+                - datetime: '2019-11-06 00:03:21'
+                  total: 5274
+                - datetime: '2019-11-07 00:00:01'
+                  total: 3640
+                - datetime: '2019-11-08 00:00:15'
+                  total: 3687
+                - datetime: '2019-11-09 00:15:58'
+                  total: 3585
+                - datetime: '2019-11-10 00:06:47'
+                  total: 4590
+                - datetime: '2019-11-11 00:05:21'
+                  total: 2596
+                - datetime: '2019-11-12 05:13:21'
+                  total: 2832
+                - datetime: '2019-11-13 00:00:08'
+                  total: 4934
+                - datetime: '2019-11-14 00:00:21'
+                  total: 4399
+                - datetime: '2019-11-15 09:23:05'
+                  total: 3
+                - datetime: '2019-11-18 07:12:26'
+                  total: 3071
+                - datetime: '2019-11-19 00:00:02'
+                  total: 6640
+                - datetime: '2019-11-20 00:04:19'
+                  total: 4602
+                - datetime: '2019-11-21 06:01:52'
+                  total: 5108
+                - datetime: '2019-11-22 23:50:22'
+                  total: 4581
+                - datetime: '2019-11-23 00:01:25'
+                  total: 2371
+                - datetime: '2019-11-24 00:26:15'
+                  total: 2874
+                - datetime: '2019-11-25 00:00:05'
+                  total: 5303
+                - datetime: '2019-11-26 00:04:53'
+                  total: 5817
+                - datetime: '2019-11-27 00:00:06'
+                  total: 3862
+                - datetime: '2019-11-28 07:21:41'
+                  total: 3402
+                - datetime: '2019-11-29 07:06:49'
+                  total: 6375
+                - datetime: '2019-11-30 00:03:57'
+                  total: 3309
+                - datetime: '2019-12-01 00:08:22'
+                  total: 3786
+                - datetime: '2019-12-02 00:00:09'
+                  total: 1972
+                - datetime: '2019-12-03 00:03:48'
+                  total: 124
+                - datetime: '2019-12-04 03:47:53'
+                  total: 6585
+                - datetime: '2019-12-05 00:00:28'
+                  total: 8398
+                - datetime: '2019-12-06 00:00:05'
+                  total: 6104
+                - datetime: '2019-12-07 00:12:09'
+                  total: 4390
+                - datetime: '2019-12-08 00:03:37'
+                  total: 2852
+                - datetime: '2019-12-09 00:00:15'
+                  total: 2552
+                - datetime: '2019-12-10 09:35:55'
+                  total: 4240
+                - datetime: '2019-12-11 00:00:02'
+                  total: 8202
+                - datetime: '2019-12-12 00:00:14'
+                  total: 6488
+                - datetime: '2019-12-13 03:47:35'
+                  total: 5956
+                - datetime: '2019-12-14 00:02:04'
+                  total: 4078
+                - datetime: '2019-12-15 00:03:08'
+                  total: 4257
+                - datetime: '2019-12-16 00:00:12'
+                  total: 8394
+                - datetime: '2019-12-17 00:03:18'
+                  total: 6093
+                - datetime: '2019-12-18 00:03:28'
+                  total: 7683
+                - datetime: '2019-12-19 00:00:10'
+                  total: 7267
+                - datetime: '2019-12-20 00:00:05'
+                  total: 3562
+                - datetime: '2019-12-21 00:14:15'
+                  total: 12
+                - datetime: '2019-12-23 05:44:22'
+                  total: 3862
+                - datetime: '2019-12-24 00:00:49'
+                  total: 2336
+                - datetime: '2019-12-25 00:52:21'
+                  total: 111
+                - datetime: '2020-01-02 07:46:58'
+                  total: 16
+                - datetime: '2020-01-03 00:28:51'
+                  total: 18
+                - datetime: '2020-01-04 00:01:21'
+                  total: 19
+                - datetime: '2020-01-05 01:01:51'
+                  total: 19
+                - datetime: '2020-01-06 02:02:21'
+                  total: 20
+                - datetime: '2020-01-07 03:52:29'
+                  total: 5529
+                - datetime: '2020-01-08 00:00:29'
+                  total: 7345
+                - datetime: '2020-01-09 05:32:06'
+                  total: 5068
+                - datetime: '2020-01-10 00:00:14'
+                  total: 2040
+                - datetime: '2020-01-11 02:54:46'
+                  total: 19
+                - datetime: '2020-01-12 03:55:16'
+                  total: 16
+                - datetime: '2020-01-13 06:11:54'
+                  total: 3877
+                - datetime: '2020-01-14 00:00:00'
+                  total: 4724
+                - datetime: '2020-01-15 00:00:19'
+                  total: 4468
+                - datetime: '2020-01-16 00:00:09'
+                  total: 6309
+                - datetime: '2020-01-17 00:00:39'
+                  total: 5052
+                - datetime: '2020-01-18 00:07:38'
+                  total: 3461
+                - datetime: '2020-01-19 00:34:50'
+                  total: 3099
+                - datetime: '2020-01-20 11:27:44'
+                  total: 1722
+                - datetime: '2020-01-21 06:33:59'
+                  total: 4904
+                - datetime: '2020-01-22 11:43:20'
+                  total: 7372
+                - datetime: '2020-01-23 07:44:17'
+                  total: 8837
+                - datetime: '2020-01-24 00:02:00'
+                  total: 6285
+                - datetime: '2020-01-25 00:08:09'
+                  total: 3532
+                - datetime: '2020-01-26 00:21:49'
+                  total: 4325
+                - datetime: '2020-01-27 03:07:42'
+                  total: 4042
+                - datetime: '2020-01-28 04:16:57'
+                  total: 6164
+                - datetime: '2020-01-29 00:00:08'
+                  total: 6770
+                - datetime: '2020-01-30 00:00:44'
+                  total: 7219
+                - datetime: '2020-01-31 00:00:47'
+                  total: 5117
+                - datetime: '2020-02-01 14:35:23'
+                  total: 4303
+                - datetime: '2020-02-02 00:00:42'
+                  total: 3939
+                - datetime: '2020-02-03 06:44:53'
+                  total: 6317
+                - datetime: '2020-02-04 00:00:01'
+                  total: 3792
+                - datetime: '2020-02-05 04:49:18'
+                  total: 6077
+                - datetime: '2020-02-06 00:00:25'
+                  total: 4229
+                - datetime: '2020-02-07 00:00:01'
+                  total: 8451
+                - datetime: '2020-02-08 00:00:00'
+                  total: 3324
+                - datetime: '2020-02-09 00:09:35'
+                  total: 5676
+                - datetime: '2020-02-10 04:13:04'
+                  total: 4789
+                - datetime: '2020-02-11 00:00:05'
+                  total: 5064
+                - datetime: '2020-02-12 05:21:37'
+                  total: 3664
+                - datetime: '2020-02-13 00:03:06'
+                  total: 6283
+                - datetime: '2020-02-14 06:46:28'
+                  total: 5099
+                - datetime: '2020-02-15 00:02:09'
+                  total: 2240
+                - datetime: '2020-02-16 00:42:37'
+                  total: 1528
+                - datetime: '2020-02-17 00:00:03'
+                  total: 6036
+                - datetime: '2020-02-18 03:45:12'
+                  total: 7319
+                - datetime: '2020-02-19 00:00:26'
+                  total: 5898
+                - datetime: '2020-02-20 06:09:51'
+                  total: 6664
+                - datetime: '2020-02-21 00:01:37'
+                  total: 4927
+                - datetime: '2020-02-22 00:05:17'
+                  total: 3978
+                - datetime: '2020-02-23 00:56:26'
+                  total: 1418
+                - datetime: '2020-02-24 04:20:18'
+                  total: 4970
+                - datetime: '2020-02-25 00:45:34'
+                  total: 4114
+                - datetime: '2020-02-26 07:32:25'
+                  total: 6911
+                - datetime: '2020-02-27 00:00:03'
+                  total: 7530
+                - datetime: '2020-02-28 05:57:20'
+                  total: 7683
+                - datetime: '2020-02-29 00:28:42'
+                  total: 2397
+                - datetime: '2020-03-01 00:28:38'
+                  total: 3996
+                - datetime: '2020-03-02 00:28:31'
+                  total: 5892
+                - datetime: '2020-03-03 09:07:53'
+                  total: 9141
+                - datetime: '2020-03-04 00:00:33'
+                  total: 7807
+                - datetime: '2020-03-05 07:41:01'
+                  total: 6114
+                - datetime: '2020-03-06 00:00:53'
+                  total: 5124
+                - datetime: '2020-03-07 00:28:35'
+                  total: 2185
+                - datetime: '2020-03-08 02:23:30'
+                  total: 973
+                - datetime: '2020-03-09 03:09:08'
+                  total: 4158
+                - datetime: '2020-03-10 00:16:28'
+                  total: 6507
+                - datetime: '2020-03-11 00:30:05'
+                  total: 7832
+                - datetime: '2020-03-12 00:00:00'
+                  total: 7643
+                - datetime: '2020-03-13 00:05:07'
+                  total: 1386
+                - datetime: '2020-03-14 04:51:34'
+                  total: 2658
+                - datetime: '2020-03-15 00:51:26'
+                  total: 3702
+                - datetime: '2020-03-16 00:09:21'
+                  total: 7291
+                - datetime: '2020-03-17 00:07:49'
+                  total: 6359
+                - datetime: '2020-03-18 00:02:30'
+                  total: 6096
+                - datetime: '2020-03-19 00:00:27'
+                  total: 4778
+                - datetime: '2020-03-20 00:06:38'
+                  total: 3366
+                - datetime: '2020-03-21 00:07:45'
+                  total: 2606
+                - datetime: '2020-03-22 00:59:37'
+                  total: 2482
+                - datetime: '2020-03-23 00:30:05'
+                  total: 6717
+                - datetime: '2020-03-24 00:00:22'
+                  total: 7986
+                - datetime: '2020-03-25 00:45:13'
+                  total: 6559
+                - datetime: '2020-03-26 00:00:14'
+                  total: 9553
+                - datetime: '2020-03-27 00:00:33'
+                  total: 5444
+                - datetime: '2020-03-28 05:15:31'
+                  total: 4607
+                - datetime: '2020-03-29 00:20:31'
+                  total: 3998
+                - datetime: '2020-03-30 00:00:04'
+                  total: 6415
+                - datetime: '2020-03-31 00:00:08'
+                  total: 6821
+                - datetime: '2020-04-01 06:00:23'
+                  total: 8249
+                - datetime: '2020-04-02 00:00:16'
+                  total: 5368
+                - datetime: '2020-04-03 05:17:06'
+                  total: 3382
+                - datetime: '2020-04-04 00:01:48'
+                  total: 2488
+                - datetime: '2020-04-05 00:01:43'
+                  total: 6115
+                - datetime: '2020-04-06 08:14:48'
+                  total: 7494
+                - datetime: '2020-04-07 00:00:30'
+                  total: 5223
+                - datetime: '2020-04-08 03:17:10'
+                  total: 7158
+                - datetime: '2020-04-09 00:00:18'
+                  total: 8342
+                - datetime: '2020-04-10 04:46:36'
+                  total: 4349
+                - datetime: '2020-04-11 00:48:04'
+                  total: 4809
+                - datetime: '2020-04-12 00:47:58'
+                  total: 5288
+                - datetime: '2020-04-13 00:47:46'
+                  total: 4382
+                - datetime: '2020-04-14 06:19:51'
+                  total: 6740
+                - datetime: '2020-04-15 05:58:18'
+                  total: 7389
+                - datetime: '2020-04-16 03:00:04'
+                  total: 7957
+                - datetime: '2020-04-17 00:03:46'
+                  total: 3948
+                - datetime: '2020-04-18 07:52:15'
+                  total: 3213
+                - datetime: '2020-04-19 00:49:00'
+                  total: 3961
+                - datetime: '2020-04-20 00:03:14'
+                  total: 7092
+                - datetime: '2020-04-21 05:38:34'
+                  total: 3387
+                - datetime: '2020-04-22 03:58:03'
+                  total: 5554
+                - datetime: '2020-04-23 12:49:28'
+                  total: 5107
+                - datetime: '2020-04-24 00:13:33'
+                  total: 5461
+                - datetime: '2020-04-25 00:08:58'
+                  total: 3397
+                - datetime: '2020-04-26 00:08:48'
+                  total: 2418
+                - datetime: '2020-04-27 00:00:34'
+                  total: 4124
+                - datetime: '2020-04-28 00:00:11'
+                  total: 6112
+                - datetime: '2020-04-29 00:00:25'
+                  total: 2715
+                - datetime: '2020-04-30 03:16:23'
+                  total: 4247
+                - datetime: '2020-05-01 00:00:19'
+                  total: 4814
+                - datetime: '2020-05-02 00:34:05'
+                  total: 5196
+                - datetime: '2020-05-03 00:33:56'
+                  total: 4327
+                - datetime: '2020-05-04 00:02:22'
+                  total: 5328
+                - datetime: '2020-05-05 00:02:38'
+                  total: 7454
+                - datetime: '2020-05-06 03:05:22'
+                  total: 5501
+                - datetime: '2020-05-07 00:04:39'
+                  total: 5900
+                - datetime: '2020-05-08 00:03:07'
+                  total: 6035
+                - datetime: '2020-05-09 00:23:28'
+                  total: 1849
+                - datetime: '2020-05-10 00:43:03'
+                  total: 5015
+                - datetime: '2020-05-11 00:00:03'
+                  total: 4974
+                - datetime: '2020-05-12 00:00:42'
+                  total: 5659
+                - datetime: '2020-05-13 07:08:16'
+                  total: 4027
+                - datetime: '2020-05-14 00:00:15'
+                  total: 3123
+                - datetime: '2020-05-15 00:01:46'
+                  total: 6630
+                - datetime: '2020-05-16 00:40:24'
+                  total: 2582
+                - datetime: '2020-05-17 00:40:15'
+                  total: 3688
+                - datetime: '2020-05-18 00:00:54'
+                  total: 6415
+                - datetime: '2020-05-19 00:00:20'
+                  total: 7353
+                - datetime: '2020-05-20 00:00:05'
+                  total: 8355
+                - datetime: '2020-05-21 06:20:15'
+                  total: 5209
+                - datetime: '2020-05-22 00:00:01'
+                  total: 4050
+                - datetime: '2020-05-23 00:26:39'
+                  total: 2082
+                - datetime: '2020-05-24 00:26:34'
+                  total: 2856
+                - datetime: '2020-05-25 18:02:12'
+                  total: 4509
+                - datetime: '2020-05-26 00:23:16'
+                  total: 5457
+                - datetime: '2020-05-27 00:17:55'
+                  total: 7174
+                - datetime: '2020-05-28 04:57:26'
+                  total: 5334
+                - datetime: '2020-05-29 00:49:51'
+                  total: 3240
+                - datetime: '2020-05-30 00:05:42'
+                  total: 2485
+                - datetime: '2020-05-31 00:05:33'
+                  total: 4293
+                - datetime: '2020-06-01 00:01:12'
+                  total: 4012
+                - datetime: '2020-06-02 04:36:02'
+                  total: 5839
+                - datetime: '2020-06-03 10:38:08'
+                  total: 6310
+                - datetime: '2020-06-04 07:05:03'
+                  total: 7319
+                - datetime: '2020-06-05 00:00:08'
+                  total: 4978
+                - datetime: '2020-06-06 00:10:47'
+                  total: 2950
+                - datetime: '2020-06-07 00:10:40'
+                  total: 3132
+                - datetime: '2020-06-08 00:10:31'
+                  total: 6081
+                - datetime: '2020-06-09 00:00:21'
+                  total: 5057
+                - datetime: '2020-06-10 00:26:15'
+                  total: 4129
+                - datetime: '2020-06-11 04:01:48'
+                  total: 6135
+                - datetime: '2020-06-12 00:00:12'
+                  total: 2781
+                - datetime: '2020-06-13 00:42:50'
+                  total: 1679
+                - datetime: '2020-06-14 00:42:44'
+                  total: 2779
+                - datetime: '2020-06-15 00:00:14'
+                  total: 4591
+                - datetime: '2020-06-16 00:00:13'
+                  total: 3952
+                - datetime: '2020-06-17 00:04:09'
+                  total: 6538
+                - datetime: '2020-06-18 00:56:53'
+                  total: 5726
+                - datetime: '2020-06-19 03:33:25'
+                  total: 5061
+                - datetime: '2020-06-20 00:35:33'
+                  total: 5534
+                - datetime: '2020-06-21 00:02:01'
+                  total: 4568
+                - datetime: '2020-06-22 04:56:54'
+                  total: 6905
+                - datetime: '2020-06-23 00:39:58'
+                  total: 4441
+                - datetime: '2020-06-24 07:04:03'
+                  total: 4496
+                - datetime: '2020-06-25 06:18:47'
+                  total: 4266
+                - datetime: '2020-06-26 11:00:01'
+                  total: 2840
+                - datetime: '2020-06-27 00:03:52'
+                  total: 3152
+                - datetime: '2020-06-28 00:00:01'
+                  total: 4619
+                - datetime: '2020-06-29 00:04:17'
+                  total: 4651
+                - datetime: '2020-06-30 03:37:13'
+                  total: 6092
+                - datetime: '2020-07-01 00:15:52'
+                  total: 5052
+                - datetime: '2020-07-02 00:00:29'
+                  total: 5417
+                - datetime: '2020-07-03 01:30:08'
+                  total: 3852
+                - datetime: '2020-07-04 00:25:30'
+                  total: 3093
+                - datetime: '2020-07-05 00:25:19'
+                  total: 3110
+                - datetime: '2020-07-06 00:00:21'
+                  total: 4694
+                - datetime: '2020-07-07 00:01:56'
+                  total: 5221
+                - datetime: '2020-07-08 11:54:42'
+                  total: 6700
+                - datetime: '2020-07-09 07:27:41'
+                  total: 3554
+                - datetime: '2020-07-10 00:11:47'
+                  total: 1961
+                - datetime: '2020-07-11 00:31:39'
+                  total: 1058
+                - datetime: '2020-07-12 00:31:28'
+                  total: 3689
+                - datetime: '2020-07-13 00:00:45'
+                  total: 4736
+                - datetime: '2020-07-14 00:05:02'
+                  total: 5922
+                - datetime: '2020-07-15 00:08:32'
+                  total: 4939
+                - datetime: '2020-07-16 04:38:39'
+                  total: 3454
+                - datetime: '2020-07-17 03:28:40'
+                  total: 5291
+                - datetime: '2020-07-18 00:56:48'
+                  total: 3134
+                - datetime: '2020-07-19 00:56:40'
+                  total: 1900
+                - datetime: '2020-07-20 00:05:40'
+                  total: 2548
+                - datetime: '2020-07-21 00:07:24'
+                  total: 3923
+                - datetime: '2020-07-22 03:17:40'
+                  total: 3859
+                - datetime: '2020-07-23 15:56:07'
+                  total: 3728
+                - datetime: '2020-07-24 06:28:55'
+                  total: 4284
+                - datetime: '2020-07-25 07:58:38'
+                  total: 3269
+                - datetime: '2020-07-26 00:10:43'
+                  total: 2313
+                - datetime: '2020-07-27 00:00:02'
+                  total: 6528
+                - datetime: '2020-07-28 00:01:09'
+                  total: 7331
+                - datetime: '2020-07-29 00:09:09'
+                  total: 7914
+                - datetime: '2020-07-30 00:00:01'
+                  total: 5200
+                - datetime: '2020-07-31 07:39:29'
+                  total: 5545
+                - datetime: '2020-08-01 08:05:30'
+                  total: 5617
+                - datetime: '2020-08-02 00:32:50'
+                  total: 2890
+                - datetime: '2020-08-03 00:01:24'
+                  total: 4283
+                - datetime: '2020-08-04 02:34:15'
+                  total: 7087
+                - datetime: '2020-08-05 07:20:56'
+                  total: 5585
+                - datetime: '2020-08-06 00:00:01'
+                  total: 5865
+                - datetime: '2020-08-07 00:08:31'
+                  total: 5019
+                - datetime: '2020-08-08 00:01:04'
+                  total: 871
+                - datetime: '2020-08-09 00:00:53'
+                  total: 5042
+                - datetime: '2020-08-10 04:54:45'
+                  total: 4379
+                - datetime: '2020-08-11 00:00:02'
+                  total: 4463
+                - datetime: '2020-08-12 00:00:20'
+                  total: 7056
+                - datetime: '2020-08-13 00:05:00'
+                  total: 5388
+                - datetime: '2020-08-14 00:00:10'
+                  total: 6607
+                - datetime: '2020-08-15 00:31:07'
+                  total: 4300
+                - datetime: '2020-08-16 00:56:01'
+                  total: 5368
+                - datetime: '2020-08-17 00:54:54'
+                  total: 4325
+                - datetime: '2020-08-18 07:52:58'
+                  total: 7837
+                - datetime: '2020-08-19 00:00:58'
+                  total: 4859
+                - datetime: '2020-08-20 00:03:04'
+                  total: 3238
+                - datetime: '2020-08-21 04:13:31'
+                  total: 6088
+                - datetime: '2020-08-22 00:50:13'
+                  total: 2248
+                - datetime: '2020-08-23 00:50:03'
+                  total: 4267
+                - datetime: '2020-08-24 07:40:27'
+                  total: 4706
+                - datetime: '2020-08-25 00:04:47'
+                  total: 4898
+                - datetime: '2020-08-26 09:24:38'
+                  total: 4635
+                - datetime: '2020-08-27 00:00:48'
+                  total: 3892
+                - datetime: '2020-08-28 05:54:21'
+                  total: 5150
+                - datetime: '2020-08-29 00:59:28'
+                  total: 4501
+                - datetime: '2020-08-30 00:59:16'
+                  total: 6154
+                - datetime: '2020-08-31 07:14:41'
+                  total: 5608
+                - datetime: '2020-09-01 00:06:03'
+                  total: 4910
+                - datetime: '2020-09-02 02:25:29'
+                  total: 4945
+                - datetime: '2020-09-03 00:00:07'
+                  total: 6249
+                - datetime: '2020-09-04 00:00:13'
+                  total: 6758
+                - datetime: '2020-09-05 00:52:24'
+                  total: 4305
+                - datetime: '2020-09-06 00:52:15'
+                  total: 1943
+                - datetime: '2020-09-07 02:23:25'
+                  total: 4227
+                - datetime: '2020-09-08 04:33:40'
+                  total: 6322
+                - datetime: '2020-09-09 00:00:00'
+                  total: 7788
+                - datetime: '2020-09-10 00:00:23'
+                  total: 5854
+                - datetime: '2020-09-11 05:08:43'
+                  total: 5988
+                - datetime: '2020-09-12 00:54:27'
+                  total: 4430
+                - datetime: '2020-09-13 00:54:26'
+                  total: 4922
+                - datetime: '2020-09-14 00:00:29'
+                  total: 6111
+                - datetime: '2020-09-15 04:01:01'
+                  total: 6488
+                - datetime: '2020-09-16 00:06:10'
+                  total: 4791
+                - datetime: '2020-09-17 05:03:56'
+                  total: 6638
+                - datetime: '2020-09-18 00:00:00'
+                  total: 6502
+                - datetime: '2020-09-19 00:32:47'
+                  total: 4110
+                - datetime: '2020-09-20 04:32:37'
+                  total: 3193
+                - datetime: '2020-09-21 10:21:42'
+                  total: 4192
+                - datetime: '2020-09-22 00:00:28'
+                  total: 2813
+                - datetime: '2020-09-23 00:00:25'
+                  total: 4236
+                - datetime: '2020-09-24 00:02:39'
+                  total: 4677
+                - datetime: '2020-09-25 00:00:20'
+                  total: 6545
+                - datetime: '2020-09-26 00:35:56'
+                  total: 3674
+                - datetime: '2020-09-27 00:35:46'
+                  total: 4061
+                - datetime: '2020-09-28 07:15:32'
+                  total: 4074
+                - datetime: '2020-09-29 00:01:32'
+                  total: 5315
+                - datetime: '2020-09-30 05:14:21'
+                  total: 5310
+                - datetime: '2020-10-01 05:52:35'
+                  total: 6859
+                - datetime: '2020-10-02 09:57:49'
+                  total: 2126
+                - datetime: '2020-10-03 03:29:47'
+                  total: 2016
+                - datetime: '2020-10-04 00:15:50'
+                  total: 2516
+                - datetime: '2020-10-05 00:15:41'
+                  total: 4637
+                - datetime: '2020-10-06 06:04:17'
+                  total: 6021
+                - datetime: '2020-10-07 03:33:38'
+                  total: 6391
+                - datetime: '2020-10-08 05:52:25'
+                  total: 15730
+                - datetime: '2020-10-09 00:33:44'
+                  total: 18005
+                - datetime: '2020-10-10 00:58:38'
+                  total: 18112
+                - datetime: '2020-10-11 00:58:28'
+                  total: 18912
+                - datetime: '2020-10-12 00:00:20'
+                  total: 17944
+                - datetime: '2020-10-13 00:03:29'
+                  total: 19967
+                - datetime: '2020-10-14 00:00:00'
+                  total: 19953
+                - datetime: '2020-10-15 00:02:13'
+                  total: 18853
+                - datetime: '2020-10-16 00:05:52'
+                  total: 18096
+                - datetime: '2020-10-17 00:00:45'
+                  total: 18637
+                - datetime: '2020-10-18 03:59:05'
+                  total: 16106
+                - datetime: '2020-10-19 00:00:16'
+                  total: 16625
+                - datetime: '2020-10-20 00:06:23'
+                  total: 17523
+                - datetime: '2020-10-21 00:03:50'
+                  total: 16791
+                - datetime: '2020-10-22 00:04:45'
+                  total: 16233
+                - datetime: '2020-10-23 00:00:32'
+                  total: 15735
+                - datetime: '2020-10-24 00:36:44'
+                  total: 16285
+                - datetime: '2020-10-25 00:36:35'
+                  total: 17500
+                - datetime: '2020-10-26 00:00:26'
+                  total: 20781
+                - datetime: '2020-10-27 00:10:19'
+                  total: 21053
+                - datetime: '2020-10-28 00:44:10'
+                  total: 20097
+                - datetime: '2020-10-29 00:00:07'
+                  total: 19685
+                - datetime: '2020-10-30 00:26:56'
+                  total: 17254
+                - datetime: '2020-10-31 00:23:48'
+                  total: 16695
+                - datetime: '2020-11-01 00:38:27'
+                  total: 17628
+                - datetime: '2020-11-02 00:00:19'
+                  total: 19806
+                - datetime: '2020-11-03 00:00:53'
+                  total: 20799
+                - datetime: '2020-11-04 00:46:08'
+                  total: 20716
+                - datetime: '2020-11-05 00:47:02'
+                  total: 18208
+                - datetime: '2020-11-06 00:00:36'
+                  total: 16683
+                - datetime: '2020-11-07 00:03:53'
+                  total: 10088
+                - datetime: '2020-11-08 00:18:41'
+                  total: 16226
+                - datetime: '2020-11-09 00:06:12'
+                  total: 18343
+                - datetime: '2020-11-10 00:02:58'
+                  total: 18685
+                - datetime: '2020-11-11 00:00:05'
+                  total: 22245
+                - datetime: '2020-11-12 00:01:17'
+                  total: 28834
+                - datetime: '2020-11-13 00:00:29'
+                  total: 27400
+                - datetime: '2020-11-14 00:47:58'
+                  total: 24590
+                - datetime: '2020-11-15 00:47:50'
+                  total: 25395
+                - datetime: '2020-11-16 00:06:36'
+                  total: 26245
+                - datetime: '2020-11-17 00:00:16'
+                  total: 26734
+                - datetime: '2020-11-18 00:28:31'
+                  total: 27651
+                - datetime: '2020-11-19 00:00:01'
+                  total: 28319
+                - datetime: '2020-11-20 00:00:18'
+                  total: 28776
+                - datetime: '2020-11-21 00:00:02'
+                  total: 26787
+                - datetime: '2020-11-22 00:11:04'
+                  total: 27422
+                - datetime: '2020-11-23 00:01:40'
+                  total: 26786
+                - datetime: '2020-11-24 00:03:38'
+                  total: 27383
+                - datetime: '2020-11-25 00:00:15'
+                  total: 27690
+                - datetime: '2020-11-26 00:00:12'
+                  total: 28102
+                - datetime: '2020-11-27 00:16:03'
+                  total: 29027
+                - datetime: '2020-11-28 00:23:13'
+                  total: 27972
+                - datetime: '2020-11-29 00:23:10'
+                  total: 25231
+                - datetime: '2020-11-30 00:00:31'
+                  total: 28894
+                - datetime: '2020-12-01 00:00:06'
+                  total: 31817
+                - datetime: '2020-12-02 00:10:44'
+                  total: 28491
+                - datetime: '2020-12-03 09:29:33'
+                  total: 43583
+                - datetime: '2020-12-04 00:06:09'
+                  total: 47195
+                - datetime: '2020-12-05 00:04:04'
+                  total: 45215
+                - datetime: '2020-12-06 00:19:13'
+                  total: 46057
+                - datetime: '2020-12-07 00:15:47'
+                  total: 45406
+                - datetime: '2020-12-08 05:26:01'
+                  total: 49014
+                - datetime: '2020-12-09 00:05:35'
+                  total: 47864
+                - datetime: '2020-12-10 00:01:53'
+                  total: 47793
+                - datetime: '2020-12-11 00:00:06'
+                  total: 44090
+                - datetime: '2020-12-12 00:39:26'
+                  total: 45069
+                - datetime: '2020-12-13 00:39:20'
+                  total: 46528
+                - datetime: '2020-12-14 09:31:49'
+                  total: 47057
+                - datetime: '2020-12-15 00:00:13'
+                  total: 50479
+                - datetime: '2020-12-16 00:09:16'
+                  total: 48560
+                - datetime: '2020-12-17 00:00:08'
+                  total: 32395
+                - datetime: '2020-12-18 00:01:01'
+                  total: 30430
+                - datetime: '2020-12-19 00:26:35'
+                  total: 25358
+                - datetime: '2020-12-20 00:26:26'
+                  total: 26658
+                - datetime: '2020-12-21 00:06:41'
+                  total: 30546
+                - datetime: '2020-12-22 00:00:06'
+                  total: 28242
+                - datetime: '2020-12-23 00:07:04'
+                  total: 29569
+                - datetime: '2020-12-24 00:17:56'
+                  total: 25696
+                - datetime: '2020-12-25 00:17:46'
+                  total: 24386
+                - datetime: '2020-12-26 00:17:39'
+                  total: 24583
+                - datetime: '2020-12-27 00:17:29'
+                  total: 26568
+                - datetime: '2020-12-28 00:17:20'
+                  total: 28965
+                - datetime: '2020-12-29 00:17:14'
+                  total: 54338
+                - datetime: '2020-12-30 00:17:05'
+                  total: 34931
+                - datetime: '2020-12-31 00:16:56'
+                  total: 30250
+                - datetime: '2021-01-01 00:16:46'
+                  total: 28014
+                - datetime: '2021-01-02 00:16:42'
+                  total: 30301
+                - datetime: '2021-01-03 00:16:34'
+                  total: 28566
+                - datetime: '2021-01-04 00:31:25'
+                  total: 26561
+                - datetime: '2021-01-05 00:29:16'
+                  total: 28317
+                - datetime: '2021-01-06 00:08:19'
+                  total: 32116
+                - datetime: '2021-01-07 10:12:48'
+                  total: 30112
+                - datetime: '2021-01-08 00:19:46'
+                  total: 29687
+                - datetime: '2021-01-09 00:27:50'
+                  total: 25628
+                - datetime: '2021-01-10 00:27:42'
+                  total: 25243
+                - datetime: '2021-01-11 00:00:00'
+                  total: 26762
+                - datetime: '2021-01-12 00:00:01'
+                  total: 27395
+                - datetime: '2021-01-13 00:00:02'
+                  total: 44921
+                - datetime: '2021-01-14 00:00:00'
+                  total: 58001
+                - datetime: '2021-01-15 00:00:17'
+                  total: 55499
+                - datetime: '2021-01-16 00:15:08'
+                  total: 52149
+                - datetime: '2021-01-17 00:15:02'
+                  total: 54317
+                - datetime: '2021-01-18 00:00:44'
+                  total: 56147
+                - datetime: '2021-01-19 00:00:18'
+                  total: 55717
+                - datetime: '2021-01-20 09:20:20'
+                  total: 57708
+                - datetime: '2021-01-21 00:00:33'
+                  total: 58120
+                - datetime: '2021-01-22 00:00:34'
+                  total: 54499
+                - datetime: '2021-01-23 00:02:10'
+                  total: 50809
+                - datetime: '2021-01-24 00:02:04'
+                  total: 51348
+                - datetime: '2021-01-25 00:01:55'
+                  total: 55092
+                - datetime: '2021-01-26 00:09:50'
+                  total: 54269
+                - datetime: '2021-01-27 00:01:47'
+                  total: 54547
+                - datetime: '2021-01-28 00:08:22'
+                  total: 54771
+                - datetime: '2021-01-29 00:00:25'
+                  total: 57405
+                - datetime: '2021-01-30 00:29:17'
+                  total: 52253
+                - datetime: '2021-01-31 00:29:10'
+                  total: 53292
+                - datetime: '2021-02-01 10:00:19'
+                  total: 50720
+                - datetime: '2021-02-02 00:00:35'
+                  total: 54844
+                - datetime: '2021-02-03 08:12:54'
+                  total: 53736
+                - datetime: '2021-02-04 02:05:49'
+                  total: 53287
+                - datetime: '2021-02-05 03:15:37'
+                  total: 52435
+                - datetime: '2021-02-06 00:01:39'
+                  total: 52546
+                - datetime: '2021-02-07 00:02:20'
+                  total: 34718
+                - datetime: '2021-02-08 08:18:50'
+                  total: 28147
+                - datetime: '2021-02-09 00:01:04'
+                  total: 28049
+                - datetime: '2021-02-10 00:54:53'
+                  total: 33977
+                - datetime: '2021-02-11 06:38:18'
+                  total: 30582
+                - datetime: '2021-02-12 00:18:42'
+                  total: 31283
+                - datetime: '2021-02-13 00:00:01'
+                  total: 30706
+                - datetime: '2021-02-14 00:24:31'
+                  total: 31011
+                - datetime: '2021-02-15 10:34:15'
+                  total: 33273
+                - datetime: '2021-02-16 03:08:02'
+                  total: 30839
+                - datetime: '2021-02-17 05:41:03'
+                  total: 31480
+                - datetime: '2021-02-18 19:05:20'
+                  total: 31937
+                - datetime: '2021-02-19 19:05:18'
+                  total: 26911
+                - datetime: '2021-02-20 19:05:18'
+                  total: 27750
+                - datetime: '2021-02-21 19:05:18'
+                  total: 29218
+                - datetime: '2021-02-22 19:05:17'
+                  total: 28292
+                - datetime: '2021-02-23 19:05:18'
+                  total: 29189
+                - datetime: '2021-02-24 19:05:21'
+                  total: 28527
+                - datetime: '2021-02-25 12:00:00'
+                  total: 31120
+                - datetime: '2021-02-26 12:00:00'
+                  total: 28913
+                - datetime: '2021-02-27 00:06:41'
+                  total: 28261
+                - datetime: '2021-02-28 00:57:47'
+                  total: 26694
+                - datetime: '2021-03-01 00:00:21'
+                  total: 28091
+                - datetime: '2021-03-02 00:35:23'
+                  total: 28755
+                - datetime: '2021-03-03 00:01:10'
+                  total: 30832
+                - datetime: '2021-03-04 00:00:24'
+                  total: 30299
+                - datetime: '2021-03-05 05:45:42'
+                  total: 29645
+                - datetime: '2021-03-06 00:58:10'
+                  total: 25800
+                - datetime: '2021-03-07 00:58:05'
+                  total: 29705
+                - datetime: '2021-03-08 00:00:15'
+                  total: 25917
+                - datetime: '2021-03-09 00:13:01'
+                  total: 29542
+                - datetime: '2021-03-10 00:00:25'
+                  total: 28250
+                - datetime: '2021-03-11 00:00:44'
+                  total: 28152
+                - datetime: '2021-03-12 04:57:17'
+                  total: 28016
+                - datetime: '2021-03-13 00:02:13'
+                  total: 28570
+                - datetime: '2021-03-14 00:52:14'
+                  total: 30646
+                - datetime: '2021-03-15 00:00:26'
+                  total: 29674
+                - datetime: '2021-03-16 00:00:24'
+                  total: 30788
+                - datetime: '2021-03-17 00:00:29'
+                  total: 29424
+                - datetime: '2021-03-18 00:00:04'
+                  total: 27949
+                - datetime: '2021-03-19 00:00:18'
+                  total: 26277
+                - datetime: '2021-03-20 00:00:15'
+                  total: 24554
+                - datetime: '2021-03-21 00:59:23'
+                  total: 25588
+                - datetime: '2021-03-22 00:00:15'
+                  total: 28905
+                - datetime: '2021-03-23 00:05:04'
+                  total: 27494
+                - datetime: '2021-03-24 00:01:31'
+                  total: 27795
+                - datetime: '2021-03-25 00:00:02'
+                  total: 28368
+                - datetime: '2021-03-26 00:03:45'
+                  total: 27473
+                - datetime: '2021-03-27 00:39:43'
+                  total: 28119
+                - datetime: '2021-03-28 12:00:00'
+                  total: 27732
+                - datetime: '2021-03-29 00:00:10'
+                  total: 27875
+                - datetime: '2021-03-30 00:09:22'
+                  total: 31569
+                - datetime: '2021-03-31 00:01:23'
+                  total: 27984
+                - datetime: '2021-04-01 00:00:03'
+                  total: 28397
+                - datetime: '2021-04-02 00:05:55'
+                  total: 28020
+                - datetime: '2021-04-03 00:05:48'
+                  total: 26282
+                - datetime: '2021-04-04 00:05:41'
+                  total: 25544
+                - datetime: '2021-04-05 00:05:31'
+                  total: 26029
+                - datetime: '2021-04-06 00:00:12'
+                  total: 28750
+                - datetime: '2021-04-07 00:00:16'
+                  total: 28212
+                - datetime: '2021-04-08 00:00:31'
+                  total: 28859
+                - datetime: '2021-04-09 00:06:43'
+                  total: 27327
+                - datetime: '2021-04-10 00:51:53'
+                  total: 26033
+                - datetime: '2021-04-11 00:51:42'
+                  total: 17169
+                - datetime: '2021-04-12 04:07:32'
+                  total: 22712
+                - datetime: '2021-04-13 00:00:01'
+                  total: 27956
+                - datetime: '2021-04-14 00:00:50'
+                  total: 31483
+                - datetime: '2021-04-15 00:16:08'
+                  total: 31372
+                - datetime: '2021-04-16 00:04:34'
+                  total: 27643
+                - datetime: '2021-04-17 00:57:07'
+                  total: 26370
+                - datetime: '2021-04-18 00:56:58'
+                  total: 24646
+                - datetime: '2021-04-19 00:00:45'
+                  total: 25655
+                - datetime: '2021-04-20 00:03:15'
+                  total: 29171
+                - datetime: '2021-04-21 00:00:09'
+                  total: 27841
+                - datetime: '2021-04-22 00:00:25'
+                  total: 28877
+                - datetime: '2021-04-23 00:00:11'
+                  total: 29271
+                - datetime: '2021-04-24 00:31:02'
+                  total: 28103
+                - datetime: '2021-04-25 00:30:53'
+                  total: 29364
+                - datetime: '2021-04-26 00:01:07'
+                  total: 30264
+                - datetime: '2021-04-27 00:27:34'
+                  total: 29556
+                - datetime: '2021-04-28 00:07:20'
+                  total: 29551
+                - datetime: '2021-04-29 00:00:07'
+                  total: 27934
+                - datetime: '2021-04-30 00:02:48'
+                  total: 37566
+                - datetime: '2021-05-01 00:34:00'
+                  total: 30076
+                - datetime: '2021-05-02 00:33:52'
+                  total: 29467
+                - datetime: '2021-05-03 12:00:00'
+                  total: 28909
+                - datetime: '2021-05-04 00:02:10'
+                  total: 31777
+                - datetime: '2021-05-05 00:00:49'
+                  total: 28069
+                - datetime: '2021-05-06 00:00:58'
+                  total: 27669
+                - datetime: '2021-05-07 00:00:05'
+                  total: 27482
+                - datetime: '2021-05-08 00:53:03'
+                  total: 27051
+                - datetime: '2021-05-09 00:52:54'
+                  total: 26937
+                - datetime: '2021-05-10 00:04:54'
+                  total: 33381
+                - datetime: '2021-05-11 00:42:38'
+                  total: 33191
+                - datetime: '2021-05-12 00:00:25'
+                  total: 26766
+                - datetime: '2021-05-13 00:05:31'
+                  total: 27437
+                - datetime: '2021-05-14 00:00:51'
+                  total: 27202
+                - datetime: '2021-05-15 00:52:56'
+                  total: 26668
+                - datetime: '2021-05-16 00:52:47'
+                  total: 25573
+                - datetime: '2021-05-17 09:09:05'
+                  total: 26942
+                - datetime: '2021-05-18 12:00:00'
+                  total: 28157
+                - datetime: '2021-05-19 00:10:26'
+                  total: 27715
+                - datetime: '2021-05-20 00:00:01'
+                  total: 31130
+                - datetime: '2021-05-21 00:24:08'
+                  total: 28333
+                - datetime: '2021-05-22 00:57:59'
+                  total: 27619
+                - datetime: '2021-05-23 00:57:54'
+                  total: 27890
+                - datetime: '2021-05-24 00:02:37'
+                  total: 28025
+                - datetime: '2021-05-25 00:00:24'
+                  total: 28171
+                - datetime: '2021-05-26 00:38:29'
+                  total: 25982
+                - datetime: '2021-05-27 00:00:00'
+                  total: 28911
+                - datetime: '2021-05-28 00:00:36'
+                  total: 28960
+                - datetime: '2021-05-29 00:57:06'
+                  total: 28897
+                - datetime: '2021-05-30 00:56:59'
+                  total: 29033
+                - datetime: '2021-05-31 00:12:03'
+                  total: 30153
+                - datetime: '2021-06-01 00:00:38'
+                  total: 27460
+                - datetime: '2021-06-02 00:00:03'
+                  total: 26858
+                - datetime: '2021-06-03 00:16:51'
+                  total: 26707
+                - datetime: '2021-06-04 00:05:41'
+                  total: 26857
+                - datetime: '2021-06-05 00:20:34'
+                  total: 25439
+                - datetime: '2021-06-06 00:20:28'
+                  total: 25596
+                - datetime: '2021-06-07 00:02:09'
+                  total: 25676
+                - datetime: '2021-06-08 06:20:06'
+                  total: 25455
+                - datetime: '2021-06-09 00:05:16'
+                  total: 27726
+                - datetime: '2021-06-10 00:05:10'
+                  total: 26310
+                - datetime: '2021-06-11 00:40:06'
+                  total: 27392
+                - datetime: '2021-06-12 00:39:57'
+                  total: 26750
+                - datetime: '2021-06-13 00:39:45'
+                  total: 25082
+                - datetime: '2021-06-14 00:39:40'
+                  total: 25804
+                - datetime: '2021-06-15 00:39:37'
+                  total: 26930
+                - datetime: '2021-06-16 00:39:33'
+                  total: 27585
+                - datetime: '2021-06-17 00:39:32'
+                  total: 25833
+                - datetime: '2021-06-18 00:39:25'
+                  total: 25094
+                - datetime: '2021-06-19 00:39:20'
+                  total: 24499
+                - datetime: '2021-06-20 00:39:08'
+                  total: 26431
+                - datetime: '2021-06-21 00:39:00'
+                  total: 26566
+                - datetime: '2021-06-22 00:38:50'
+                  total: 26405
+                - datetime: '2021-06-23 00:38:38'
+                  total: 26275
+                - datetime: '2021-06-24 00:38:32'
+                  total: 26177
+                - datetime: '2021-06-25 00:08:24'
+                  total: 26045
+                - datetime: '2021-06-26 00:08:12'
+                  total: 25497
+                - datetime: '2021-06-27 00:08:01'
+                  total: 26956
+                - datetime: '2021-06-28 00:07:56'
+                  total: 27186
+                - datetime: '2021-06-29 00:07:47'
+                  total: 26966
+                - datetime: '2021-06-30 00:07:38'
+                  total: 27510
+                - datetime: '2021-07-01 00:07:28'
+                  total: 26967
+                - datetime: '2021-07-02 00:07:24'
+                  total: 27282
+                - datetime: '2021-07-03 12:00:00'
+                  total: 26566
+                - datetime: '2021-07-04 00:07:18'
+                  total: 24810
+                - datetime: '2021-07-05 00:07:17'
+                  total: 26412
+                - datetime: '2021-07-06 12:00:00'
+                  total: 29462
+                - datetime: '2021-07-07 00:01:58'
+                  total: 30591
+                - datetime: '2021-07-08 18:01:02'
+                  total: 24270
+                - datetime: '2021-07-09 18:00:56'
+                  total: 19893
+                - datetime: '2021-07-10 18:00:55'
+                  total: 20070
+                - datetime: '2021-07-11 18:00:57'
+                  total: 18926
+                - datetime: '2021-07-12 10:54:58'
+                  total: 22005
+                - datetime: '2021-07-13 18:00:59'
+                  total: 23886
+                - datetime: '2021-07-14 00:13:15'
+                  total: 25270
+                - datetime: '2021-07-15 07:15:02'
+                  total: 27990
+                - datetime: '2021-07-16 07:15:03'
+                  total: 26888
+                - datetime: '2021-07-17 03:41:38'
+                  total: 25215
+                - datetime: '2021-07-18 00:02:40'
+                  total: 26951
+                - datetime: '2021-07-19 00:00:16'
+                  total: 30562
+                - datetime: '2021-07-20 00:00:40'
+                  total: 27212
+                - datetime: '2021-07-21 00:00:00'
+                  total: 27422
+                - datetime: '2021-07-22 01:00:17'
+                  total: 26922
+                - datetime: '2021-07-23 01:45:58'
+                  total: 27558
+                - datetime: '2021-07-24 02:18:16'
+                  total: 28408
+                - datetime: '2021-07-25 03:19:23'
+                  total: 29242
+                - datetime: '2021-07-26 00:09:23'
+                  total: 30901
+                - datetime: '2021-07-27 00:00:19'
+                  total: 33181
+                - datetime: '2021-07-28 00:07:15'
+                  total: 33787
+                - datetime: '2021-07-29 00:27:51'
+                  total: 34991
+                - datetime: '2021-07-30 00:00:19'
+                  total: 32274
+                - datetime: '2021-07-31 00:34:27'
+                  total: 31624
+                - datetime: '2021-08-01 00:04:09'
+                  total: 31066
+                - datetime: '2021-08-02 02:03:58'
+                  total: 32371
+                - datetime: '2021-08-03 03:04:58'
+                  total: 31658
+                - datetime: '2021-08-04 00:04:07'
+                  total: 32641
+                - datetime: '2021-08-05 00:01:01'
+                  total: 33008
+                - datetime: '2021-08-06 00:00:41'
+                  total: 35921
+                - datetime: '2021-08-07 00:00:01'
+                  total: 31421
+                - datetime: '2021-08-08 00:06:03'
+                  total: 31814
+                - datetime: '2021-08-09 01:05:59'
+                  total: 32719
+                - datetime: '2021-08-10 02:06:58'
+                  total: 32236
+                - datetime: '2021-08-11 03:08:41'
+                  total: 35188
+                - datetime: '2021-08-12 00:00:03'
+                  total: 35308
+                - datetime: '2021-08-13 06:23:43'
+                  total: 34242
+                - datetime: '2021-08-14 01:08:22'
+                  total: 30827
+                - datetime: '2021-08-15 11:43:30'
+                  total: 31075
+                - datetime: '2021-08-16 03:09:28'
+                  total: 33292
+                - datetime: '2021-08-17 00:00:52'
+                  total: 33989
+                - datetime: '2021-08-18 01:42:14'
+                  total: 34664
+                - datetime: '2021-08-19 00:00:30'
+                  total: 32755
+                - datetime: '2021-08-20 01:58:58'
+                  total: 31538
+                - datetime: '2021-08-21 00:00:23'
+                  total: 30415
+                - datetime: '2021-08-22 02:53:28'
+                  total: 30202
+                - datetime: '2021-08-23 03:54:28'
+                  total: 30922
+                - datetime: '2021-08-24 07:42:55'
+                  total: 29328
+                - datetime: '2021-08-25 00:45:59'
+                  total: 25438
+                - datetime: '2021-08-26 01:46:28'
+                  total: 26975
+                - datetime: '2021-08-27 02:48:13'
+                  total: 24743
+                - datetime: '2021-08-28 03:48:29'
+                  total: 24256
+                - datetime: '2021-08-29 00:38:28'
+                  total: 24604
+                - datetime: '2021-08-30 02:05:48'
+                  total: 26025
+                - datetime: '2021-08-31 00:01:14'
+                  total: 26797
+                - datetime: '2021-09-01 00:52:16'
+                  total: 27756
+                - datetime: '2021-09-02 00:53:52'
+                  total: 26962
+                - datetime: '2021-09-03 02:00:17'
+                  total: 25421
+                - datetime: '2021-09-04 00:04:22'
+                  total: 24986
+                - datetime: '2021-09-05 12:00:00'
+                  total: 25854
+                - datetime: '2021-09-06 00:00:06'
+                  total: 28177
+                - datetime: '2021-09-07 07:29:29'
+                  total: 28436
+                - datetime: '2021-09-08 00:15:07'
+                  total: 27036
+                - datetime: '2021-09-09 00:27:17'
+                  total: 29380
+                - datetime: '2021-09-10 01:27:58'
+                  total: 26927
+                - datetime: '2021-09-11 02:28:59'
+                  total: 25098
+                - datetime: '2021-09-12 16:05:03'
+                  total: 25016
+                - datetime: '2021-09-13 00:15:07'
+                  total: 25723
+                - datetime: '2021-09-14 17:15:06'
+                  total: 26813
+                - datetime: '2021-09-15 23:39:36'
+                  total: 28588
+                - datetime: '2021-09-16 00:00:17'
+                  total: 27220
+                - datetime: '2021-09-17 00:01:29'
+                  total: 28168
+                - datetime: '2021-09-18 03:03:14'
+                  total: 24837
+                - datetime: '2021-09-19 00:13:09'
+                  total: 25305
+                - datetime: '2021-09-20 06:27:23'
+                  total: 27278
+                - datetime: '2021-09-21 01:39:22'
+                  total: 27955
+                - datetime: '2021-09-22 06:12:38'
+                  total: 29636
+                - datetime: '2021-09-23 00:00:17'
+                  total: 28282
+                - datetime: '2021-09-24 00:29:22'
+                  total: 28660
+                - datetime: '2021-09-25 01:30:24'
+                  total: 30501
+                - datetime: '2021-09-26 00:22:58'
+                  total: 26442
+                - datetime: '2021-09-27 01:15:05'
+                  total: 27958
+                - datetime: '2021-09-28 02:06:29'
+                  total: 25072
+                - datetime: '2021-09-29 00:00:12'
+                  total: 30478
+                - datetime: '2021-09-30 00:00:07'
+                  total: 30619
+                - datetime: '2021-10-01 00:12:22'
+                  total: 27761
+                - datetime: '2021-10-02 02:31:28'
+                  total: 28972
+                - datetime: '2021-10-03 03:31:52'
+                  total: 28653
+                - datetime: '2021-10-04 02:08:28'
+                  total: 26550
+                - datetime: '2021-10-05 03:09:26'
+                  total: 25976
+                - datetime: '2021-10-06 00:01:04'
+                  total: 25885
+                - datetime: '2021-10-07 00:00:16'
+                  total: 26157
+                - datetime: '2021-10-08 01:20:32'
+                  total: 26334
+                - datetime: '2021-10-09 01:15:06'
+                  total: 12325
+                - datetime: '2021-10-11 08:21:56'
+                  total: 6
+                - datetime: '2021-10-13 07:30:28'
+                  total: 19332
+                - datetime: '2021-10-14 00:00:27'
+                  total: 29248
+                - datetime: '2021-10-15 00:14:25'
+                  total: 29720
+                - datetime: '2021-10-16 02:12:30'
+                  total: 25066
+                - datetime: '2021-10-17 03:13:00'
+                  total: 25385
+                - datetime: '2021-10-18 00:00:09'
+                  total: 22680
+                - datetime: '2021-10-19 00:01:04'
+                  total: 22676
+                - datetime: '2021-10-20 00:06:19'
+                  total: 20326
+                - datetime: '2021-10-21 01:17:21'
+                  total: 20326
+  /v1/devices/{deviceId}/links:
+    get:
+      operationId: getV1DevicesByDeviceidLinks
+      summary: v1/devices/{id}/links
+      tags:
+      - Devices
+      description: List of Device Links
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - deviceLinkKey: 014869001721887-014869001721887
+                  type: move
+                  deviceId: 014869001721887
+                  assetId: 014869001721887
+                  parameters: null
+                  dateCreated: '2021-12-22T17:00:19+00:00'
+                  dateUpdated: '2021-12-22T17:00:19+00:00'
+    post:
+      operationId: postV1DevicesByDeviceidLinks
+      summary: v1/devices/{id}/links
+      tags:
+      - Devices
+      description: Create Device Link
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                parameters:
+                  type: string
+                assetId:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                type: move
+                deviceId: 014869001721887
+                assetId: 014869001721887
+                deviceLinkKey: 014869001721887-014869001721887
+    delete:
+      operationId: deleteV1DevicesByDeviceidLinks
+      summary: v1/devices/{id}/links
+      tags:
+      - Devices
+      description: Clear Device Links
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+  /v1/devices/{deviceId}/links/{deviceLinkKey}:
+    get:
+      operationId: getV1DevicesByDeviceidLinksByDevicelinkkey
+      summary: v1/devices/{id}/links/{key}
+      tags:
+      - Devices
+      description: Load Device Link Details
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deviceLinkKey
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                parameters:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceLinkKey: 014869001721887-014869001721887
+                type: move
+                deviceId: 014869001721887
+                assetId: 014869001721887
+                parameters: null
+                dateCreated: '2021-12-22T17:00:19+00:00'
+                dateUpdated: '2021-12-22T17:00:19+00:00'
+    post:
+      operationId: postV1DevicesByDeviceidLinksByDevicelinkkey
+      summary: v1/devices/{id}/links/{key}
+      tags:
+      - Devices
+      description: Update Device Link Details
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deviceLinkKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceLinkKey: 014869001721887-014869001721887
+                type: move
+                deviceId: 014869001721887
+                assetId: 014869001721887
+                parameters: null
+                dateCreated: '2021-12-22T17:00:19+00:00'
+                dateUpdated: '2021-12-22T17:00:19+00:00'
+    delete:
+      operationId: deleteV1DevicesByDeviceidLinksByDevicelinkkey
+      summary: v1/devices/{id}/links/{key}
+      tags:
+      - Devices
+      description: Delete Device Link Details
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deviceLinkKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceLinkKey: 014869001721887-014869001721887
+                type: disabled
+                deviceId: 014869001721887
+                assetId: 014869001721887
+                parameters: null
+                dateCreated: '2021-12-22T17:00:19+00:00'
+                dateUpdated: '2021-12-22T17:00:19+00:00'
+                device:
+                  deviceId: 014869001721887
+                  accountId: 69
+                  assetId: 014869001721887
+                  odometerLocked: false
+                  runtimeLocked: false
+                  firmwareDeploymentStatus: UNKNOWN
+  /v1/devices/{deviceId}/notes:
+    get:
+      operationId: getV1DevicesByDeviceidNotes
+      summary: v1/devices/{deviceId}/notes
+      tags:
+      - Devices
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - noteId: 3846
+                  typeId: 1
+                  deviceId: 014869001721887
+                  datetime: '2021-03-12T06:35:17+00:00'
+                  userId: 1577
+                  note: test
+                  statusId: 1
+                  dateClosed: '2021-03-12T06:35:18+00:00'
+                  dateCreated: '2021-03-12T06:35:17+00:00'
+                  dateUpdated: '2021-03-12T06:35:18+00:00'
+    post:
+      operationId: postV1DevicesByDeviceidNotes
+      summary: v1/devices/{deviceId}/notes
+      tags:
+      - Devices
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                deviceId: 014869001721887
+                userId: 3611
+                datetime: '2021-12-22T15:48:31+00:00'
+                dateCreated: '2021-12-22T15:48:31+00:00'
+                dateUpdated: '2021-12-22T15:48:31+00:00'
+                typeId: 1
+                note: test2
+                noteId: 4427
+  /v1/devices/{deviceId}/notes/{deviceNoteId}:
+    get:
+      operationId: getV1DevicesByDeviceidNotesByDevicenoteid
+      summary: v1/devices/{deviceId}/notes/{noteId}
+      tags:
+      - Devices
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deviceNoteId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                noteId: 3846
+                typeId: 1
+                deviceId: 014869001721887
+                datetime: '2021-03-12T06:35:17+00:00'
+                userId: 1577
+                note: test
+                statusId: 1
+                dateClosed: '2021-03-12T06:35:18+00:00'
+                dateCreated: '2021-03-12T06:35:17+00:00'
+                dateUpdated: '2021-03-12T06:35:18+00:00'
+    post:
+      operationId: postV1DevicesByDeviceidNotesByDevicenoteid
+      summary: v1/devices/{deviceId}/notes/{noteId}
+      tags:
+      - Devices
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deviceNoteId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                statusId:
+                  type: string
+                dateClosed:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                noteId: 3846
+                typeId: 1
+                deviceId: 014869001721887
+                datetime: '2021-03-12T06:35:17+00:00'
+                userId: 1577
+                note: test
+                statusId: 1
+                dateClosed: '2022-12-10T00:00:00+00:00'
+                dateCreated: '2021-03-12T06:35:17+00:00'
+                dateUpdated: '2021-12-22T16:18:44+00:00'
+    delete:
+      operationId: deleteV1DevicesByDeviceidNotesByDevicenoteid
+      summary: v1/devices/{deviceId}/notes/{noteId}
+      tags:
+      - Devices
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deviceNoteId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                statusId:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                noteId: 3846
+                typeId: 1
+                deviceId: 014869001721887
+                datetime: '2021-03-12T06:35:17+00:00'
+                userId: 1577
+                note: test
+                statusId: 0
+                dateClosed: '2021-12-22T16:20:54+00:00'
+                dateCreated: '2021-03-12T06:35:17+00:00'
+                dateUpdated: '2021-12-22T16:20:55+00:00'
+  /v1/devices/{deviceId}/subscriptions:
+    get:
+      operationId: getV1DevicesByDeviceidSubscriptions
+      summary: v1/devices/{deviceId}/subscriptions
+      tags:
+      - Devices
+      description: 'Subscription Linked to this device/asset
+
+
+        See /v1/subscriptions for more details'
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - subscriptionKey: ''
+                  deviceId: ''
+                  subscriptionPlanKey: hardware-3-month-aud
+                  status: 1
+                  subscriptionStart: '0000-00-00T00:00:00+00:00'
+                  subscriptionEnd: '0000-00-00T00:00:00+00:00'
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '2021-12-22T15:09:10+00:00'
+    post:
+      operationId: postV1DevicesByDeviceidSubscriptions
+      summary: v1/devices/{deviceId}/subscriptions
+      tags:
+      - Devices
+      description: Create Subscription
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                subscriptionPlanKey:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                subscriptionKey: ''
+                deviceId: ''
+                subscriptionPlanKey: hardware-3-month-aud
+                subscriptionStart: '0000-00-00T00:00:00+00:00'
+                subscriptionEnd: '0000-00-00T00:00:00+00:00'
+  /v1/devices/{deviceId}/subscriptions/plans:
+    get:
+      operationId: getV1DevicesByDeviceidSubscriptionsPlans
+      summary: v1/devices/{deviceId}/subscriptions/plans
+      tags:
+      - Devices
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                total: 1
+                start: 1
+                end: 1
+                results:
+                - subscriptionPlanKey: ''
+                  subscriptionPlan: ''
+                  status: 1
+                  defaultPrice: 1
+                  currencyCode: AUD
+                  deviceCategory: addon
+                  term: 1M
+                  isWizard: false
+                  isDataFeed: false
+                  paymentOptions: any
+                  createdBy: 1
+                  dateCreated: '0000-00-00T00:00:00+00:00'
+                  dateUpdated: '0000-00-00T00:00:00+00:00'
+  /v1/devices/{deviceId}/subscriptions/{subscriptionKey}:
+    get:
+      operationId: getV1DevicesByDeviceidSubscriptionsBySubscriptionkey
+      summary: v1/devices/{deviceId}/subscriptions/{subscriptionKey}
+      tags:
+      - Devices
+      description: 'Load Subscription Details
+
+
+        /v1/subscriptions'
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: subscriptionKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+    post:
+      operationId: postV1DevicesByDeviceidSubscriptionsBySubscriptionkey
+      summary: v1/devices/{deviceId}/subscriptions/{subscriptionKey}
+      tags:
+      - Devices
+      description: 'Update Subscription Details
+
+
+        /v1/subscriptions'
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: subscriptionKey
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                subscriptionPlanKey:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                subscriptionKey: ''
+                deviceId: ''
+                subscriptionPlanKey: ''
+                status: 1
+                subscriptionStart: '0000-00-00T00:00:00+00:00'
+                subscriptionEnd: '0000-00-00T00:00:00+00:00'
+                dateCreated: '0000-00-00T00:00:00+00:00'
+                dateUpdated: '0000-00-00T00:00:00+00:00'
+    delete:
+      operationId: deleteV1DevicesByDeviceidSubscriptionsBySubscriptionkey
+      summary: v1/devices/{deviceId}/subscriptions/{subscriptionKey}
+      tags:
+      - Devices
+      description: 'Delete/Disable Device Subscription
+
+
+        /v1/subscriptions'
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: subscriptionKey
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Response not documented in the collection
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-provenance:
+  method: converted
+  source: https://api-docs.fleetsu.com/api/collections/3159405/77o41jR?environment=3159405-f2fd913c-c4bb-961e-d70a-e5d5571c8103&segregateAuth=true&versionTag=latest
+  format: Postman Collection v2.0.0
+  original: openapi/_original/fleetsu-postman-collection.json
+  publisher: Fleetsu
+  note: 'Mechanically converted from the Postman collection Fleetsu publishes at api-docs.fleetsu.com; request URLs written https://api.fleetsu.comv1/... in the collection were normalised to /v1/...; requests on other hosts were left out: POST https://app.randmcnally.io/v1/accounts/6874/integrations; GET http://localhost/v1/users/{id}/features; GET https://randpoi.randmcnally.us/v1/search/radius?latlon=42.613170290527997%2C%20-87.94715427593032&type=truckstop'

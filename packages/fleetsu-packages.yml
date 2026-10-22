@@ -1,0 +1,14 @@
+generated: '2026-10-22'
+method: none
+source: https://api-docs.fleetsu.com/
+packages: []
+checked:
+- url: https://registry.npmjs.org/-/v1/search?text=fleetsu
+  result: 0 packages
+- url: https://pypi.org/pypi/fleetsu/json
+  result: 404
+- url: https://rubygems.org/api/v1/search.json?query=fleetsu
+  result: 0 gems
+- url: https://api.github.com/search/repositories?q=fleetsu
+  result: 29 repos, all personal/unrelated projects; no Fleetsu or Rand McNally organisation repo
+note: The docs publish no SDK, client library or CLI; the only developer artifact is the Postman collection.

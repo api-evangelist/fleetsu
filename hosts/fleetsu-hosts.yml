@@ -1,0 +1,112 @@
+generated: '2026-10-22'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 7
+  own: 6
+  other_domain: 0
+  platform: 1
+  roles:
+  - docs
+  - identity
+  - other
+  - support
+  - website
+hosts:
+- host: api-docs.fleetsu.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - docs-index
+  - contract-discovery
+  - well-known
+  types:
+  - Documentation
+  - APIReference
+  serves:
+  - docs
+  registrable_domain: fleetsu.com
+  role: docs
+  relation: own
+- host: api.fleetsu.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types:
+  - Login
+  serves:
+  - api
+  registrable_domain: fleetsu.com
+  role: identity
+  relation: own
+- host: app.fleetsu.com
+  found_by:
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: fleetsu.com
+  role: other
+  relation: own
+- host: fleetsu.com
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Website
+  - Blog
+  - Contact
+  - TermsOfService
+  - PrivacyPolicy
+  serves:
+  - cdn
+  vendor: cloudflare
+  registrable_domain: fleetsu.com
+  role: website
+  relation: own
+- host: help.fleetsu.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - docs-index
+  - contract-discovery
+  - well-known
+  types:
+  - Support
+  serves:
+  - docs
+  registrable_domain: fleetsu.com
+  role: support
+  relation: own
+- host: support.fleetsu.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: fleetsu.com
+  role: support
+  relation: own
+- host: twitter.com
+  found_by:
+  - pointer
+  types:
+  - Twitter
+  serves: []
+  registrable_domain: twitter.com
+  role: other
+  relation: platform
