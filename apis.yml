@@ -1,0 +1,23 @@
+aid: fleetsu
+name: Fleetsu
+description: 'Fleetsu is a company surfaced via the API Evangelist harvest backlog (source: australia-apidays-2026)
+  and added to the network as a stub for full-pipeline profiling.'
+url: https://raw.githubusercontent.com/api-evangelist/fleetsu/refs/heads/main/apis.yml
+x-type: company
+x-source: harvest:australia-apidays-2026
+x-tier: stub
+x-tier-reason: harvest
+specificationVersion: '0.20'
+created: '2026-10-22'
+modified: '2026-10-22'
+tags:
+- Company
+apis: []
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+- FN: APIs.json
+  email: info@apis.io
+common:
+- type: Website
+  url: https://fleetsu.com/
