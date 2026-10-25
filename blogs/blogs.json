@@ -1,0 +1,14 @@
+{
+  "repo": "fleetsu",
+  "feeds": [
+    {
+      "source": "https://fleetsu.com/blog/",
+      "feed_url": "https://fleetsu.com/blog/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-10-24T12:29:31Z"
+}
